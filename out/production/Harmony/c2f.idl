@@ -1,0 +1,37 @@
+module ngems
+{
+	module c2f
+	{
+		struct MessageHeader
+		{
+			string senderName;
+			string entityName;
+			sequence <string> recipientNames;
+			long long timestampMs;
+			long messageId;
+		};
+		
+		struct TextMessage
+		{
+			MessageHeader header;
+			string attributes;
+			string message;
+		};
+		#pragma keylist TextMessage header.senderName header.messageId
+		
+		struct HeartbeatMessage
+		{
+			MessageHeader header;
+			string attributes;
+		};
+		#pragma keylist HeartbeatMessage header.senderName header.messageId
+		
+		struct PositionReportMessage
+		{
+			MessageHeader header;
+			double latitude;
+			double longitude;
+		};
+		#pragma keylist PositionReportMessage header.senderName header.messageId
+	};
+};

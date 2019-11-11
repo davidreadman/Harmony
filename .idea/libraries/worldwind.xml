@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="worldwind">
+    <CLASSES>
+      <root url="jar://C:/worldwind-v2.1.0/worldwind.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://C:/worldwind-v2.1.0/worldwind.jar!/" />
+    </SOURCES>
+  </library>
+</component>

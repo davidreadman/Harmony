@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="gluegen-rt-natives-windows-amd64">
+    <CLASSES>
+      <root url="jar://C:/worldwind-v2.1.0/gluegen-rt-natives-windows-amd64.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

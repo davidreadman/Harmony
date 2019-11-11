@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry excluding="generated-sources/idl/" kind="src" path="src"/>
+	<classpathentry kind="src" path="src/generated-sources/idl"/>
+	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/dcpssaj5.jar"/>
+	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/gdal.jar"/>
+	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/Harmony.jar"/>
+	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/jogl-all.jar"/>
+	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/vpf-symbols.jar"/>
+	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/worldwind.jar"/>
+	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/worldwindx.jar"/>
+	<classpathentry kind="output" path="out/production/Harmony"/>
+</classpath>

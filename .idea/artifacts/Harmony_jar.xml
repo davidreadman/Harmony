@@ -1,0 +1,19 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="Harmony:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Harmony_jar</output-path>
+    <root id="root">
+      <element id="archive" name="Harmony.jar">
+        <element id="module-output" name="Harmony" />
+      </element>
+      <element id="library" level="project" name="dcpssaj5" />
+      <element id="library" level="project" name="gdal" />
+      <element id="library" level="project" name="gluegen-rt" />
+      <element id="library" level="project" name="jogl-all" />
+      <element id="library" level="project" name="junit-4.5" />
+      <element id="library" level="project" name="worldwind" />
+      <element id="library" level="project" name="worldwindx" />
+      <element id="library" level="project" name="gluegen-rt-natives-windows-amd64" />
+      <element id="library" level="project" name="jogl-all-natives-windows-amd64" />
+    </root>
+  </artifact>
+</component>

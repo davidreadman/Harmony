@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="gdal">
+    <CLASSES>
+      <root url="jar://C:/worldwind-v2.1.0/gdal.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
