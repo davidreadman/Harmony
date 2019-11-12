@@ -3,6 +3,8 @@ import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class JFrameGuiActions
 {
@@ -10,7 +12,20 @@ public class JFrameGuiActions
     public JFrameGuiActions(DisplayWW displayWW, HarmonyDataPublisher publishdata, NodeData[] nodeData)
     {
         //setup the data subscriber here so it can create an event.
-        new HarmonyDataSubscriber(null,myMessageFlag);
+        DDSPositionMessage dDSPositionMessage = new DDSPositionMessage();
+
+        PropertyChangeListener pcl = new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(evt.getSource() instanceof DDSPositionMessage) {
+                    DDSPositionMessage pd = (DDSPositionMessage)evt.getSource();
+                    System.out.println(String.format("Received event from %s: %s has been changed from %s to %s", pd.getDDSPositionMessage(),evt.getPropertyName(), evt.getOldValue(), evt.getNewValue()));
+                }
+            }
+        };
+        dDSPositionMessage.addPropertyChangeListener(pcl);
+
+        new HarmonyDataSubscriber(null, dDSPositionMessage);
         //new HarmonyMetricsSubscriber();
         System.out.println("waiting for data");
         //setup logger

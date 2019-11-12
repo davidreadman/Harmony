@@ -21,11 +21,13 @@ public class HarmonyDataListener extends DataReaderAdapter<PositionReportMessage
     boolean closed = false;
     GuardCondition guardCond = null;
     String receievedMessage ="";
-    boolean thisMessageFlag = false;
-    public HarmonyDataListener(GuardCondition myGC, boolean myMessageFlag)
+    DDSPositionMessage dDSPositionMessage;
+
+
+    public HarmonyDataListener(GuardCondition myGC, DDSPositionMessage dDSPositionMessage)
     {
         guardCond = myGC;
-        thisMessageFlag = myMessageFlag;
+        this.dDSPositionMessage = dDSPositionMessage;
     }
 
     @Override
@@ -56,6 +58,7 @@ public class HarmonyDataListener extends DataReaderAdapter<PositionReportMessage
                     System.out.println("    userID  : " + msg.header.entityName);
                     System.out.println("    latitude : \"" + msg.latitude + "\"");
                     System.out.println("    longitude : \"" + msg.longitude + "\"");
+                    tempMessage = (msg.header.entityName+msg.latitude + msg.longitude );
                 }
             }
 
@@ -63,7 +66,9 @@ public class HarmonyDataListener extends DataReaderAdapter<PositionReportMessage
             {
                 // unblock the Waitset in Subscriber main loop
                 guardCond.setTriggerValue(true);
-                thisMessageFlag = true;
+
+                dDSPositionMessage.setDDSPositionMessage(tempMessage);
+
             } else
             {
                 System.out.println("=== [ListenerDataListener.on_data_available] ===> hasValidData is false!");

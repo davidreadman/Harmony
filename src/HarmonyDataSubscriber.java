@@ -30,9 +30,9 @@ public class HarmonyDataSubscriber
 {
     static String partitionName = "SNAnalysis";
     boolean messageFlag =false;
-    public HarmonyDataSubscriber(String[] args, boolean subMessageFlag)
+    public HarmonyDataSubscriber(String[] args, DDSPositionMessage dDSPositionMessage)
     {
-        messageFlag = subMessageFlag;
+
         try
         {
             System.setProperty(
@@ -62,7 +62,7 @@ public class HarmonyDataSubscriber
 
 
             GuardCondition myGC = GuardCondition.newGuardCondition(env);
-            HarmonyDataListener c2fListener = new HarmonyDataListener(myGC,messageFlag);
+            HarmonyDataListener c2fListener = new HarmonyDataListener(myGC,dDSPositionMessage);
             Collection<Class<? extends Status>> statuses = new HashSet<Class<? extends Status>>();
             statuses.add(DataAvailableStatus.class);
             statuses.add(RequestedDeadlineMissedStatus.class);
