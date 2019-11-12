@@ -14,6 +14,7 @@ import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
 import gov.nasa.worldwind.awt.WorldWindowGLJPanel;
 import gov.nasa.worldwind.event.SelectEvent;
+import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
@@ -34,6 +35,7 @@ import gov.nasa.worldwind.symbology.BasicTacticalSymbolAttributes;
 import gov.nasa.worldwind.symbology.TacticalSymbol;
 import gov.nasa.worldwind.symbology.TacticalSymbolAttributes;
 import gov.nasa.worldwind.symbology.milstd2525.MilStd2525TacticalSymbol;
+import gov.nasa.worldwind.util.BasicDragger;
 import gov.nasa.worldwind.util.WWUtil;
 import gov.nasa.worldwind.view.orbit.FlatOrbitView;
 import gov.nasa.worldwindx.examples.KeepingObjectsInView;
@@ -54,7 +56,9 @@ import javax.swing.*;
 class DisplayWW
 {
     WorldWindowGLCanvas canvas;
-    Position defaultPosition = Position.fromDegrees(-22.509187, 150.096047, 1);
+    LatLon defaultPosition = Position.fromDegrees(-22.509187, 150.096047, 1);
+    LatLon rCPosition = Position.fromDegrees(-22.71220, 150.40076, 1);
+
     NodeData[] nodeData;
 
     public DisplayWW(NodeData[] nodeData)
@@ -80,24 +84,52 @@ class DisplayWW
         {
             System.out.println("symbol: " + nodeData[i].symbol);
             addSymbol(nodeData[i].symbol, nodeData[i].currentLocation);
-
         }
 
+        RenderableLayer shapesLayer = new RenderableLayer();
+        shapesLayer.setName("Shapes to Track");
+        ShapeAttributes attrs = new BasicShapeAttributes();
+        attrs.setInteriorMaterial(Material.BLUE);
+        attrs.setOutlineMaterial(new Material(WWUtil.makeColorBrighter(Color.BLUE)));
+        attrs.setInteriorOpacity(0.5);
+        SurfaceCircle circle = new SurfaceCircle(attrs, rCPosition, 50d);
+        shapesLayer.addRenderable(circle);
+        canvas.getModel().getLayers().add(shapesLayer);
+
+        canvas.addSelectListener(new SelectListener()
+        {
+            protected BasicDragger dragger = new BasicDragger(canvas);
+
+            public void selected(SelectEvent event)
+            {
+                // Delegate dragging computations to a dragger.
+                this.dragger.selected(event);
+
+                if (event.getEventAction().equals(SelectEvent.DRAG))
+                {
+                   // disableHelpAnnotation();
+                   // viewController.sceneChanged();
+                }
+            }
+        });
     }
     public void configure()
     {
         // configure start position
         Configuration.setValue(AVKey.INITIAL_PITCH, 16.0);
         Configuration.setValue(AVKey.INITIAL_HEADING, 358.0);
-        Configuration.setValue(AVKey.INITIAL_LATITUDE, -22.550);
-        Configuration.setValue(AVKey.INITIAL_LONGITUDE, 150.230);
-        Configuration.setValue(AVKey.INITIAL_ALTITUDE, 50000.0);
+        Configuration.setValue(AVKey.INITIAL_LATITUDE, -22.71220);
+        Configuration.setValue(AVKey.INITIAL_LONGITUDE, 150.40076);
+        Configuration.setValue(AVKey.INITIAL_ALTITUDE, 20000.0);
         // make offline (true is offline false is online)
-        Configuration.setValue(AVKey.OFFLINE_MODE, true);
+        Configuration.setValue(AVKey.OFFLINE_MODE, false);
         // make flat
         Configuration.setValue(AVKey.GLOBE_CLASS_NAME, EarthFlat.class.getName());
         // Configuration.setValue(AVKey.VIEW_CLASS_NAME, FlatOrbitView.class.getName());
     }
+    /*very crude implementation of adding a symbol, need to remove the continous recreation of
+    symbollayers and update the node with a tactical symbol
+     */
     public void addSymbol(String sidc, LatLon pos)
     {
         //create symbol layer

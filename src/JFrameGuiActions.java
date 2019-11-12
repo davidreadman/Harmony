@@ -1,4 +1,7 @@
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
+import gov.nasa.worldwind.event.SelectEvent;
+import gov.nasa.worldwind.event.SelectListener;
+import gov.nasa.worldwind.util.BasicDragger;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -8,32 +11,36 @@ import java.beans.PropertyChangeListener;
 
 public class JFrameGuiActions
 {
-    boolean myMessageFlag = false;
-    public JFrameGuiActions(DisplayWW displayWW, HarmonyDataPublisher publishdata, NodeData[] nodeData)
-    {
-        //setup the data subscriber here so it can create an event.
-        DDSPositionMessage dDSPositionMessage = new DDSPositionMessage();
 
-        PropertyChangeListener pcl = new PropertyChangeListener() {
+    public JFrameGuiActions(DisplayWW displayWW, HarmonyDataPublisher publishData, NodeData[] nodeData)
+    {
+        /* set up logger to write to CSV files */
+        WriteLog logger = new WriteLog();
+
+        /* setup the binding of properties to allow for change monitoring across threads */
+        DDSPositionMessage dDSPositionMessage = new DDSPositionMessage();
+        PropertyChangeListener pcl = new PropertyChangeListener()
+        {
             @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getSource() instanceof DDSPositionMessage) {
-                    DDSPositionMessage pd = (DDSPositionMessage)evt.getSource();
-                    System.out.println(String.format("Received event from %s: %s has been changed from %s to %s", pd.getDDSPositionMessage(),evt.getPropertyName(), evt.getOldValue(), evt.getNewValue()));
+            public void propertyChange(PropertyChangeEvent evt)
+            {
+                if (evt.getSource() instanceof DDSPositionMessage)
+                {
+                    DDSPositionMessage pd = (DDSPositionMessage) evt.getSource();
+                    System.out.println(String.format("Received event from %s: %s has been changed from %s to %s", pd.getDDSPositionMessage(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue()));
                 }
             }
         };
         dDSPositionMessage.addPropertyChangeListener(pcl);
 
+        /* set up DDS Subscriber/Listeners with bound properties */
         new HarmonyDataSubscriber(null, dDSPositionMessage);
         //new HarmonyMetricsSubscriber();
-        System.out.println("waiting for data");
-        //setup logger
-        WriteLog logger = new WriteLog();
 
-
+        /* set up the GUI items */
         // frame.getContentPane().setLayout(new FlowLayout());
         JFrame frame = new JFrame("World Wind");
+
         JButton publishButton = new JButton("Publish", new ImageIcon("publish.png"));
         publishButton.setBounds(100, 100, 140, 40);
         frame.add(publishButton);
@@ -54,8 +61,7 @@ public class JFrameGuiActions
         JT.setBounds(1000, 100, 200, 500);
         frame.add(JT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // build Java swing interface
-
+        /* add the worldwind canvas to the JFrame */
         frame.add(displayWW.canvas);
         frame.setSize(2000, 2000);
         frame.setVisible(true);
@@ -66,10 +72,9 @@ public class JFrameGuiActions
             public void actionPerformed(ActionEvent e)
             {
 
-
                 //send out data for all nodes
                 int numberOfNodes = nodeData.length;
-                String writeableString = logger.getTimeStamp()+ ",";
+                String writeableString = logger.getTimeStamp() + ",";
                 for (int i = 0; i < numberOfNodes; i++)
                 {
                     writeableString = writeableString + nodeData[i].NodeUUID + ",";
@@ -81,12 +86,9 @@ public class JFrameGuiActions
                 writeableString = writeableString + "\n";
                 logger.writeStringToFile(writeableString);
                 System.out.println("written " + writeableString);
-                System.out.println("messageflag " + myMessageFlag);
-                logger.Flush();
-                //JDialog d = new JDialog(frame, "Hello", true);
 
-                //d.setLocationRelativeTo(frame);
-                // d.setVisible(true);
+                logger.Flush();
+
             }
         });
         cloButton.addActionListener(new ActionListener()
@@ -107,16 +109,15 @@ public class JFrameGuiActions
                 int numberOfNodes = nodeData.length;
                 for (int i = 0; i < numberOfNodes; i++)
                 {
-                    publishdata.HarmonyPublish(nodeData[i]);
+                    publishData.HarmonyPublish(nodeData[i]);
                 }
                 System.out.println("published");
-                //JDialog d = new JDialog(frame, "Hello", true);
 
-                //d.setLocationRelativeTo(frame);
-                // d.setVisible(true);
             }
 
         });
+
+
 
     }
 }
