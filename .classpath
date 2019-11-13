@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry excluding="generated-sources/idl/" kind="src" path="src"/>
-	<classpathentry kind="src" path="src/generated-sources/idl"/>
-	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/dcpssaj5.jar"/>
-	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/gdal.jar"/>
-	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/Harmony.jar"/>
-	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/jogl-all.jar"/>
-	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/junit-4.5.jar"/>
-	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/vpf-symbols.jar"/>
-	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/worldwind.jar"/>
-	<classpathentry kind="lib" path="out/artifacts/Harmony_jar/worldwindx.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/dcpssaj5"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/gdal"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/gluegen-rt"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jogl-all"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/junit-4.5"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/worldwind"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/worldwindx"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/gluegen-rt-natives-windows-amd64"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jogl-all-natives-windows-amd64"/>
 	<classpathentry kind="output" path="out/production/Harmony"/>
 </classpath>

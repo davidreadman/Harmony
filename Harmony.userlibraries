@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="dcpssaj5">
+    <archive path="C:/opensplice/HDE/x86_64.win64/jar/dcpssaj5.jar" />
+  </library>
+  <library name="gdal">
+    <archive path="C:/worldwind-v2.1.0/gdal.jar" />
+  </library>
+  <library name="gluegen-rt">
+    <archive path="C:/worldwind-v2.1.0/gluegen-rt.jar" />
+  </library>
+  <library name="gluegen-rt-natives-windows-amd64">
+    <archive path="C:/worldwind-v2.1.0/gluegen-rt-natives-windows-amd64.jar" />
+  </library>
+  <library name="jogl-all">
+    <archive path="C:/worldwind-v2.1.0/jogl-all.jar" />
+  </library>
+  <library name="jogl-all-natives-windows-amd64">
+    <archive path="C:/worldwind-v2.1.0/jogl-all-natives-windows-amd64.jar" />
+  </library>
+  <library name="junit-4.5">
+    <archive path="C:/worldwind-v2.1.0/junit-4.5.jar" />
+  </library>
+  <library name="worldwind">
+    <archive path="C:/worldwind-v2.1.0/worldwind.jar" />
+  </library>
+  <library name="worldwindx">
+    <archive path="C:/worldwind-v2.1.0/worldwindx.jar" />
+  </library>
+</eclipse-userlibraries>
+

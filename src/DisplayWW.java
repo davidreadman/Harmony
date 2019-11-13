@@ -52,7 +52,9 @@ import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
 import javax.swing.*;
-
+/*
+The DisplayWW Class is used to control and update the WorldWind Canvas, a
+ */
 class DisplayWW
 {
     WorldWindowGLCanvas canvas;

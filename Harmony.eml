@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inherit-compiler-output="true" inheritJdk="true">
+	<output-test url="file://$MODULE_DIR$/out/test/Harmony"/>
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<levels>
+		<level name="dcpssaj5" value="project"/>
+		<level name="gdal" value="project"/>
+		<level name="gluegen-rt" value="project"/>
+		<level name="jogl-all" value="project"/>
+		<level name="junit-4.5" value="project"/>
+		<level name="worldwind" value="project"/>
+		<level name="worldwindx" value="project"/>
+		<level name="gluegen-rt-natives-windows-amd64" value="project"/>
+		<level name="jogl-all-natives-windows-amd64" value="project"/>
+	</levels>
+</component>
