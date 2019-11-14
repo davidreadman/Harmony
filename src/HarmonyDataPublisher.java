@@ -72,8 +72,8 @@ public class HarmonyDataPublisher
             System.out.println("publishing node "+thisNodeData.NodeUUID);
 
             positionReportMessage.header.entityName = thisNodeData.NodeUUID;
-            positionReportMessage.latitude = thisNodeData.Lat;
-            positionReportMessage.longitude = thisNodeData.Lon;
+            positionReportMessage.latitude = thisNodeData.currentLocation.asDegreesArray()[0];
+            positionReportMessage.longitude = thisNodeData.currentLocation.asDegreesArray()[1];
 
                 writer.write(positionReportMessage, InstanceHandle.nilHandle(env));
 

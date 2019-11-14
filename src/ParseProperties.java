@@ -1,3 +1,4 @@
+import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 
 import java.util.Properties;
@@ -49,7 +50,7 @@ public class ParseProperties
 			theseNodes[i].NodeUUID = prop.getProperty("Node"+(i+1)+"UUID");
 			theseNodes[i].Lat = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lat"));
 			theseNodes[i].Lon = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lon"));
-			theseNodes[i].currentLocation=Position.fromDegrees(theseNodes[i].Lat,theseNodes[i].Lon);
+			theseNodes[i].currentLocation= LatLon.fromDegrees(theseNodes[i].Lat,theseNodes[i].Lon);
 			theseNodes[i].symbol = prop.getProperty("Node"+(i+1)+"2525B");
 				System.out.println("symbol: " +theseNodes[i].symbol);
 			}

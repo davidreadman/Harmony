@@ -146,8 +146,8 @@ Set up the Gui Listeners
                 for (int i = 0; i < numberOfNodes; i++)
                 {
                     writeableString = writeableString + nodeData[i].NodeUUID + ",";
-                    writeableString = writeableString + nodeData[i].Lat + ",";
-                    writeableString = writeableString + nodeData[i].Lon + ",";
+                    writeableString = writeableString + nodeData[i].currentLocation.latitude + ",";
+                    writeableString = writeableString + nodeData[i].currentLocation.longitude + ",";
                     writeableString = writeableString + "This will be a future metric,";
                     writeableString = writeableString + "This will be a future decision,";
                 }

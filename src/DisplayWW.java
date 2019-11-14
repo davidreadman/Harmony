@@ -103,8 +103,10 @@ class DisplayWW
 
 
         RenderableLayer linesLayer = new RenderableLayer();
-        Path path = new Path((Position)nodeData[0].currentLocation,(Position)nodeData[1].currentLocation);
-       linesLayer.addRenderable(path);
+        Position pointA = new Position(nodeData[0].currentLocation,0);
+        Position pointB = new Position(nodeData[1].currentLocation,0);
+        Path path = new Path(pointA,pointB);
+         linesLayer.addRenderable(path);
         canvas.getModel().getLayers().add(linesLayer);
 
         canvas.addSelectListener(new SelectListener()
@@ -117,9 +119,21 @@ class DisplayWW
                 this.dragger.selected(event);
 
                 if (event.getEventAction().equals(SelectEvent.DRAG))
+
                 {
-                   // disableHelpAnnotation();
-                   // viewController.sceneChanged();
+
+                    for (int i = 0; i < NumberOfNodes; i++)
+                    {
+
+                        Object object = event.getTopPickedObject().getObject();
+                        if (object == nodeData[i].symbolIdentifier)
+                        {
+                            //update the dragged symbol node with the new location
+                            nodeData[i].currentLocation = nodeData[i].symbolIdentifier.getPosition();
+                        }
+                        //pass in the node, have the node updated with the tactical symbol
+                    }
+
                 }
             }
         });
