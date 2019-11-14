@@ -1,6 +1,7 @@
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
 import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
+import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.util.BasicDragger;
 
 import javax.swing.*;
@@ -36,6 +37,9 @@ public class JFrameGuiActions
                 {
                     DDSPositionMessage pd = (DDSPositionMessage) evt.getSource();
                     System.out.println(String.format("Received event from %s: %s has been changed from %s to %s", pd.getDDSPositionMessage(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue()));
+                    //on a DDS Message is the *current* best time to make a decision on a new position
+                    //a nice quick test could be a new random location based on existing location
+                    //curently living in timer, but move to here next after the position message has been altered to include node data
                 }
             }
         };
@@ -132,6 +136,8 @@ public class JFrameGuiActions
         frame.setSize(2000, 2000);
         frame.setVisible(true);
 
+
+
 /*
 Set up the Gui Listeners
  */
@@ -201,10 +207,32 @@ Set up the Gui Listeners
             }
 
         });
+        ActionListener timerListener = new ActionListener()
+        {
+
+            public void actionPerformed(ActionEvent actionEvent)
+            {
+                int NumberOfNodes = nodeData.length;
+
+                for (int i = 0; i < NumberOfNodes; i++)
+                {
+                    Position newRandomPosition = new Position(displayWW.randomLocation(nodeData[i].currentLocation,100.1),0);
+                    nodeData[i].nextLocation = newRandomPosition;
+                    Position newPosition = new Position(nodeData[i].nextLocation,0);
+                    nodeData[i].symbolIdentifier.setPosition(newPosition);
+                    nodeData[i].currentLocation=newPosition;
+                }
+                displayWW.canvas.redraw();
+            }
+        };
+        Timer timer = new Timer(1000, timerListener);
+        timer.start();
+
 
 
 
     }
+
     public static void setUIFont (javax.swing.plaf.FontUIResource f){
         java.util.Enumeration keys = UIManager.getDefaults().keys();
         while (keys.hasMoreElements()) {

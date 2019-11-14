@@ -5,13 +5,14 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ospl-info.log" beforeDir="false" afterPath="$PROJECT_DIR$/ospl-info.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Harmony_jar/Harmony.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Harmony_jar/Harmony.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Harmony/DisplayWW.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Harmony/DisplayWW.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Harmony/HarmonyDataPublisher.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Harmony/HarmonyDataPublisher.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Harmony/JFrameGuiActions$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Harmony/JFrameGuiActions$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DisplayWW.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DisplayWW.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HarmonyDataPublisher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HarmonyDataPublisher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Harmony/JFrameGuiActions$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Harmony/JFrameGuiActions$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Harmony/JFrameGuiActions$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Harmony/JFrameGuiActions$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Harmony/JFrameGuiActions$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Harmony/JFrameGuiActions$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Harmony/JFrameGuiActions.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Harmony/JFrameGuiActions.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Harmony/NodeData.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Harmony/NodeData.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/JFrameGuiActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/JFrameGuiActions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ParseProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ParseProperties.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/NodeData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/NodeData.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

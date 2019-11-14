@@ -6,6 +6,7 @@ public class NodeData
      Double Lat;
      Double Lon;
      LatLon currentLocation;
+     LatLon nextLocation;
      String NodeUUID;
      String type;
      String symbol;
@@ -19,6 +20,7 @@ public class NodeData
         NodeUUID =newUUID;
         type = newtype;
         currentLocation = newPosition;
+        nextLocation = newPosition;
         symbol=newSymbol;
     }
 
