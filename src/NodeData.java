@@ -9,6 +9,7 @@ public class NodeData
      String NodeUUID;
      String type;
      String symbol;
+     TacticalSymbol symbolIdentifier;
      NodeData ()
      {
      }

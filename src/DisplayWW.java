@@ -26,11 +26,7 @@ import gov.nasa.worldwind.globes.Globe;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.layers.Earth.MGRSGraticuleLayer;
-import gov.nasa.worldwind.render.BasicShapeAttributes;
-import gov.nasa.worldwind.render.Material;
-import gov.nasa.worldwind.render.Polyline;
-import gov.nasa.worldwind.render.ShapeAttributes;
-import gov.nasa.worldwind.render.SurfaceCircle;
+import gov.nasa.worldwind.render.*;
 import gov.nasa.worldwind.symbology.BasicTacticalSymbolAttributes;
 import gov.nasa.worldwind.symbology.TacticalSymbol;
 import gov.nasa.worldwind.symbology.TacticalSymbolAttributes;
@@ -80,13 +76,20 @@ class DisplayWW
         canvas.getModel().getLayers().remove(compassLayer);
 
         //load array of nodes into worldwind as symbols to be displayed
+        //set up a symbolLayer containing all the symbols
+        RenderableLayer symbolLayer = new RenderableLayer();
         int NumberOfNodes = nodeData.length;
         System.out.println("number of nodes: " + nodeData.length);
         for (int i = 0; i < NumberOfNodes; i++)
         {
             System.out.println("symbol: " + nodeData[i].symbol);
-            addSymbol(nodeData[i].symbol, nodeData[i].currentLocation);
+            //pass in the node, have the node updated with the tactical symbol
+            symbolLayer = addSymbol(symbolLayer,nodeData[i]);
+            //check if identifier is updated
+            System.out.println("symbol id: " + nodeData[i].symbolIdentifier);
         }
+        //load the symbolLayer into the canvas
+        canvas.getModel().getLayers().add(symbolLayer);
 
         RenderableLayer shapesLayer = new RenderableLayer();
         shapesLayer.setName("Shapes to Track");
@@ -97,6 +100,12 @@ class DisplayWW
         SurfaceCircle circle = new SurfaceCircle(attrs, rCPosition, 50d);
         shapesLayer.addRenderable(circle);
         canvas.getModel().getLayers().add(shapesLayer);
+
+
+        RenderableLayer linesLayer = new RenderableLayer();
+        Path path = new Path((Position)nodeData[0].currentLocation,(Position)nodeData[1].currentLocation);
+       linesLayer.addRenderable(path);
+        canvas.getModel().getLayers().add(linesLayer);
 
         canvas.addSelectListener(new SelectListener()
         {
@@ -132,13 +141,14 @@ class DisplayWW
     /*very crude implementation of adding a symbol, need to remove the continous recreation of
     symbollayers and update the node with a tactical symbol
      */
-    public void addSymbol(String sidc, LatLon pos)
+    public RenderableLayer addSymbol(RenderableLayer symbolLayer,NodeData nodeData)
     {
-        //create symbol layer
-        RenderableLayer symbolLayer = new RenderableLayer();
-        TacticalSymbol newSymbol = setupSymbol(sidc, pos);
+
+        TacticalSymbol newSymbol = setupSymbol(nodeData.symbol, nodeData.currentLocation);
         symbolLayer.addRenderable(newSymbol);
-        canvas.getModel().getLayers().add(symbolLayer);
+        //load this symbol into the Node
+        nodeData.symbolIdentifier = newSymbol;
+        return symbolLayer;
     }
     public TacticalSymbol setupSymbol(String sidc, Position pos)
     {

@@ -51,6 +51,7 @@ public class JFrameGuiActions
         setUIFont (new javax.swing.plaf.FontUIResource("Serif",Font.PLAIN,30));
 
         JFrame frame = new JFrame("World Wind");
+        frame.setDefaultLookAndFeelDecorated(true);
 
 
        /*
@@ -107,24 +108,26 @@ public class JFrameGuiActions
 
         JButton logButton = new JButton("Log", new ImageIcon("publish.png"));
         logButton.setBounds(250, 110, 140, 40);
-       // frame.add(logButton);
+        frame.add(logButton);
 
         JButton cloButton = new JButton("close", new ImageIcon("publish.png"));
         cloButton.setBounds(400, 120, 140, 40);
        // frame.add(cloButton);
 
-        JButton lastButton = new JButton("last", new ImageIcon("publish.png"));
+        JButton lastButton = new JButton("debug", new ImageIcon("publish.png"));
         lastButton.setBounds(100, 300, 140, 40);
-        //frame.add(lastButton);
+        frame.add(lastButton);
 
         JTextField JT = new JTextField("");
 
         JT.setBounds(0, 300, 200, 500);
-       // JT.setSize(200,500);
+        JT.setBackground(new Color(0,0,0,200));
+       JT.setOpaque(true);
         JT.setAlignmentX(Component.RIGHT_ALIGNMENT);
         frame.add(JT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /* add the worldwind canvas to the JFrame */
+
         frame.add(displayWW.canvas);
         frame.setSize(2000, 2000);
         frame.setVisible(true);
@@ -184,6 +187,16 @@ Set up the Gui Listeners
                     publishData.HarmonyPublish(nodeData[i]);
                 }
                 System.out.println("published");
+
+            }
+
+        });
+        lastButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+
+                System.out.println("canvas node 1");
 
             }
 
