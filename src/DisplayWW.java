@@ -147,7 +147,7 @@ class DisplayWW
         Configuration.setValue(AVKey.INITIAL_LONGITUDE, 150.40076);
         Configuration.setValue(AVKey.INITIAL_ALTITUDE, 20000.0);
         // make offline (true is offline false is online)
-        Configuration.setValue(AVKey.OFFLINE_MODE, false);
+        Configuration.setValue(AVKey.OFFLINE_MODE, true);
         // make flat
         Configuration.setValue(AVKey.GLOBE_CLASS_NAME, EarthFlat.class.getName());
         // Configuration.setValue(AVKey.VIEW_CLASS_NAME, FlatOrbitView.class.getName());
