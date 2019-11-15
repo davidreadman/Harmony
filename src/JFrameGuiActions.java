@@ -2,6 +2,8 @@ import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
 import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.globes.Earth;
+import gov.nasa.worldwind.globes.Globe;
 import gov.nasa.worldwind.util.BasicDragger;
 
 import javax.swing.*;
@@ -152,19 +154,18 @@ Set up the Gui Listeners
                 for (int i = 0; i < numberOfNodes; i++)
                 {
                     writeableString = writeableString + nodeData[i].NodeUUID + ",";
-                    writeableString = writeableString + nodeData[i].currentLocation.latitude + ",";
-                    writeableString = writeableString + nodeData[i].currentLocation.longitude + ",";
+                    writeableString = writeableString + nodeData[i].currentLocation.asDegreesArray()[0] + ",";
+                    writeableString = writeableString + nodeData[i].currentLocation.asDegreesArray()[1] + ",";
                     writeableString = writeableString + "This will be a future metric,";
                     writeableString = writeableString + "This will be a future decision,";
                 }
                 writeableString = writeableString + "\n";
                 logger.writeStringToFile(writeableString);
                 System.out.println("written " + writeableString);
-
                 logger.Flush();
-
             }
         });
+
         rbMenuItem.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -173,7 +174,7 @@ Set up the Gui Listeners
                 if (rbMenuItem.isSelected())
                 {
                     System.out.println("rBmenuItem");
-                    WriteLog logger = new WriteLog();
+                    logger = new WriteLog();
                 }
                 else
                 {
@@ -216,7 +217,8 @@ Set up the Gui Listeners
 
                 for (int i = 0; i < NumberOfNodes; i++)
                 {
-                    Position newRandomPosition = new Position(displayWW.randomLocation(nodeData[i].currentLocation,100.1),0);
+
+                    Position newRandomPosition = new Position(displayWW.randomNELocation(nodeData[i].currentLocation,100.1),0);
                     nodeData[i].nextLocation = newRandomPosition;
                     Position newPosition = new Position(nodeData[i].nextLocation,0);
                     nodeData[i].symbolIdentifier.setPosition(newPosition);

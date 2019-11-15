@@ -57,7 +57,7 @@ class DisplayWW
     LatLon defaultPosition = Position.fromDegrees(-22.509187, 150.096047, 1);
     LatLon rCPosition = Position.fromDegrees(-22.71220, 150.40076, 1);
 
-    NodeData[] nodeData;
+
 
     public DisplayWW(NodeData[] nodeData)
     {
@@ -198,7 +198,7 @@ class DisplayWW
 
     }
     //routine to create a random location based on a known location and a max distance in miles
-    protected static LatLon randomLocation(LatLon centre,Double distance)
+    protected static LatLon randomLocation(LatLon centre,Double distanceInMeters)
     {
         Globe tempGlobe = new Earth();
         //distance = angle in radians * globe radius in miles
@@ -206,12 +206,26 @@ class DisplayWW
         //https://worldwind.arc.nasa.gov/java/latest/javadoc/gov/nasa/worldwind/geom/Angle.html
         //random angle
         Angle bearing = Angle.fromDegrees(Math.random()*360);
-        distance = distance * Math.random();
-        double distanceRadians = distance/ tempGlobe.getRadius();
+        distanceInMeters = distanceInMeters * Math.random();
+        double distanceRadians = distanceInMeters/ tempGlobe.getRadius();
         LatLon newLatLon= LatLon.greatCircleEndPosition(centre,bearing.radians,distanceRadians);
 
         return newLatLon;
+    }
+    //routine to create a random northeasterlylocation based on a known location and a max distance in miles
+    protected static LatLon randomNELocation(LatLon centre,Double distanceInMeters)
+    {
+        Globe tempGlobe = new Earth();
+        //distance = angle in radians * globe radius in miles
+        //miles to kms 1.60944kms to a mile
+        //https://worldwind.arc.nasa.gov/java/latest/javadoc/gov/nasa/worldwind/geom/Angle.html
+        //random angle
+        Angle bearing = Angle.fromDegrees(Math.random()*90);// 0 to 90 degrees
+        distanceInMeters = distanceInMeters * Math.random();
+        double distanceRadians = distanceInMeters/ tempGlobe.getRadius();
+        LatLon newLatLon= LatLon.greatCircleEndPosition(centre,bearing.radians,distanceRadians);
 
+        return newLatLon;
     }
 
 }
