@@ -1,0 +1,250 @@
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T15:31:17+1030
+Description : ---------------------------------------------------------------
+              -- The service is using the following configuration settings --
+              ---------------------------------------------------------------
+              Domain (id)          : ospl_sp_ddsi (0)
+              Storage              : 0 Kbytes
+              Storage threshold    : 1024 Kbytes
+              Storage address      : Not available
+              Locking              : default
+              Memory mode          : Heap memory
+              Builtin topics       : true
+              Priority inheritance : false
+              SystemId             : 2082539073 from [1,2147483647]
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <12160>
+Thread      : spliced 16828
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/The OpenSplice domain service/u_domain.c/785/0/1573794077.556746600/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T15:31:17+1030
+Description : Service cmsoap disabled
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <12160>
+Thread      : spliced 16828
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/OpenSplice domain service/sr_componentInfo.c/446/0/1573794077.557873800/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T15:31:17+1030
+Description : ++++++++++++++++++++++++++++++++++++++++++++++++
+              ++ The service 'splicedaemon' is now operational. 
+              ++++++++++++++++++++++++++++++++++++++++++++++++
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <12160>
+Thread      : spliced 16828
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/v_serviceChangeState/v_service.c/266/0/1573794077.559015200/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T15:31:17+1030
+Description : ++++++++++++++++++++++++++++++++++++++++++++++++
+              ++ The service 'ddsi2' is now operational. 
+              ++++++++++++++++++++++++++++++++++++++++++++++++
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <12160>
+Thread      : ddsi2 20948
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/v_serviceChangeState/v_service.c/266/0/1573794077.589388700/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T15:31:17+1030
+Description : The durability service can be identified by ID: 2082539073
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <12160>
+Thread      : durability 4468
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/DurabilityService/d_durability.c/554/0/1573794077.878463100/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T15:31:25+1030
+Description : ++++++++++++++++++++++++++++++++++++++++++++++++
+              ++ The service 'durability' is now operational. 
+              ++++++++++++++++++++++++++++++++++++++++++++++++
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <12160>
+Thread      : conflictResolver 20768
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/v_serviceChangeState/v_service.c/266/0/1573794085.182096800/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T15:33:41+1030
+Description : ---------------------------------------------------------------
+              -- The service is using the following configuration settings --
+              ---------------------------------------------------------------
+              Domain (id)          : ospl_sp_ddsi (0)
+              Storage              : 0 Kbytes
+              Storage threshold    : 1024 Kbytes
+              Storage address      : Not available
+              Locking              : default
+              Memory mode          : Heap memory
+              Builtin topics       : true
+              Priority inheritance : false
+              SystemId             : 1071434555 from [1,2147483647]
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <2820>
+Thread      : spliced 8772
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/The OpenSplice domain service/u_domain.c/785/0/1573794221.555016500/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T15:33:41+1030
+Description : Service cmsoap disabled
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <2820>
+Thread      : spliced 8772
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/OpenSplice domain service/sr_componentInfo.c/446/0/1573794221.561641900/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T15:33:41+1030
+Description : ++++++++++++++++++++++++++++++++++++++++++++++++
+              ++ The service 'splicedaemon' is now operational. 
+              ++++++++++++++++++++++++++++++++++++++++++++++++
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <2820>
+Thread      : spliced 8772
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/v_serviceChangeState/v_service.c/266/0/1573794221.562844000/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T15:33:41+1030
+Description : ++++++++++++++++++++++++++++++++++++++++++++++++
+              ++ The service 'ddsi2' is now operational. 
+              ++++++++++++++++++++++++++++++++++++++++++++++++
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <2820>
+Thread      : ddsi2 20940
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/v_serviceChangeState/v_service.c/266/0/1573794221.590100600/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T15:33:41+1030
+Description : The durability service can be identified by ID: 1071434555
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <2820>
+Thread      : durability 2496
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/DurabilityService/d_durability.c/554/0/1573794221.886515700/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T15:33:49+1030
+Description : ++++++++++++++++++++++++++++++++++++++++++++++++
+              ++ The service 'durability' is now operational. 
+              ++++++++++++++++++++++++++++++++++++++++++++++++
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <2820>
+Thread      : conflictResolver 6696
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/v_serviceChangeState/v_service.c/266/0/1573794229.179220300/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T16:00:50+1030
+Description : ---------------------------------------------------------------
+              -- The service is using the following configuration settings --
+              ---------------------------------------------------------------
+              Domain (id)          : ospl_sp_ddsi (0)
+              Storage              : 0 Kbytes
+              Storage threshold    : 1024 Kbytes
+              Storage address      : Not available
+              Locking              : default
+              Memory mode          : Heap memory
+              Builtin topics       : true
+              Priority inheritance : false
+              SystemId             : 1050116383 from [1,2147483647]
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <8392>
+Thread      : spliced 5116
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/The OpenSplice domain service/u_domain.c/785/0/1573795850.303423900/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T16:00:50+1030
+Description : Service cmsoap disabled
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <8392>
+Thread      : spliced 5116
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/OpenSplice domain service/sr_componentInfo.c/446/0/1573795850.304743200/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T16:00:50+1030
+Description : ++++++++++++++++++++++++++++++++++++++++++++++++
+              ++ The service 'splicedaemon' is now operational. 
+              ++++++++++++++++++++++++++++++++++++++++++++++++
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <8392>
+Thread      : spliced 5116
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/v_serviceChangeState/v_service.c/266/0/1573795850.306065200/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T16:00:50+1030
+Description : ++++++++++++++++++++++++++++++++++++++++++++++++
+              ++ The service 'ddsi2' is now operational. 
+              ++++++++++++++++++++++++++++++++++++++++++++++++
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <8392>
+Thread      : ddsi2 1384
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/v_serviceChangeState/v_service.c/266/0/1573795850.338176500/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-15T16:00:50+1030
+Description : The durability service can be identified by ID: 1050116383
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <8392>
+Thread      : durability 22268
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/DurabilityService/d_durability.c/554/0/1573795850.735633600/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-18T10:38:55+1030
+Description : ---------------------------------------------------------------
+              -- The service is using the following configuration settings --
+              ---------------------------------------------------------------
+              Domain (id)          : ospl_sp_ddsi (0)
+              Storage              : 0 Kbytes
+              Storage threshold    : 1024 Kbytes
+              Storage address      : Not available
+              Locking              : default
+              Memory mode          : Heap memory
+              Builtin topics       : true
+              Priority inheritance : false
+              SystemId             : 1224569306 from [1,2147483647]
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <8088>
+Thread      : spliced 13272
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/The OpenSplice domain service/u_domain.c/785/0/1574035735.391761700/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-18T10:38:55+1030
+Description : Service cmsoap disabled
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <8088>
+Thread      : spliced 13272
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/OpenSplice domain service/sr_componentInfo.c/446/0/1574035735.392860600/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-18T10:38:55+1030
+Description : ++++++++++++++++++++++++++++++++++++++++++++++++
+              ++ The service 'splicedaemon' is now operational. 
+              ++++++++++++++++++++++++++++++++++++++++++++++++
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <8088>
+Thread      : spliced 13272
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/v_serviceChangeState/v_service.c/266/0/1574035735.393988900/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-18T10:38:55+1030
+Description : ++++++++++++++++++++++++++++++++++++++++++++++++
+              ++ The service 'ddsi2' is now operational. 
+              ++++++++++++++++++++++++++++++++++++++++++++++++
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <8088>
+Thread      : ddsi2 15340
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/v_serviceChangeState/v_service.c/266/0/1574035735.444511400/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-18T10:38:55+1030
+Description : The durability service can be identified by ID: 1224569306
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <8088>
+Thread      : durability 17788
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/DurabilityService/d_durability.c/554/0/1574035735.848239600/0
+========================================================================================
+Report      : INFO
+Date        : 2019-11-18T10:39:03+1030
+Description : ++++++++++++++++++++++++++++++++++++++++++++++++
+              ++ The service 'durability' is now operational. 
+              ++++++++++++++++++++++++++++++++++++++++++++++++
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <8088>
+Thread      : conflictResolver 5364
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/v_serviceChangeState/v_service.c/266/0/1574035743.046174700/0

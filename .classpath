@@ -11,5 +11,14 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/worldwindx"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/gluegen-rt-natives-windows-amd64"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jogl-all-natives-windows-amd64"/>
+	<classpathentry kind="lib" path="C:/worldwind-v2.1.0/gdal.jar"/>
+	<classpathentry kind="lib" path="C:/worldwind-v2.1.0/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="C:/worldwind-v2.1.0/gluegen-rt-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="C:/worldwind-v2.1.0/jogl-all.jar"/>
+	<classpathentry kind="lib" path="C:/worldwind-v2.1.0/jogl-all-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="C:/worldwind-v2.1.0/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="C:/worldwind-v2.1.0/worldwind.jar"/>
+	<classpathentry kind="lib" path="C:/worldwind-v2.1.0/worldwindx.jar"/>
+	<classpathentry kind="lib" path="C:/opensplice/HDE/x86_64.win64/jar/dcpssaj5.jar"/>
 	<classpathentry kind="output" path="out/production/Harmony"/>
 </classpath>

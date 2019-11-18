@@ -1,0 +1,930 @@
+========================================================================================
+Context     : org.opensplice.dds.dcps.DomainParticipantFactoryImpl.create_participant
+Date        : 2019-11-18T10:28:09+1030
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <14836>
+Thread      : 18260
+Internals   : DomainParticipantFactoryImpl.java/175/6.9.181127OSS/42c7cafa/42c7cafa/-1
+----------------------------------------------------------------------------------------
+Report      : Unable to connect to domain id = <ANY>.
+              The most common causes of this error are an incorrect configuration file or
+              that OpenSpliceDDS is not running (when using shared memory mode).
+Internals   : u_participantNew/u_participant.c/234/773/1574035089.891841000
+----------------------------------------------------------------------------------------
+Report      : Attach to shared memory segment failed
+Internals   : user::u_domain::attachToFederatedDomain/u_domain.c/1349/769/1574035089.891885200
+----------------------------------------------------------------------------------------
+Report      : Cannot connect to domainId (0) and domainName (The default Domain).
+              Please make sure to start OpenSplice before creating a DomainParticipant.
+Internals   : user::u_domain::attachSharedMemory/u_domain.c/1317/773/1574035089.891914000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.891942200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.891970700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.891998800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892025800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892052300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892079200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892163500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892192900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892220700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892514800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892543700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892593200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892618600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892638500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892657500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892676400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892695400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892714400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892733300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892752300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892771200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892790100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892809100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892827700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892846600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892865800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892909600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892931000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892950100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892968800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.892987500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893006500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893025100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893043800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893062200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893080900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893099700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893118300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893136600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893171900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893192000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893210900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893231100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893250700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893269500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893288200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893306800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893325400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893344200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893362900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893381900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893400600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893419200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893437900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893457000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893475800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893494400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893537000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893558000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893577000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893595700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893614500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893633000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893668400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893691500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893710300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893729700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893748400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893767000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893785500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893804000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893822700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893841300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893862200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893882900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893902000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893921000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893939500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893958100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893976600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.893995000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894013500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894032000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894050700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894069100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894087600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894106200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894124600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894144600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894177900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894195700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894213400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894231300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894248900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894266500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894284800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894302400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894320000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894337500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894354900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894372800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894390400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894409600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894427200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894446100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894464400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894482200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894499800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894517400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894535100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894552700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894570300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894588000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894606200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894624200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894656100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894685400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894704600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894722500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894771300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894792200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894809900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894827400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894844800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894862300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894879800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894897400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894915000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894932600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894950100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894967600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.894985100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895002600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895020100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895039400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895057800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895075200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895092600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895109900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895127300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895144700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895162100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895179600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895197100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895214500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895232000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895249900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895267400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895284800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895302200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895321300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895339600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895357100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895374400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895391700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895409000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895426400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895443700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895485800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895503500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895521000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895538300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895555700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895573700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895591400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895610200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895630900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895648700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895666200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895683600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895700700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895717900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895735000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895752400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895769600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895787000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895804200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895821400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895838600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895855700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895874300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895893200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895911100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895928300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895945600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895962700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895980000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.895997100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896014300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896031400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896048600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896065800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896082900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896100400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896117600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896134800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896153300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896171200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896188400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896205600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896222800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896240000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896257000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896274200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896291300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896308500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896325600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896343200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896360300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896377300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896394300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896411500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896431400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896449400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896466700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896483700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896500700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896517800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896535000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896552500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896570000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896587200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896604300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896621300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896652300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896678300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896695900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896714600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896732900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896751200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896768000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896785100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896801900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896818800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896835700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896852400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896869300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896886100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896902900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896919700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896936600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896953400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.896970200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897020900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897040900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897060100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897077300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897094300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897111400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897128400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897145400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897162300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897179500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897196600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897214200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897231100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897248000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897264800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897282900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897300400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897317300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897334000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897350900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897367800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897384600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897401600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897418400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897435200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897451900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897468600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897485400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897502100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897518800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897535600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897553500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897571000
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897587800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897604500
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897621400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897653200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897677200
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897702800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897725800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897748700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897771300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897798600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897816700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897833400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897850400
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897868900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897886900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897903800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897920700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897939100
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897955800
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897972700
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.897989300
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.898005900
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.898022600
+----------------------------------------------------------------------------------------
+Report      : os_win32_loopKeyFiles: Could not find any key file: C:\Users\dread\AppData\Local\Temp\osp*.tmp
+Internals   : u_domainOpen/u_domain.c/79/0/1574035089.898039400
+========================================================================================
+Report      : ERROR
+Date        : 2019-11-18T10:38:55+1030
+Description : Failed to open meta configuration file "ospl_metaconfig.xml".
+              The file was not found in the current directory nor
+              could the file be found at the default location because
+              the environment variable OSPL_HOME was not set
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <8088>
+Thread      : spliced 13272
+Internals   : 6.9.181127OSS/42c7cafa/42c7cafa/configuration validator/cfg_validator.c/935/0/1574035735.371636300/0
