@@ -1,0 +1,90 @@
+========================================================================================
+Context     : org.opensplice.dds.dcps.DomainParticipantFactoryImpl.create_participant
+Date        : 2019-11-18T13:26:21+1030
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <10756>
+Thread      : 16148
+Internals   : DomainParticipantFactoryImpl.java/175/6.9.181127OSS/42c7cafa/42c7cafa/-1
+----------------------------------------------------------------------------------------
+Report      : Unable to connect to domain id = <ANY>.
+              The most common causes of this error are an incorrect configuration file or
+              that OpenSpliceDDS is not running (when using shared memory mode).
+Internals   : u_participantNew/u_participant.c/234/774/1574045781.081555000
+----------------------------------------------------------------------------------------
+Report      : Failed to initialize domain configuration for domain 2147483647
+Internals   : u__domainOpen/u_domain.c/1485/774/1574045781.081589600
+----------------------------------------------------------------------------------------
+Report      : Invalid URI specified: "C:\opensplice\HDE\x86_64.win64\etc\config\ospl.xml".
+Internals   : user::u_domain::GetDomainConfig/u_domain.c/241/774/1574045781.081612700
+========================================================================================
+Context     : org.opensplice.dds.dcps.DomainParticipantFactoryImpl.create_participant
+Date        : 2019-11-18T13:27:35+1030
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <1544>
+Thread      : 13168
+Internals   : DomainParticipantFactoryImpl.java/175/6.9.181127OSS/42c7cafa/42c7cafa/-1
+----------------------------------------------------------------------------------------
+Report      : Unable to connect to domain id = <ANY>.
+              The most common causes of this error are an incorrect configuration file or
+              that OpenSpliceDDS is not running (when using shared memory mode).
+Internals   : u_participantNew/u_participant.c/234/774/1574045855.885000500
+----------------------------------------------------------------------------------------
+Report      : Failed to initialize domain configuration for domain 2147483647
+Internals   : u__domainOpen/u_domain.c/1485/774/1574045855.885034300
+----------------------------------------------------------------------------------------
+Report      : Invalid URI specified: "C:\opensplice\HDE\x86_64.win64\etc\config\ospl.xml".
+Internals   : user::u_domain::GetDomainConfig/u_domain.c/241/774/1574045855.885057000
+========================================================================================
+Context     : org.opensplice.dds.dcps.DomainParticipantFactoryImpl.create_participant
+Date        : 2019-11-18T13:27:40+1030
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <1544>
+Thread      : 2620
+Internals   : DomainParticipantFactoryImpl.java/175/6.9.181127OSS/42c7cafa/42c7cafa/-1
+----------------------------------------------------------------------------------------
+Report      : Unable to connect to domain id = <ANY>.
+              The most common causes of this error are an incorrect configuration file or
+              that OpenSpliceDDS is not running (when using shared memory mode).
+Internals   : u_participantNew/u_participant.c/234/774/1574045860.462399100
+----------------------------------------------------------------------------------------
+Report      : Failed to initialize domain configuration for domain 2147483647
+Internals   : u__domainOpen/u_domain.c/1485/774/1574045860.462438700
+----------------------------------------------------------------------------------------
+Report      : Invalid URI specified: "C:\opensplice\HDE\x86_64.win64\etc\config\ospl.xml".
+Internals   : user::u_domain::GetDomainConfig/u_domain.c/241/774/1574045860.462474200
+========================================================================================
+Context     : org.opensplice.dds.dcps.DomainParticipantFactoryImpl.create_participant
+Date        : 2019-11-18T13:27:40+1030
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <1544>
+Thread      : 2620
+Internals   : DomainParticipantFactoryImpl.java/175/6.9.181127OSS/42c7cafa/42c7cafa/-1
+----------------------------------------------------------------------------------------
+Report      : Unable to connect to domain id = <ANY>.
+              The most common causes of this error are an incorrect configuration file or
+              that OpenSpliceDDS is not running (when using shared memory mode).
+Internals   : u_participantNew/u_participant.c/234/774/1574045860.465088900
+----------------------------------------------------------------------------------------
+Report      : Failed to initialize domain configuration for domain 2147483647
+Internals   : u__domainOpen/u_domain.c/1485/774/1574045860.465136700
+----------------------------------------------------------------------------------------
+Report      : Invalid URI specified: "C:\opensplice\HDE\x86_64.win64\etc\config\ospl.xml".
+Internals   : user::u_domain::GetDomainConfig/u_domain.c/241/774/1574045860.465170000
+========================================================================================
+Context     : org.opensplice.dds.dcps.DomainParticipantFactoryImpl.create_participant
+Date        : 2019-11-18T13:27:40+1030
+Node        : DESKTOP-GKKAK62
+Process     : java.exe <1544>
+Thread      : 2620
+Internals   : DomainParticipantFactoryImpl.java/175/6.9.181127OSS/42c7cafa/42c7cafa/-1
+----------------------------------------------------------------------------------------
+Report      : Unable to connect to domain id = <ANY>.
+              The most common causes of this error are an incorrect configuration file or
+              that OpenSpliceDDS is not running (when using shared memory mode).
+Internals   : u_participantNew/u_participant.c/234/774/1574045860.467553100
+----------------------------------------------------------------------------------------
+Report      : Failed to initialize domain configuration for domain 2147483647
+Internals   : u__domainOpen/u_domain.c/1485/774/1574045860.467591400
+----------------------------------------------------------------------------------------
+Report      : Invalid URI specified: "C:\opensplice\HDE\x86_64.win64\etc\config\ospl.xml".
+Internals   : user::u_domain::GetDomainConfig/u_domain.c/241/774/1574045860.467624600
