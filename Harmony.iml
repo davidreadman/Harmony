@@ -16,5 +16,6 @@
     <orderEntry type="library" name="worldwindx" level="project" />
     <orderEntry type="library" name="gluegen-rt-natives-windows-amd64" level="project" />
     <orderEntry type="library" name="jogl-all-natives-windows-amd64" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
