@@ -1,0 +1,6 @@
+
+*.log
+
+out/artifacts/Harmony_jar/
+
+out/production/Harmony/
