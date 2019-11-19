@@ -151,9 +151,9 @@ class DisplayWW
         // make flat
         Configuration.setValue(AVKey.GLOBE_CLASS_NAME, EarthFlat.class.getName());
         // Configuration.setValue(AVKey.VIEW_CLASS_NAME, FlatOrbitView.class.getName());
+
     }
-    /*very crude implementation of adding a symbol, need to remove the continous recreation of
-    symbollayers and update the node with a tactical symbol
+    /*takes the Renderable layer and adds a tactical symbol to it, returning that updated layer and adding symbol to node
      */
     public RenderableLayer addSymbol(RenderableLayer symbolLayer,NodeData nodeData)
     {
