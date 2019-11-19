@@ -17,9 +17,8 @@ import java.beans.PropertyChangeListener;
 public class JFrameGuiActions
 {
 
-    boolean loggingFlag = false;
-    boolean sendNodes = true;
     WriteLog logger;
+    boolean loggingFlag = false;
 
     public JFrameGuiActions(DisplayWW displayWW, HarmonyDataPublisher publishData, NodeData[] nodeData)
     {
@@ -66,8 +65,8 @@ public class JFrameGuiActions
         JMenuBar menuBar;
         JMenu  menu,submenu,aboutMenu;
         JMenuItem menuItem;
-        JRadioButtonMenuItem rbMenuItem, dDSMenuItem;
-
+        JRadioButtonMenuItem rbMenuItem, dDSNodeMenuItem, pubMenuItem, logMenuItem;
+        JRadioButtonMenuItem  dDSMetMenuItem, stopPubMenuItem, stopLogMenuItem;
 
         menuBar = new JMenuBar();
         menu = new JMenu("Options");
@@ -87,17 +86,41 @@ public class JFrameGuiActions
         //a group of JMenuItems
         //a group of radio box menu items
         menu.addSeparator();
-        ButtonGroup group = new ButtonGroup();
-        dDSMenuItem = new JRadioButtonMenuItem("Send Node information/Receive Metrics");
-        group.add(dDSMenuItem);
-        dDSMenuItem.setSelected(true);
-        menu.add(dDSMenuItem);
+        ButtonGroup dDSGroup = new ButtonGroup();
+        dDSNodeMenuItem = new JRadioButtonMenuItem("Send Node information/Receive Metrics");
+        dDSGroup.add(dDSNodeMenuItem);
+        dDSNodeMenuItem.setSelected(true);
+        menu.add(dDSNodeMenuItem);
 
-        dDSMenuItem = new JRadioButtonMenuItem("Receive Node Information/Send Metrics");
-        group.add(dDSMenuItem);
-        menu.add(dDSMenuItem);
+        dDSMetMenuItem = new JRadioButtonMenuItem("Receive Node Information/Send Metrics");
+        dDSGroup.add(dDSMetMenuItem);
+        menu.add(dDSMetMenuItem);
 
+        /*start and stop publishing */
+        menu.addSeparator();
+        ButtonGroup pubGroup = new ButtonGroup();
+        pubMenuItem = new JRadioButtonMenuItem("Start Publishing DDS Messages");
 
+        pubGroup.add(pubMenuItem);
+        pubMenuItem.setSelected(false);
+        menu.add(pubMenuItem);
+
+        stopPubMenuItem = new JRadioButtonMenuItem("Stop Publishing DDS Messages");
+        pubGroup.add(stopPubMenuItem);
+        stopPubMenuItem.setSelected(true);
+        menu.add(stopPubMenuItem);
+        /*start and stop logging */
+        menu.addSeparator();
+        ButtonGroup logGroup = new ButtonGroup();
+        logMenuItem = new JRadioButtonMenuItem("Start Logging Positions");
+        logGroup.add(logMenuItem);
+        logMenuItem.setSelected(false);
+        menu.add(logMenuItem);
+
+        stopLogMenuItem = new JRadioButtonMenuItem("Stop Logging Positions");
+        logGroup.add(stopLogMenuItem);
+        stopLogMenuItem.setSelected(true);
+        menu.add(stopLogMenuItem);
 
         //Build second menu in the menu bar.
         aboutMenu = new JMenu("About");
@@ -108,21 +131,14 @@ public class JFrameGuiActions
 
         frame.setJMenuBar (menuBar);
 
-        JButton publishButton = new JButton("Publish", new ImageIcon("publish.png"));
-        publishButton.setBounds(100, 100, 140, 40);
-        frame.add(publishButton);
 
-        JButton logButton = new JButton("Log", new ImageIcon("publish.png"));
-        logButton.setBounds(250, 110, 140, 40);
-        frame.add(logButton);
 
-        JButton cloButton = new JButton("close", new ImageIcon("publish.png"));
-        cloButton.setBounds(400, 120, 140, 40);
+
+        JButton debugButton = new JButton("debug", new ImageIcon("debug.png"));
+        debugButton.setBounds(400, 120, 140, 40);
        // frame.add(cloButton);
 
-        JButton lastButton = new JButton("debug", new ImageIcon("publish.png"));
-        lastButton.setBounds(100, 300, 140, 40);
-        frame.add(lastButton);
+
 
         JTextField JT = new JTextField("");
 
@@ -143,62 +159,22 @@ public class JFrameGuiActions
 /*
 Set up the Gui Listeners
  */
-        logButton.addActionListener(new ActionListener()
+
+
+        logMenuItem.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
 
-                //send out data for all nodes
-                int numberOfNodes = nodeData.length;
-                String writeableString = logger.getTimeStamp() + ",";
-                for (int i = 0; i < numberOfNodes; i++)
+                if (!loggingFlag)//first time selected
                 {
-                    writeableString = writeableString + nodeData[i].NodeUUID + ",";
-                    writeableString = writeableString + nodeData[i].currentLocation.asDegreesArray()[0] + ",";
-                    writeableString = writeableString + nodeData[i].currentLocation.asDegreesArray()[1] + ",";
-                    writeableString = writeableString + "This will be a future metric,";
-                    writeableString = writeableString + "This will be a future decision,";
-                }
-                writeableString = writeableString + "\n";
-                logger.writeStringToFile(writeableString);
-                System.out.println("written " + writeableString);
-                logger.Flush();
-            }
-        });
-
-        rbMenuItem.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-
-                if (rbMenuItem.isSelected())
-                {
-                    System.out.println("rBmenuItem");
                     logger = new WriteLog();
-                }
-                else
-                {
-                    rbMenuItem.setSelected(true);
+                    loggingFlag = true;
                 }
             }
         });
-        publishButton.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
 
-                //send out data for all nodes
-                int numberOfNodes = nodeData.length;
-                for (int i = 0; i < numberOfNodes; i++)
-                {
-                    publishData.HarmonyPublish(nodeData[i]);
-                }
-                System.out.println("published");
-
-            }
-
-        });
-        lastButton.addActionListener(new ActionListener()
+        debugButton.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
@@ -213,8 +189,8 @@ Set up the Gui Listeners
 
             public void actionPerformed(ActionEvent actionEvent)
             {
+               /*set current position of the nodes to the 'next' position*/
                 int NumberOfNodes = nodeData.length;
-
                 for (int i = 0; i < NumberOfNodes; i++)
                 {
 
@@ -225,6 +201,42 @@ Set up the Gui Listeners
                     nodeData[i].currentLocation=newPosition;
                 }
                 displayWW.canvas.redraw();
+                /////////////////////////////////////////////
+                /* set up and log data to csv file */
+                //if logging is enabled
+                //if this is the first time logging, set up csv file and set a flag
+                //else just log the data
+                if(loggingFlag && logMenuItem.isSelected())
+                {
+                    //send out data for all nodes
+                    int numberOfNodes = nodeData.length;
+                    String writeableString = logger.getTimeStamp() + ",";
+                    for (int i = 0; i < numberOfNodes; i++)
+                    {
+                        writeableString = writeableString + nodeData[i].NodeUUID + ",";
+                        writeableString = writeableString + nodeData[i].currentLocation.asDegreesArray()[0] + ",";
+                        writeableString = writeableString + nodeData[i].currentLocation.asDegreesArray()[1] + ",";
+                        writeableString = writeableString + "This will be a future metric,";
+                        writeableString = writeableString + "This will be a future decision,";
+                    }
+                    writeableString = writeableString + "\n";
+                    logger.writeStringToFile(writeableString);
+                    System.out.println("written " + writeableString);
+                    logger.Flush();
+                }
+                /////////////////////////////////////////////
+                /* publish DDS messages */
+                //send out data for all nodes
+                if(pubMenuItem.isSelected())
+                {
+                    int numberOfNodes = nodeData.length;
+                    for (int i = 0; i < numberOfNodes; i++)
+                    {
+                        publishData.HarmonyPublish(nodeData[i]);
+                    }
+                    System.out.println("published");
+                }
+                //////////////////////////////////////////////
             }
         };
         Timer timer = new Timer(1000, timerListener);

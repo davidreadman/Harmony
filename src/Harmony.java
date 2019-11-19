@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.awt.BorderLayout;
@@ -83,7 +84,15 @@ public class Harmony
 {
     public static void main(String[] args) throws IOException
     {
+        /*
+        exploring the possibility of running a batch file at program start to enable
+        opensplice environment variable setup
 
+        Runtime.
+                getRuntime().
+                exec("echo \"test\"");
+
+         */
         //Create initialisations
 		/*
 		ParseProperties class reads in values from .properties file for nodal information

@@ -20,7 +20,7 @@ public class HarmonyDataListener extends DataReaderAdapter<PositionReportMessage
 
     boolean closed = false;
     GuardCondition guardCond = null;
-    String receievedMessage ="";
+
     DDSPositionMessage dDSPositionMessage;
 
 
