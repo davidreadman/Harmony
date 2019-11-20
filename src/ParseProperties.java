@@ -1,6 +1,7 @@
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 
+import java.io.FileInputStream;
 import java.util.Properties;
 import java.lang.Double;
 
@@ -25,10 +26,12 @@ public class ParseProperties
 		double lon;
 		try {
 			Properties prop = new Properties();
+
 			String propFileName = "config.properties";
-			
-			inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
-			
+			//the following line is to read from a properties file embedded in the jar
+			//inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+			inputStream = new FileInputStream(propFileName);
+
 			if (inputStream !=null){
 				prop.load(inputStream);
 			} else {
@@ -52,7 +55,7 @@ public class ParseProperties
 			theseNodes[i].Lon = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lon"));
 			theseNodes[i].currentLocation= LatLon.fromDegrees(theseNodes[i].Lat,theseNodes[i].Lon);
 			theseNodes[i].symbol = prop.getProperty("Node"+(i+1)+"2525B");
-				System.out.println("symbol: " +theseNodes[i].symbol);
+
 			}
 			
 			

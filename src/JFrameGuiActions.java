@@ -153,12 +153,9 @@ public class JFrameGuiActions
         frame.setSize(2000, 2000);
         frame.setVisible(true);
 
-
-
 /*
 Set up the Gui Listeners
  */
-
 
         logMenuItem.addActionListener(new ActionListener()
         {
@@ -250,7 +247,6 @@ Set up the Gui Listeners
         };
         Timer secondTimer = new Timer(3000, secondTimerListener);
         secondTimer.start();
-
 
 
     }
