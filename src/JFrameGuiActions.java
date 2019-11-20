@@ -22,9 +22,7 @@ public class JFrameGuiActions
 
     public JFrameGuiActions(DisplayWW displayWW, HarmonyDataPublisher publishData, NodeData[] nodeData)
     {
-        /* set up logger to write to CSV files */
-        /*disabled so new logfiles are not created each time */
-       //
+
 
         /* setup the binding of properties to allow for change monitoring across threads */
         DDSPositionMessage dDSPositionMessage = new DDSPositionMessage();
@@ -45,14 +43,15 @@ public class JFrameGuiActions
             }
         };
         dDSPositionMessage.addPropertyChangeListener(pcl);
-
+        /* setup the MovementDecision class */
+        MovementDecision movementDecision = new MovementDecision(nodeData,displayWW);
         /* set up DDS Subscriber/Listeners with bound properties */
         new HarmonyDataSubscriber(null, dDSPositionMessage);
         //new HarmonyMetricsSubscriber();
 
         /* set up the GUI items */
         // frame.getContentPane().setLayout(new FlowLayout());
-    /* set up default UI fonts */
+        /* set up default UI fonts */
         setUIFont (new javax.swing.plaf.FontUIResource("Serif",Font.PLAIN,30));
 
         JFrame frame = new JFrame("World Wind");
@@ -194,7 +193,7 @@ Set up the Gui Listeners
                 for (int i = 0; i < NumberOfNodes; i++)
                 {
 
-                    Position newRandomPosition = new Position(displayWW.randomNELocation(nodeData[i].currentLocation,100.1),0);
+                    Position newRandomPosition = new Position(movementDecision.randomNELocation(nodeData[i].currentLocation,100.1),0);
                     nodeData[i].nextLocation = newRandomPosition;
                     Position newPosition = new Position(nodeData[i].nextLocation,0);
                     nodeData[i].symbolIdentifier.setPosition(newPosition);
