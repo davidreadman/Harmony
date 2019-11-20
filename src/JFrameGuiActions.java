@@ -200,7 +200,17 @@ Set up the Gui Listeners
                     nodeData[i].currentLocation=newPosition;
                 }
                 displayWW.canvas.redraw();
-                /////////////////////////////////////////////
+
+            }
+        };
+        Timer timer = new Timer(1000, timerListener);
+        timer.start();
+        ActionListener secondTimerListener = new ActionListener()
+        {
+
+            public void actionPerformed(ActionEvent actionEvent)
+            {
+
                 /* set up and log data to csv file */
                 //if logging is enabled
                 //if this is the first time logging, set up csv file and set a flag
@@ -220,7 +230,7 @@ Set up the Gui Listeners
                     }
                     writeableString = writeableString + "\n";
                     logger.writeStringToFile(writeableString);
-                    System.out.println("written " + writeableString);
+                   // System.out.println("written " + writeableString);
                     logger.Flush();
                 }
                 /////////////////////////////////////////////
@@ -238,9 +248,8 @@ Set up the Gui Listeners
                 //////////////////////////////////////////////
             }
         };
-        Timer timer = new Timer(1000, timerListener);
-        timer.start();
-
+        Timer secondTimer = new Timer(3000, secondTimerListener);
+        secondTimer.start();
 
 
 
