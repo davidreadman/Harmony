@@ -44,7 +44,7 @@ public class JFrameGuiActions
         };
         dDSPositionMessage.addPropertyChangeListener(pcl);
         /* setup the MovementDecision class */
-        MovementDecision movementDecision = new MovementDecision(nodeData,displayWW);
+        MovementDecision movementDecision = new MovementDecision(nodeData, displayWW);
         /* set up DDS Subscriber/Listeners with bound properties */
         new HarmonyDataSubscriber(null, dDSPositionMessage);
         //new HarmonyMetricsSubscriber();

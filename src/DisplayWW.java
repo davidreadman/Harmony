@@ -151,7 +151,11 @@ class DisplayWW
         // make flat
         Configuration.setValue(AVKey.GLOBE_CLASS_NAME, EarthFlat.class.getName());
         // Configuration.setValue(AVKey.VIEW_CLASS_NAME, FlatOrbitView.class.getName());
-
+        //if the 2525B symbols are not available online the following variable needs to be set according to
+        //https://forum.worldwindcentral.com/forum/world-wind-java-forums/symbology-and-tactical-graphics/15478-milstd2525iconretrieverpath-for-offline-use
+        //<Property name="gov.nasa.worldwind.avkey.MilStd2525IconRetrieverPath" value="jar:file:milstd2525-symbols.zip!"/>
+        Configuration.setValue(AVKey.MIL_STD_2525_ICON_RETRIEVER_PATH , "jar:file:milstd2525-symbols.zip!");
+        //Note: if running from intellij the zip file needs to be in the root directory path, if from console it needs to be next to the jar
     }
     /*takes the Renderable layer and adds a tactical symbol to it, returning that updated layer and adding symbol to node
      */
