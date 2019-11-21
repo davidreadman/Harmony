@@ -58,7 +58,8 @@ public class HarmonyDataListener extends DataReaderAdapter<PositionReportMessage
                     System.out.println("    userID  : " + msg.header.entityName);
                     System.out.println("    latitude : \"" + msg.latitude + "\"");
                     System.out.println("    longitude : \"" + msg.longitude + "\"");
-                    tempMessage = (msg.header.entityName+msg.latitude + msg.longitude );
+                    tempMessage = String.format("%s: (%f,%f)",msg.header.entityName, msg.latitude, msg.longitude);
+                    //tempMessage = (msg.header.entityName+msg.latitude + msg.longitude );
                 }
             }
 

@@ -8,9 +8,7 @@ import gov.nasa.worldwind.util.BasicDragger;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -19,6 +17,7 @@ public class JFrameGuiActions
 
     WriteLog logger;
     boolean loggingFlag = false;
+
 
     public JFrameGuiActions(DisplayWW displayWW, HarmonyDataPublisher publishData, NodeData[] nodeData)
     {
@@ -151,6 +150,28 @@ public class JFrameGuiActions
 
         frame.add(displayWW.canvas);
         frame.setSize(2000, 2000);
+        frame.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Dimension currentDim = frame.getSize();
+                JT.setBounds(0,300,(int)currentDim.width/10, (int) currentDim.height/4);
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+
+            }
+        });
         frame.setVisible(true);
 
 /*
