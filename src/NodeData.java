@@ -16,11 +16,10 @@ public class NodeData
      String symbol;
      TacticalSymbol symbolIdentifier;
      NodeType nodeType;
+     double minSpeed;
+     double maxSpeed;
 
-     NodeData ()
-     {
-     }
-    NodeData (String newUUID, String newtype, Position newPosition, String newSymbol, NodeType nodeType)
+    NodeData (String newUUID, String newtype, Position newPosition, String newSymbol, NodeType nodeType, double minSpeed, double maxSpeed)
     {
         // constructor
         NodeUUID =newUUID;
@@ -29,8 +28,11 @@ public class NodeData
         nextLocation = newPosition;
         symbol=newSymbol;
         this.nodeType = nodeType;
+        this.minSpeed = minSpeed;
+        this.maxSpeed = maxSpeed;
     }
 
+    NodeData() {}
      
  
 }

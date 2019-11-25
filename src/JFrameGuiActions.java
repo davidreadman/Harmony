@@ -205,8 +205,14 @@ Set up the Gui Listeners
                 int NumberOfNodes = nodeData.length;
                 for (int i = 0; i < NumberOfNodes; i++)
                 {
+                    Position newRandomPosition;
+                    if(nodeData[i].minSpeed == nodeData[i].maxSpeed) {
+                        newRandomPosition = movementDecision.moveWithDirection(nodeData[i].currentLocation, MovementDecision.MovementDirection.NORTH_EAST, nodeData[i].maxSpeed, false);
+                    }
+                    else {
+                        newRandomPosition = movementDecision.selectDistanceFromRangeThenMoveWithDirection(nodeData[i].currentLocation, MovementDecision.MovementDirection.NORTH_EAST, nodeData[i].minSpeed, nodeData[i].maxSpeed, false);
+                    }
 
-                    Position newRandomPosition = movementDecision.moveWithDirection(nodeData[i].currentLocation, MovementDecision.MovementDirection.NORTH_EAST, DEFAULT_DISTANCE_IN_METERS, false);
                     nodeData[i].nextLocation = newRandomPosition;
                     Position newPosition = nodeData[i].nextLocation;
                     nodeData[i].symbolIdentifier.setPosition(newPosition);
