@@ -53,7 +53,20 @@ public class ParseProperties
 			theseNodes[i].NodeUUID = prop.getProperty("Node"+(i+1)+"UUID");
 			theseNodes[i].Lat = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lat"));
 			theseNodes[i].Lon = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lon"));
-			theseNodes[i].currentLocation= LatLon.fromDegrees(theseNodes[i].Lat,theseNodes[i].Lon);
+			theseNodes[i].currentLocation= new Position(LatLon.fromDegrees(theseNodes[i].Lat,theseNodes[i].Lon), 0);
+			NodeData.NodeType nodeType;
+			switch(prop.getProperty("Node"+(i+1)+"IFF")) {
+				case "B":
+					nodeType = NodeData.NodeType.BLUE;
+					break;
+				case "R":
+					nodeType = NodeData.NodeType.RED;
+					break;
+				default:
+					nodeType = NodeData.NodeType.GREEN;
+					break;
+			}
+			theseNodes[i].nodeType = nodeType;
 			theseNodes[i].symbol = prop.getProperty("Node"+(i+1)+"2525B");
 
 			}

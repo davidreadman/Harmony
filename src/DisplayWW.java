@@ -103,8 +103,8 @@ class DisplayWW
 
 
         RenderableLayer linesLayer = new RenderableLayer();
-        Position pointA = new Position(nodeData[0].currentLocation,0);
-        Position pointB = new Position(nodeData[1].currentLocation,0);
+        Position pointA = nodeData[0].currentLocation;
+        Position pointB = nodeData[1].currentLocation;
         Path path = new Path(pointA,pointB);
          linesLayer.addRenderable(path);
         canvas.getModel().getLayers().add(linesLayer);

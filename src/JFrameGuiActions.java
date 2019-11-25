@@ -1,10 +1,4 @@
-import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
-import gov.nasa.worldwind.event.SelectEvent;
-import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.geom.Position;
-import gov.nasa.worldwind.globes.Earth;
-import gov.nasa.worldwind.globes.Globe;
-import gov.nasa.worldwind.util.BasicDragger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +9,7 @@ import java.beans.PropertyChangeListener;
 public class JFrameGuiActions
 {
 
+    public static final double DEFAULT_DISTANCE_IN_METERS = 100.0;
     WriteLog logger;
     boolean loggingFlag = false;
 
@@ -211,9 +206,9 @@ Set up the Gui Listeners
                 for (int i = 0; i < NumberOfNodes; i++)
                 {
 
-                    Position newRandomPosition = new Position(movementDecision.randomNELocation(nodeData[i].currentLocation,100.1),0);
+                    Position newRandomPosition = movementDecision.moveWithDirection(nodeData[i].currentLocation, MovementDecision.MovementDirection.NORTH_EAST, DEFAULT_DISTANCE_IN_METERS, false);
                     nodeData[i].nextLocation = newRandomPosition;
-                    Position newPosition = new Position(nodeData[i].nextLocation,0);
+                    Position newPosition = nodeData[i].nextLocation;
                     nodeData[i].symbolIdentifier.setPosition(newPosition);
                     nodeData[i].currentLocation=newPosition;
                 }
