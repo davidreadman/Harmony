@@ -107,7 +107,7 @@ public class Harmony
         //set up worldwind canvas
         DisplayWW outputToDisplay = new DisplayWW(blueNode);
         //set up gui and all actions thereafter
-        new JFrameGuiActions(outputToDisplay, publishdata, blueNode);
+        new JFrameGuiActions(outputToDisplay, publishdata, blueNode).setVisible(true);
 
         // Make Decisions
         //putting this within the guiactions initially

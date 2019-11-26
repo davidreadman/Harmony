@@ -6,7 +6,7 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class JFrameGuiActions
+public class JFrameGuiActions extends JFrame
 {
 
     public static final double DEFAULT_DISTANCE_IN_METERS = 100.0;
@@ -46,10 +46,9 @@ public class JFrameGuiActions
         /* set up the GUI items */
         // frame.getContentPane().setLayout(new FlowLayout());
         /* set up default UI fonts */
-        setUIFont (new javax.swing.plaf.FontUIResource("Serif",Font.PLAIN,30));
-
-        JFrame frame = new JFrame("World Wind");
-        frame.setDefaultLookAndFeelDecorated(true);
+        this.setUIFont (new javax.swing.plaf.FontUIResource("Serif",Font.PLAIN,30));
+        this.setTitle("Harmony");
+        this.setDefaultLookAndFeelDecorated(true);
 
 
        /*
@@ -122,7 +121,7 @@ public class JFrameGuiActions
 
         menuBar.add(aboutMenu);
 
-        frame.setJMenuBar (menuBar);
+        this.setJMenuBar (menuBar);
 
 
 
@@ -139,16 +138,16 @@ public class JFrameGuiActions
         JT.setBackground(new Color(0,0,0,200));
        JT.setOpaque(true);
         JT.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        frame.add(JT);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.add(JT);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /* add the worldwind canvas to the JFrame */
 
-        frame.add(displayWW.canvas);
-        frame.setSize(2000, 2000);
-        frame.addComponentListener(new ComponentListener() {
+        this.add(displayWW.canvas);
+        this.setSize(2000, 2000);
+        this.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-                Dimension currentDim = frame.getSize();
+                Dimension currentDim = getSize();
                 JT.setBounds(0,300,(int)currentDim.width/10, (int) currentDim.height/4);
             }
 
@@ -167,7 +166,7 @@ public class JFrameGuiActions
 
             }
         });
-        frame.setVisible(true);
+
 
 /*
 Set up the Gui Listeners
