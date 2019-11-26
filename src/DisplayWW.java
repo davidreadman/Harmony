@@ -51,7 +51,7 @@ import javax.swing.*;
 /*
 The DisplayWW Class is used to control and update the WorldWind Canvas, a
  */
-class DisplayWW
+class DisplayWW extends JPanel
 {
     WorldWindowGLCanvas canvas;
     LatLon defaultPosition = Position.fromDegrees(-22.509187, 150.096047, 1);
@@ -67,7 +67,9 @@ class DisplayWW
         // create main object
         canvas = new WorldWindowGLCanvas();
         canvas.setModel(new BasicModel());
-
+        canvas.setSize(new Dimension(600,600));
+        setLayout(new BorderLayout(5, 5));
+        add(canvas,BorderLayout.CENTER);
         // remove world map
         Layer worldMapLayer = canvas.getModel().getLayers().getLayerByName("World Map");
         canvas.getModel().getLayers().remove(worldMapLayer);

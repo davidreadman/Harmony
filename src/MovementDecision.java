@@ -28,9 +28,9 @@ public class MovementDecision
     //need a Globe to do positional calculations on great circles
     Globe tempGlobe;
 
-    public MovementDecision(NodeData[] nodeData, DisplayWW displayWW)
+    public MovementDecision(NodeData[] nodeData)
     {
-        movementDisplayWW = displayWW;
+
         movementNodeData = nodeData;
         tempGlobe = new Earth();
 

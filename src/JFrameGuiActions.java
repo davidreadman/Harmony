@@ -14,7 +14,7 @@ public class JFrameGuiActions extends JFrame
     boolean loggingFlag = false;
 
 
-    public JFrameGuiActions(DisplayWW displayWW, HarmonyDataPublisher publishData, NodeData[] nodeData)
+    public JFrameGuiActions(HarmonyDataPublisher publishData, NodeData[] nodeData)
     {
 
 
@@ -38,7 +38,7 @@ public class JFrameGuiActions extends JFrame
         };
         dDSPositionMessage.addPropertyChangeListener(pcl);
         /* setup the MovementDecision class */
-        MovementDecision movementDecision = new MovementDecision(nodeData, displayWW);
+        MovementDecision movementDecision = new MovementDecision(nodeData);
         /* set up DDS Subscriber/Listeners with bound properties */
         new HarmonyDataSubscriber(null, dDSPositionMessage);
         //new HarmonyMetricsSubscriber();
@@ -125,7 +125,8 @@ public class JFrameGuiActions extends JFrame
 
 
 
-
+/*
+textfield and button
         JButton debugButton = new JButton("debug", new ImageIcon("debug.png"));
         debugButton.setBounds(400, 120, 140, 40);
        // frame.add(cloButton);
@@ -139,16 +140,20 @@ public class JFrameGuiActions extends JFrame
        JT.setOpaque(true);
         JT.setAlignmentX(Component.RIGHT_ALIGNMENT);
         this.add(JT);
+        */
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /* add the worldwind canvas to the JFrame */
-
-        this.add(displayWW.canvas);
+        /*displayWW is set up as a JPanel */
+        DisplayWW displayWW = new DisplayWW(nodeData);
+        /* add the panel to the frame */
+        this.add(displayWW);
+        //this.add(displayWW.canvas);
         this.setSize(2000, 2000);
         this.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
                 Dimension currentDim = getSize();
-                JT.setBounds(0,300,(int)currentDim.width/10, (int) currentDim.height/4);
+                //JT.setBounds(0,300,(int)currentDim.width/10, (int) currentDim.height/4);
             }
 
             @Override
@@ -185,7 +190,7 @@ Set up the Gui Listeners
             }
         });
 
-        debugButton.addActionListener(new ActionListener()
+        /*debugButton.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
@@ -194,7 +199,7 @@ Set up the Gui Listeners
 
             }
 
-        });
+        });*/
         ActionListener timerListener = new ActionListener()
         {
 

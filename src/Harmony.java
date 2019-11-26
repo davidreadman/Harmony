@@ -105,9 +105,9 @@ public class Harmony
         NodeData[] blueNode = properties.parseConfig();
 
         //set up worldwind canvas
-        DisplayWW outputToDisplay = new DisplayWW(blueNode);
+       // DisplayWW outputToDisplay = new DisplayWW(blueNode);
         //set up gui and all actions thereafter
-        new JFrameGuiActions(outputToDisplay, publishdata, blueNode).setVisible(true);
+        new JFrameGuiActions( publishdata, blueNode).setVisible(true);
 
         // Make Decisions
         //putting this within the guiactions initially
