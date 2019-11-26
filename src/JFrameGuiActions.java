@@ -1,6 +1,7 @@
 import gov.nasa.worldwind.geom.Position;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
@@ -12,11 +13,17 @@ public class JFrameGuiActions extends JFrame
     public static final double DEFAULT_DISTANCE_IN_METERS = 100.0;
     WriteLog logger;
     boolean loggingFlag = false;
-
+    JPanel panel2525B,nodeLocPanel;
+    DisplayWW displayWW;
+    JMenuBar menuBar;
+    JMenu  menu,submenu,aboutMenu,informationMenu;
+    JMenuItem menuItem;
+    JRadioButtonMenuItem rbMenuItem, dDSNodeMenuItem, pubMenuItem, logMenuItem;
+   JRadioButtonMenuItem  dDSMetMenuItem, stopPubMenuItem, stopLogMenuItem;
+   JToggleButton toggle2525B,toggleNodeLocPanel;
 
     public JFrameGuiActions(HarmonyDataPublisher publishData, NodeData[] nodeData)
     {
-
 
         /* setup the binding of properties to allow for change monitoring across threads */
         DDSPositionMessage dDSPositionMessage = new DDSPositionMessage();
@@ -50,127 +57,45 @@ public class JFrameGuiActions extends JFrame
         this.setTitle("Harmony");
         this.setDefaultLookAndFeelDecorated(true);
 
-
-       /*
-        https://docs.oracle.com/javase/tutorial/uiswing/components/menu.html
-        */
-        JMenuBar menuBar;
-        JMenu  menu,submenu,aboutMenu;
-        JMenuItem menuItem;
-        JRadioButtonMenuItem rbMenuItem, dDSNodeMenuItem, pubMenuItem, logMenuItem;
-        JRadioButtonMenuItem  dDSMetMenuItem, stopPubMenuItem, stopLogMenuItem;
-
-        menuBar = new JMenuBar();
-        menu = new JMenu("Options");
-        menuBar.add(menu);
-
-        menuItem = new JMenuItem("");
-        menu.add(menuItem);
+        /*method setupMenuBar*/
+        this.setJMenuBar(setupMenuBar());
 
 
-        //a group of radio button menu items
-        menu.addSeparator();
-
-        rbMenuItem = new JRadioButtonMenuItem("Enable Logging");
-        rbMenuItem.setSelected(false);
-
-        menu.add(rbMenuItem);
-        //a group of JMenuItems
-        //a group of radio box menu items
-        menu.addSeparator();
-        ButtonGroup dDSGroup = new ButtonGroup();
-        dDSNodeMenuItem = new JRadioButtonMenuItem("Send Node information/Receive Metrics");
-        dDSGroup.add(dDSNodeMenuItem);
-        dDSNodeMenuItem.setSelected(true);
-        menu.add(dDSNodeMenuItem);
-
-        dDSMetMenuItem = new JRadioButtonMenuItem("Receive Node Information/Send Metrics");
-        dDSGroup.add(dDSMetMenuItem);
-        menu.add(dDSMetMenuItem);
-
-        /*start and stop publishing */
-        menu.addSeparator();
-        ButtonGroup pubGroup = new ButtonGroup();
-        pubMenuItem = new JRadioButtonMenuItem("Start Publishing DDS Messages");
-
-        pubGroup.add(pubMenuItem);
-        pubMenuItem.setSelected(false);
-        menu.add(pubMenuItem);
-
-        stopPubMenuItem = new JRadioButtonMenuItem("Stop Publishing DDS Messages");
-        pubGroup.add(stopPubMenuItem);
-        stopPubMenuItem.setSelected(true);
-        menu.add(stopPubMenuItem);
-        /*start and stop logging */
-        menu.addSeparator();
-        ButtonGroup logGroup = new ButtonGroup();
-        logMenuItem = new JRadioButtonMenuItem("Start Logging Positions");
-        logGroup.add(logMenuItem);
-        logMenuItem.setSelected(false);
-        menu.add(logMenuItem);
-
-        stopLogMenuItem = new JRadioButtonMenuItem("Stop Logging Positions");
-        logGroup.add(stopLogMenuItem);
-        stopLogMenuItem.setSelected(true);
-        menu.add(stopLogMenuItem);
-
-        //Build second menu in the menu bar.
-        aboutMenu = new JMenu("About");
-        menuItem = new JMenuItem("DST - LD - SITN");
-        aboutMenu.add(menuItem);
-
-        menuBar.add(aboutMenu);
-
-        this.setJMenuBar (menuBar);
-
-
-
-/*
-textfield and button
+    /*
+    textfield and button
         JButton debugButton = new JButton("debug", new ImageIcon("debug.png"));
         debugButton.setBounds(400, 120, 140, 40);
        // frame.add(cloButton);
 
 
 
-        JTextField JT = new JTextField("");
 
-        JT.setBounds(0, 300, 200, 500);
-        JT.setBackground(new Color(0,0,0,200));
-       JT.setOpaque(true);
-        JT.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        this.add(JT);
         */
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /* add the worldwind canvas to the JFrame */
+        JPanel cardPanel = new JPanel();
+        cardPanel.setLayout(new CardLayout());
+
+        // Create two World Windows that share resources.
+
+
+
+        // Add the World Windows to the card panel.
+
         /*displayWW is set up as a JPanel */
-        DisplayWW displayWW = new DisplayWW(nodeData);
+       this.displayWW = new DisplayWW(nodeData);
+        cardPanel.add(displayWW, "World Window A");
         /* add the panel to the frame */
-        this.add(displayWW);
+         // Add the card panel to the frame.
+        this.add(cardPanel, BorderLayout.CENTER);
+        this.add(this.setup2525B((CardLayout) cardPanel.getLayout(), cardPanel), BorderLayout.NORTH);
+        this.add(this.nodeLocations((CardLayout) cardPanel.getLayout(), cardPanel), BorderLayout.WEST);
+        this.pack();
+       // this.add(displayWW);
         //this.add(displayWW.canvas);
-        this.setSize(2000, 2000);
-        this.addComponentListener(new ComponentListener() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                Dimension currentDim = getSize();
-                //JT.setBounds(0,300,(int)currentDim.width/10, (int) currentDim.height/4);
-            }
+        this.setSize(1800, 1800);
 
-            @Override
-            public void componentMoved(ComponentEvent e) {
 
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-
-            }
-        });
 
 
 /*
@@ -189,17 +114,25 @@ Set up the Gui Listeners
                 }
             }
         });
-
-        /*debugButton.addActionListener(new ActionListener()
+        toggle2525B.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
-
-                System.out.println("canvas node 1");
+                /*the toggle button call .isSelected returns false or true, use this to show or hide panel*/
+                panel2525B.setVisible(toggle2525B.isSelected());
 
             }
+        });
 
-        });*/
+        toggleNodeLocPanel.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                /*the toggle button call .isSelected returns false or true, use this to show or hide panel*/
+                nodeLocPanel.setVisible(toggleNodeLocPanel.isSelected());
+
+            }
+        });
         ActionListener timerListener = new ActionListener()
         {
 
@@ -285,5 +218,161 @@ Set up the Gui Listeners
             if (value instanceof javax.swing.plaf.FontUIResource)
                 UIManager.put (key, f);
         }
+    }
+    private JMenuBar setupMenuBar()
+    {
+         /*
+        https://docs.oracle.com/javase/tutorial/uiswing/components/menu.html
+        */
+
+
+        menuBar = new JMenuBar();
+        menu = new JMenu("Options");
+        menuBar.add(menu);
+
+        menuItem = new JMenuItem("");
+        menu.add(menuItem);
+
+
+        //a group of radio button menu items
+        menu.addSeparator();
+
+        rbMenuItem = new JRadioButtonMenuItem("Enable Logging");
+        rbMenuItem.setSelected(false);
+
+        menu.add(rbMenuItem);
+        //a group of JMenuItems
+        //a group of radio box menu items
+        menu.addSeparator();
+        ButtonGroup dDSGroup = new ButtonGroup();
+        dDSNodeMenuItem = new JRadioButtonMenuItem("Send Node information/Receive Metrics");
+        dDSGroup.add(dDSNodeMenuItem);
+        dDSNodeMenuItem.setSelected(true);
+        menu.add(dDSNodeMenuItem);
+
+        dDSMetMenuItem = new JRadioButtonMenuItem("Receive Node Information/Send Metrics");
+        dDSGroup.add(dDSMetMenuItem);
+        menu.add(dDSMetMenuItem);
+
+        /*start and stop publishing */
+        menu.addSeparator();
+        ButtonGroup pubGroup = new ButtonGroup();
+        pubMenuItem = new JRadioButtonMenuItem("Start Publishing DDS Messages");
+
+        pubGroup.add(pubMenuItem);
+        pubMenuItem.setSelected(false);
+        menu.add(pubMenuItem);
+
+        stopPubMenuItem = new JRadioButtonMenuItem("Stop Publishing DDS Messages");
+        pubGroup.add(stopPubMenuItem);
+        stopPubMenuItem.setSelected(true);
+        menu.add(stopPubMenuItem);
+        /*start and stop logging */
+        menu.addSeparator();
+        ButtonGroup logGroup = new ButtonGroup();
+        logMenuItem = new JRadioButtonMenuItem("Start Logging Positions");
+        logGroup.add(logMenuItem);
+        logMenuItem.setSelected(false);
+        menu.add(logMenuItem);
+
+        stopLogMenuItem = new JRadioButtonMenuItem("Stop Logging Positions");
+        logGroup.add(stopLogMenuItem);
+        stopLogMenuItem.setSelected(true);
+        menu.add(stopLogMenuItem);
+
+        //Build Information menu
+        informationMenu = new JMenu("Information");
+        toggleNodeLocPanel = new JToggleButton("show/hide Node locations");
+        toggleNodeLocPanel.setSelected(false);
+        informationMenu.add(toggleNodeLocPanel);
+        toggle2525B = new JToggleButton("show/hide 2525B");
+        toggle2525B.setSelected(false);
+        informationMenu.add(toggle2525B);
+        menuBar.add(informationMenu);
+
+
+        //Build about menu in the menu bar.
+        aboutMenu = new JMenu("About");
+        menuItem = new JMenuItem("DST - LD - SITN");
+        aboutMenu.add(menuItem);
+
+
+
+        menuBar.add(aboutMenu);
+        return(menuBar);
+
+
+    }
+    private JPanel nodeLocations(final CardLayout cardLayout, final JPanel cardLayoutParent)
+    {
+        final JLabel NodeLocationLabel = new JLabel("Node Locations");
+
+        JTextField JT = new JTextField("");
+
+
+        this.nodeLocPanel = new JPanel(new GridLayout(2, 2));
+        nodeLocPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        nodeLocPanel.add(NodeLocationLabel);
+        nodeLocPanel.add(JT);
+
+       // nodeLocPanel.setBackground(new Color(0,0,0,200));
+        //nodeLocPanel.setOpaque(true);
+        JT.setText("Node A\n latitude, longitude\nNodeB\n latitude, longitude");
+
+
+
+        nodeLocPanel.setVisible(false);
+        return nodeLocPanel;
+    }
+    private JPanel setup2525B(final CardLayout cardLayout, final JPanel cardLayoutParent)
+    {
+        final JLabel NodeLabel = new JLabel("Node");
+        final JButton buttonA = new JButton("Button A");
+
+        final JLabel AffiliationLabel = new JLabel("Affiliation");
+        final JLabel labC = new JLabel(" Button C");
+
+        final JLabel labD = new JLabel(" Button D");
+
+        final JButton buttonB = new JButton(" Button B");
+        //buttonA.setBackground(new Color(0,0,0,200));
+        //buttonA.setOpaque(true);
+        this.panel2525B = new JPanel(new GridLayout(2, 7));
+        panel2525B.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panel2525B.add(NodeLabel);
+        panel2525B.add(AffiliationLabel);
+        panel2525B.add(labC);
+        panel2525B.add(buttonA);
+        panel2525B.add(buttonB);
+       // panel2525B.setBackground(new Color(0,0,0,200));
+       // panel2525B.setOpaque(true);
+        buttonA.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent actionEvent)
+            {
+                cardLayout.show(cardLayoutParent, "World Window A");
+                buttonA.setEnabled(false);
+                buttonB.setEnabled(true);
+                displayWW.canvas.redraw();
+            }
+        });
+
+        buttonB.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent actionEvent)
+            {
+                cardLayout.show(cardLayoutParent, "World Window B");
+                buttonA.setEnabled(true);
+                buttonB.setEnabled(false);
+                displayWW.canvas.redraw();
+
+            }
+        });
+
+        buttonA.setEnabled(false);
+
+
+        panel2525B.setVisible(false);
+        return panel2525B;
     }
 }
