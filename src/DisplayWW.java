@@ -1,31 +1,14 @@
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.util.Collection;
-import java.util.LinkedList;
 import gov.nasa.worldwind.BasicModel;
 import gov.nasa.worldwind.Configuration;
-import gov.nasa.worldwind.Model;
 import gov.nasa.worldwind.WorldWind;
-import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
-import gov.nasa.worldwind.awt.WorldWindowGLJPanel;
 import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
-import gov.nasa.worldwind.geom.Angle;
-import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
-import gov.nasa.worldwind.geom.Sector;
-import gov.nasa.worldwind.geom.coords.MGRSCoord;
-import gov.nasa.worldwind.globes.Earth;
 import gov.nasa.worldwind.globes.EarthFlat;
-import gov.nasa.worldwind.globes.Globe;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.RenderableLayer;
-import gov.nasa.worldwind.layers.Earth.MGRSGraticuleLayer;
 import gov.nasa.worldwind.render.*;
 import gov.nasa.worldwind.symbology.BasicTacticalSymbolAttributes;
 import gov.nasa.worldwind.symbology.TacticalSymbol;
@@ -33,29 +16,16 @@ import gov.nasa.worldwind.symbology.TacticalSymbolAttributes;
 import gov.nasa.worldwind.symbology.milstd2525.MilStd2525TacticalSymbol;
 import gov.nasa.worldwind.util.BasicDragger;
 import gov.nasa.worldwind.util.WWUtil;
-import gov.nasa.worldwind.view.orbit.FlatOrbitView;
-import gov.nasa.worldwindx.examples.KeepingObjectsInView;
-import gov.nasa.worldwindx.examples.util.HighlightController;
 
-import javax.swing.JButton;
-import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.Timer;
-import javax.swing.border.LineBorder;
-
-import javax.swing.*;
+import java.awt.*;
 /*
 The DisplayWW Class is used to control and update the WorldWind Canvas, a
  */
 class DisplayWW extends JPanel
 {
     WorldWindowGLCanvas canvas;
-    LatLon defaultPosition = Position.fromDegrees(-22.509187, 150.096047, 1);
-    LatLon rCPosition = Position.fromDegrees(-22.71220, 150.40076, 1);
+    Position defaultPosition = Position.fromDegrees(-22.509187, 150.096047, 1);
+    Position rCPosition = Position.fromDegrees(-22.71220, 150.40076, 1);
 
 
 
@@ -163,24 +133,6 @@ class DisplayWW extends JPanel
         attrs.setScale(0.75); // Make the symbol 75% its normal size.
         attrs.setOpacity(0.5); // Make the symbol 50% transparent.
         symname.setModifier("test",1);
-        symname.setShowTextModifiers(true);
-        symname.setAttributes(attrs);
-        symname.setShowLocation(true);
-        return symname;
-
-    }
-    public TacticalSymbol setupSymbol(String sidc, LatLon pos)
-    {
-        // place a tactical symbol
-        // http://goworldwind.org/developers-guide/symbology/tactical-symbols/
-        Position temppos = new Position(pos,0);
-        TacticalSymbol symname = new MilStd2525TacticalSymbol(sidc,temppos);
-        symname.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
-        // G*GPGPUY------- SFAPMFQM------A sfgaucvrm------
-        // RenderableLayer symbolLayer = new RenderableLayer();
-        TacticalSymbolAttributes attrs = new BasicTacticalSymbolAttributes();
-        attrs.setScale(0.75); // Make the symbol 75% its normal size.
-        attrs.setOpacity(0.5); // Make the symbol 50% transparent.
         symname.setShowTextModifiers(true);
         symname.setAttributes(attrs);
         symname.setShowLocation(true);

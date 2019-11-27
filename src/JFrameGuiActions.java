@@ -1,5 +1,4 @@
-import gov.nasa.worldwind.event.SelectEvent;
-import gov.nasa.worldwind.event.SelectListener;
+import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.util.BasicDragger;
@@ -7,14 +6,17 @@ import gov.nasa.worldwind.util.BasicDragger;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 public class JFrameGuiActions extends JFrame
 {
 
-    public static final double DEFAULT_DISTANCE_IN_METERS = 100.0;
     WriteLog logger;
     boolean loggingFlag = false;
     JPanel panel2525B,nodeLocPanel;
@@ -46,13 +48,11 @@ public class JFrameGuiActions extends JFrame
                     System.out.println(String.format("Received event from %s: %s has been changed from %s to %s", pd.getDDSPositionMessage(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue()));
                     //on a DDS Message is the *current* best time to make a decision on a new position
                     //a nice quick test could be a new random location based on existing location
-                    //curently living in timer, but move to here next after the position message has been altered to include node data
+                    //curently living in timer, but moveAtAngle to here next after the position message has been altered to include node data
                 }
             }
         };
         dDSPositionMessage.addPropertyChangeListener(pcl);
-        /* setup the MovementDecision class */
-        MovementDecision movementDecision = new MovementDecision(nodeData);
         /* set up DDS Subscriber/Listeners with bound properties */
         new HarmonyDataSubscriber(null, dDSPositionMessage);
 
@@ -163,15 +163,25 @@ Set up the Gui Listeners
 
             public void actionPerformed(ActionEvent actionEvent)
             {
-               /*set current position of the nodes to the 'next' position*/
-                int NumberOfNodes = nodeData.length;
-                for (int i = 0; i < NumberOfNodes; i++)
-                {
-                    Position newRandomPosition = movementDecision.moveWithoutDirection(nodeData[i].currentLocation,new Position(displayWW.rCPosition,0),nodeData[i].maxSpeed,false,true);
-                    nodeData[i].nextLocation = newRandomPosition;
-                    Position newPosition = nodeData[i].nextLocation;
-                    nodeData[i].symbolIdentifier.setPosition(newPosition);
-                    nodeData[i].currentLocation=newPosition;
+               /*
+                * For each node, find all the nodes that are within it's detection radius.
+                * For each detected node, calculate the distance, angle and direction from that node.
+                */
+
+                for(int i=0;i<nodeData.length;i++) {
+                    ArrayList<DetectedNode> nodesDetected = new ArrayList<>();
+                    for(int j=0;j<nodeData.length;j++) {
+                        if(i == j) {
+                            continue;
+                        }
+                        double distance = Position.greatCircleDistance(nodeData[i].currentLocation, nodeData[j].currentLocation).radians * MovementDecision.tempGlobe.getRadius();
+                        if(distance <= nodeData[i].detectionRadiusInKm) {
+                            Angle azimuthAngle = Position.greatCircleAzimuth(nodeData[i].currentLocation, nodeData[j].currentLocation);
+                            MovementDirection movementDirection = MovementDecision.findElement(azimuthAngle.degrees);
+                            nodesDetected.add(new DetectedNode(nodeData[j],movementDirection.direction,azimuthAngle,distance));
+                        }
+                    }
+                    nodeData[i].updateNodesDetectedByMe(nodesDetected);
                 }
                 displayWW.canvas.redraw();
 
