@@ -1,6 +1,7 @@
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 
+import javax.xml.soap.Node;
 import java.io.FileInputStream;
 import java.util.Properties;
 import java.lang.Double;
@@ -57,19 +58,23 @@ public class ParseProperties
 				NodeData.NodeType nodeType;
 				switch(prop.getProperty("Node"+(i+1)+"IFF")) {
 					case "B":
-						nodeType = NodeData.NodeType.BLUE;
+						nodeType = NodeData.NodeType.FRIEND;
 						break;
 					case "R":
-						nodeType = NodeData.NodeType.RED;
+						nodeType = NodeData.NodeType.HOSTILE;
+						break;
+					case "G":
+						nodeType = NodeData.NodeType.NEUTRAL;
 						break;
 					default:
-						nodeType = NodeData.NodeType.GREEN;
+						nodeType = NodeData.NodeType.NULL;
 						break;
 				}
 				theseNodes[i].nodeType = nodeType;
 				theseNodes[i].symbol = prop.getProperty("Node"+(i+1)+"2525B");
-				theseNodes[i].minSpeed = Double.parseDouble(prop.getProperty("Node"+(i+1)+"MinSpeed"));
-				theseNodes[i].maxSpeed = Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed"));
+				theseNodes[i].operationalSpeed = Speed.fromKilometresPerHour(Double.parseDouble(prop.getProperty("Node"+(i+1)+"OperationalSpeed")));
+				theseNodes[i].maximumSpeed = Speed.fromKilometresPerHour(Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed")));
+				theseNodes[i].detectionRadiusInKm = Double.parseDouble(prop.getProperty("Node"+(i+1)+"RadiusOfDetectionInKm"));
 			}
 			
 			

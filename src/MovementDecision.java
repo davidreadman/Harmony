@@ -4,123 +4,84 @@ import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.globes.Earth;
 import gov.nasa.worldwind.globes.Globe;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 //note: distanceInRadians = distanceInMeters / globe.getRadius();
 public class MovementDecision
 {
-    public static final int VARIATION_DEGREES = 20;
+    private static final int VARIATION_DEGREES = 20;
 
-    public enum MovementDirection {
-        NORTH,
-        SOUTH,
-        EAST,
-        WEST,
-        NORTH_EAST,
-        NORTH_WEST,
-        SOUTH_EAST,
-        SOUTH_WEST
+    public static final Globe tempGlobe = new Earth();
+
+    private static final List<MovementDirection> possibleDirections = populateList();
+
+    private static List<MovementDirection> populateList() {
+        List<MovementDirection> possibleDirections = new ArrayList<>();
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.NORTH,0));
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.NORTH_EAST,0.01,89.99));
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.NORTH_EAST,-359.99,-270.01));
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.EAST,90));
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.EAST,-270));
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.SOUTH_EAST,90.01,179.99));
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.SOUTH_EAST,-269.99,-180.01));
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.SOUTH,180));
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.SOUTH,-180));
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.SOUTH_WEST,180.01,269.99));
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.SOUTH_WEST,-179.99,-90.01));
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.WEST,270));
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.WEST,-90));
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.NORTH_WEST,270.01,359.99));
+        possibleDirections.add(new MovementDirection(MovementDirection.DirectionType.NORTH_WEST,-89.99,-0.01));
+        return possibleDirections;
     }
 
+    public static MovementDirection findElement(MovementDirection.DirectionType directionType) {
+        return possibleDirections.stream().filter(e -> e.direction == directionType).findFirst().orElse(null);
+    }
 
-    DisplayWW movementDisplayWW;
-    NodeData[] movementNodeData;
-    //need a Globe to do positional calculations on great circles
-    Globe tempGlobe;
-
-    public MovementDecision(NodeData[] nodeData)
-    {
-
-        movementNodeData = nodeData;
-        tempGlobe = new Earth();
-
+    public static MovementDirection findElement(double bearingInDegrees) {
+        return possibleDirections.stream().filter(e -> e.minimum <= bearingInDegrees && bearingInDegrees <= e.maximum).findFirst().orElse(null);
     }
 
     /**
-     * Create a new position so that it moves towards or away from a target.
-     * @param current Position we are moving from
-     * @param target Position we are either moving towards or away from
-     * @param distanceInMeters how much movement there is
-     * @param variation true implies that we will want to move with variation
-     * @param moveTowards true implies we want to move our current position towards the target, false implies we want to move away
-     * @return a new position towards/away from the target after movement
+     *
+     * @param center starting position
+     * @param bearingInDegrees angle of which we are travelling towards or away to our intended target
+     * @param distanceInMeters how much we want to travel
+     * @param angleVariation  If true, then we return a value of the bearing degrees values +/- the variation.
+     * @param distanceVariation If true, then the distance will be randomized.
+     * @param moveTowards flip the bearing degrees value if we're moving away from a target.
+     * @return a new position based on the parameters.
      */
-    public Position moveWithoutDirection(Position current, Position target, Double distanceInMeters, boolean variation, boolean moveTowards) {
-        Angle bearing = Position.greatCircleDistance(current, target);
-        Double bearingInDegrees = moveTowards ? bearing.degrees : (bearing.degrees + 180) % 360;
-
-        if(variation) {
-            return moveWithVariation(current, bearingInDegrees, distanceInMeters);
+    public static Position moveAtAngle(Position center, double bearingInDegrees, double distanceInMeters, boolean angleVariation, boolean distanceVariation, boolean moveTowards) {
+        //flip the bearing degrees value if we're moving away from a target.
+        if(!moveTowards) {
+            bearingInDegrees = (bearingInDegrees + 180) % 360;
         }
-        else {
-            return moveToNewLocationWithAngle(current, bearing, distanceInMeters);
+
+        if(angleVariation) {
+            double old = bearingInDegrees;
+            bearingInDegrees = ThreadLocalRandom.current().nextDouble(old-VARIATION_DEGREES, old+VARIATION_DEGREES+0.01);
         }
-    }
 
-    public Position selectDistanceFromRangeThenMoveWithoutDirection(Position current, Position target, Double minDistance, Double maxDistance, boolean variation, boolean moveTowards) {
-        return moveWithoutDirection(current,target,ThreadLocalRandom.current().nextDouble(minDistance, maxDistance+0.01), variation, moveTowards);
-    }
+        if(distanceVariation) {
+            distanceInMeters *= Math.random();
+        }
 
-    private Position moveWithVariation(Position center, double bearingInDegrees, Double distanceInMeters) {
-        return moveToNewLocationWithAngle(center, Angle.fromDegrees(ThreadLocalRandom.current().nextDouble(bearingInDegrees-VARIATION_DEGREES, bearingInDegrees+VARIATION_DEGREES+0.01)), distanceInMeters * Math.random());
-    }
 
-    public Position moveToNewLocationWithAngle(Position center, Angle angle, Double distanceInMeters) {
-        double distanceRadians = distanceInMeters/ tempGlobe.getRadius();
-        LatLon newLatLon= LatLon.greatCircleEndPosition(center,angle.radians,distanceRadians);
+        Angle bearing = Angle.fromDegrees(bearingInDegrees);
+        double distanceRadians = distanceInMeters/tempGlobe.getRadius();
+        LatLon newLatLon =  LatLon.greatCircleEndPosition(center,bearing.radians,distanceRadians);
         return new Position(newLatLon,0);
     }
 
-    public Position selectDistanceFromRangeThenMoveWithDirection(Position center, MovementDirection direction, Double minDistance, Double maxDistance, boolean variation) {
-        return moveWithDirection(center, direction, ThreadLocalRandom.current().nextDouble(minDistance, maxDistance+0.01), variation);
+    public static Position moveInSpecificDirection(Position current, MovementDirection.DirectionType direction, double distanceInMeters, boolean angleVariation, boolean distanceVariation, boolean moveTowards) {
+        MovementDirection movementDirection = findElement(direction);
+        double bearingInDegrees = ThreadLocalRandom.current().nextDouble(movementDirection.minimum, movementDirection.maximum+0.01);
+        return moveAtAngle(current, bearingInDegrees, distanceInMeters, angleVariation, distanceVariation, moveTowards);
     }
 
-    public Position moveWithDirection(Position center, MovementDirection direction, Double distanceInMeters, boolean variation) {
-        int lowerBound = -1;
-        int upperBound = -1;
-
-        switch(direction) {
-            case EAST:
-                lowerBound = 0;
-                upperBound = 1;
-                break;
-            case NORTH_EAST:
-                lowerBound = 1;
-                upperBound = 90;
-                break;
-            case NORTH:
-                lowerBound = 90;
-                upperBound = 91;
-                break;
-            case NORTH_WEST:
-                lowerBound = 91;
-                upperBound = 180;
-                break;
-            case WEST:
-                lowerBound = 180;
-                upperBound = 181;
-                break;
-            case SOUTH_WEST:
-                lowerBound = 181;
-                upperBound = 270;
-                break;
-            case SOUTH:
-                lowerBound = 270;
-                upperBound = 271;
-                break;
-            case SOUTH_EAST:
-                lowerBound = 271;
-                upperBound = 360;
-                break;
-            default:
-                break;
-        }
-        int randomisedValue = ThreadLocalRandom.current().nextInt(lowerBound, upperBound+1);
-        if(variation) {
-            return moveWithVariation(center, randomisedValue, distanceInMeters);
-        }
-        else {
-            return moveToNewLocationWithAngle(center, Angle.fromDegrees(randomisedValue), distanceInMeters);
-        }
-    }
 }
+
