@@ -1,4 +1,8 @@
+import gov.nasa.worldwind.event.SelectEvent;
+import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.layers.Layer;
+import gov.nasa.worldwind.util.BasicDragger;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,17 +18,20 @@ public class JFrameGuiActions extends JFrame
     WriteLog logger;
     boolean loggingFlag = false;
     JPanel panel2525B,nodeLocPanel;
+    JLabel NodeUUIDText;
     DisplayWW displayWW;
     JMenuBar menuBar;
     JMenu  menu,submenu,aboutMenu,informationMenu;
     JMenuItem menuItem;
     JRadioButtonMenuItem rbMenuItem, dDSNodeMenuItem, pubMenuItem, logMenuItem;
-   JRadioButtonMenuItem  dDSMetMenuItem, stopPubMenuItem, stopLogMenuItem;
-   JToggleButton toggle2525B,toggleNodeLocPanel;
+    JRadioButtonMenuItem  dDSMetMenuItem, stopPubMenuItem, stopLogMenuItem;
+    JRadioButtonMenuItem toggle2525B,toggleNodeLocPanel;
+    NodeData[] nodeData;
+    NodeData selectedNode;
 
     public JFrameGuiActions(HarmonyDataPublisher publishData, NodeData[] nodeData)
     {
-
+        this.nodeData = nodeData;
         /* setup the binding of properties to allow for change monitoring across threads */
         DDSPositionMessage dDSPositionMessage = new DDSPositionMessage();
         /* listen for a change in the position message */
@@ -48,10 +55,7 @@ public class JFrameGuiActions extends JFrame
         MovementDecision movementDecision = new MovementDecision(nodeData);
         /* set up DDS Subscriber/Listeners with bound properties */
         new HarmonyDataSubscriber(null, dDSPositionMessage);
-        //new HarmonyMetricsSubscriber();
 
-        /* set up the GUI items */
-        // frame.getContentPane().setLayout(new FlowLayout());
         /* set up default UI fonts */
         this.setUIFont (new javax.swing.plaf.FontUIResource("Serif",Font.PLAIN,30));
         this.setTitle("Harmony");
@@ -61,34 +65,24 @@ public class JFrameGuiActions extends JFrame
         this.setJMenuBar(setupMenuBar());
 
 
-    /*
-    textfield and button
-        JButton debugButton = new JButton("debug", new ImageIcon("debug.png"));
-        debugButton.setBounds(400, 120, 140, 40);
-       // frame.add(cloButton);
-
-
-
-
-        */
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /* add the worldwind canvas to the JFrame */
+        /*using cardpanel, look at changing this at a later stage to JLayeredPane */
         JPanel cardPanel = new JPanel();
         cardPanel.setLayout(new CardLayout());
-
-        // Create two World Windows that share resources.
-
 
 
         // Add the World Windows to the card panel.
 
         /*displayWW is set up as a JPanel */
        this.displayWW = new DisplayWW(nodeData);
-        cardPanel.add(displayWW, "World Window A");
+       /*add this panel to the cardpanel*/
+        cardPanel.add(displayWW, "World Wind");
         /* add the panel to the frame */
          // Add the card panel to the frame.
         this.add(cardPanel, BorderLayout.CENTER);
-        this.add(this.setup2525B((CardLayout) cardPanel.getLayout(), cardPanel), BorderLayout.NORTH);
+        JPanel setup2525BHandle = this.setup2525B((CardLayout) cardPanel.getLayout(), cardPanel);
+        this.add(setup2525BHandle, BorderLayout.NORTH);
         this.add(this.nodeLocations((CardLayout) cardPanel.getLayout(), cardPanel), BorderLayout.WEST);
         this.pack();
        // this.add(displayWW);
@@ -133,6 +127,37 @@ Set up the Gui Listeners
 
             }
         });
+        int NumberOfNodes = nodeData.length;
+        displayWW.canvas.addSelectListener(new SelectListener()
+        {
+            protected BasicDragger dragger = new BasicDragger(displayWW.canvas);
+
+            public void selected(SelectEvent event)
+            {
+                // Delegate dragging computations to a dragger.
+                this.dragger.selected(event);
+                if (event.getEventAction().equals(SelectEvent.DRAG))
+                {
+                    for (int i = 0; i < NumberOfNodes; i++)
+                    {
+
+                        Object object = event.getTopPickedObject().getObject();
+                        if (object == nodeData[i].symbolIdentifier)
+                        {
+                            //update the dragged symbol node with the new location
+                            nodeData[i].currentLocation = nodeData[i].symbolIdentifier.getPosition();
+                            //and let the 2525B routing know which one is selected
+                            selectedNode = nodeData[i];
+                            NodeUUIDText.setText(nodeData[i].NodeUUID);
+                            //testing to see how to address the object
+
+                        }
+                        //pass in the node, have the node updated with the tactical symbol
+                    }
+
+                }
+            }
+        });
         ActionListener timerListener = new ActionListener()
         {
 
@@ -142,14 +167,7 @@ Set up the Gui Listeners
                 int NumberOfNodes = nodeData.length;
                 for (int i = 0; i < NumberOfNodes; i++)
                 {
-                    Position newRandomPosition;
-                    if(nodeData[i].minSpeed == nodeData[i].maxSpeed) {
-                        newRandomPosition = movementDecision.moveWithDirection(nodeData[i].currentLocation, MovementDecision.MovementDirection.NORTH_EAST, nodeData[i].maxSpeed, false);
-                    }
-                    else {
-                        newRandomPosition = movementDecision.selectDistanceFromRangeThenMoveWithDirection(nodeData[i].currentLocation, MovementDecision.MovementDirection.NORTH_EAST, nodeData[i].minSpeed, nodeData[i].maxSpeed, false);
-                    }
-
+                    Position newRandomPosition = movementDecision.moveWithoutDirection(nodeData[i].currentLocation,new Position(displayWW.rCPosition,0),nodeData[i].maxSpeed,false,true);
                     nodeData[i].nextLocation = newRandomPosition;
                     Position newPosition = nodeData[i].nextLocation;
                     nodeData[i].symbolIdentifier.setPosition(newPosition);
@@ -282,10 +300,10 @@ Set up the Gui Listeners
 
         //Build Information menu
         informationMenu = new JMenu("Information");
-        toggleNodeLocPanel = new JToggleButton("show/hide Node locations");
+        toggleNodeLocPanel = new JRadioButtonMenuItem("show/hide Node locations");
         toggleNodeLocPanel.setSelected(false);
         informationMenu.add(toggleNodeLocPanel);
-        toggle2525B = new JToggleButton("show/hide 2525B");
+        toggle2525B = new JRadioButtonMenuItem("show/hide 2525B");
         toggle2525B.setSelected(false);
         informationMenu.add(toggle2525B);
         menuBar.add(informationMenu);
@@ -324,52 +342,76 @@ Set up the Gui Listeners
         nodeLocPanel.setVisible(false);
         return nodeLocPanel;
     }
-    private JPanel setup2525B(final CardLayout cardLayout, final JPanel cardLayoutParent)
+    public JPanel setup2525B(final CardLayout cardLayout, final JPanel cardLayoutParent)
     {
+        /* set up the drop down lists*/
+        String[] iFFStrings = { "Friend", "Hostile", "Neutral", "Null"};
+        char[] iFFChars = { 'F', 'H', 'N','-'};
+        StringBuilder MilSymString =  new StringBuilder(nodeData[0].symbolIdentifier.getIdentifier());
+
         final JLabel NodeLabel = new JLabel("Node");
-        final JButton buttonA = new JButton("Button A");
-
+        //as null pointers are bad, identify first node as selected
+        NodeUUIDText = new JLabel(nodeData[0].NodeUUID);
         final JLabel AffiliationLabel = new JLabel("Affiliation");
-        final JLabel labC = new JLabel(" Button C");
+        final JLabel StringLabel = new JLabel("String");
 
-        final JLabel labD = new JLabel(" Button D");
+        final JLabel SymbolString = new JLabel(MilSymString.toString());
 
-        final JButton buttonB = new JButton(" Button B");
+
+    /*set up the string of node names */
+        int NumberOfNodes = nodeData.length;
+        String[] nodeNames = new String[NumberOfNodes];
+
+        for (int i = 0; i < NumberOfNodes; i++)
+        {
+            nodeNames[i] = nodeData[i].NodeUUID;
+        }
+
+        //Create the combo box, select item at index 4.
+        //Indices start at 0, so 4 specifies the pig.
+        JComboBox iFFList = new JComboBox(iFFStrings);
+        JComboBox nodeList = new JComboBox(nodeNames);
+        iFFList.setSelectedIndex(3);
+        nodeList.setSelectedIndex(0);
+
         //buttonA.setBackground(new Color(0,0,0,200));
         //buttonA.setOpaque(true);
-        this.panel2525B = new JPanel(new GridLayout(2, 7));
+        this.panel2525B = new JPanel(new GridLayout(2, 3));
         panel2525B.setBorder(new EmptyBorder(10, 10, 10, 10));
         panel2525B.add(NodeLabel);
         panel2525B.add(AffiliationLabel);
-        panel2525B.add(labC);
-        panel2525B.add(buttonA);
-        panel2525B.add(buttonB);
+        panel2525B.add(StringLabel);
+        //panel2525B.add(nodeList);
+        panel2525B.add(NodeUUIDText);
+        panel2525B.add(iFFList);
+        panel2525B.add(SymbolString);
        // panel2525B.setBackground(new Color(0,0,0,200));
        // panel2525B.setOpaque(true);
-        buttonA.addActionListener(new ActionListener()
+        iFFList.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent actionEvent)
             {
-                cardLayout.show(cardLayoutParent, "World Window A");
-                buttonA.setEnabled(false);
-                buttonB.setEnabled(true);
-                displayWW.canvas.redraw();
+                MilSymString.setCharAt(1,iFFChars[iFFList.getSelectedIndex()]);
+                //this sets the stringbuilder output to test functionality
+                SymbolString.setText(MilSymString.toString());
+                //need to set the string in the node to the new value
+                selectedNode.symbol = MilSymString.toString();
+                //need to update the tactical symbol to this
+                //selectedNode.symbolIdentifier is the symbol object
+                //selectedNode.currentLocation is the location
+                //remove this symbol from the renderable layer
+                Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
+
+
+                //create a new symbol with the new string
+                //add this new symbol to the renderable layer
+                //replace the symbol in the node with this new symbol
             }
         });
 
-        buttonB.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent actionEvent)
-            {
-                cardLayout.show(cardLayoutParent, "World Window B");
-                buttonA.setEnabled(true);
-                buttonB.setEnabled(false);
-                displayWW.canvas.redraw();
 
-            }
-        });
 
-        buttonA.setEnabled(false);
+
 
 
         panel2525B.setVisible(false);

@@ -80,6 +80,7 @@ class DisplayWW extends JPanel
         //load array of nodes into worldwind as symbols to be displayed
         //set up a symbolLayer containing all the symbols
         RenderableLayer symbolLayer = new RenderableLayer();
+        symbolLayer.setName("symbolLayer");
         int NumberOfNodes = nodeData.length;
         System.out.println("number of nodes: " + nodeData.length);
         for (int i = 0; i < NumberOfNodes; i++)
@@ -90,6 +91,12 @@ class DisplayWW extends JPanel
             //check if identifier is updated
             System.out.println("symbol id: " + nodeData[i].symbolIdentifier);
         }
+        //////////////////////////////////////
+
+    //    TacticalSymbol newSymbol = setupSymbol("SFGPUCRVA-bf---", rCPosition);
+      //  symbolLayer.addRenderable(newSymbol);
+
+        /////////////////////////////////////////////
         //load the symbolLayer into the canvas
         canvas.getModel().getLayers().add(symbolLayer);
 
@@ -111,34 +118,7 @@ class DisplayWW extends JPanel
          linesLayer.addRenderable(path);
         canvas.getModel().getLayers().add(linesLayer);
 
-        canvas.addSelectListener(new SelectListener()
-        {
-            protected BasicDragger dragger = new BasicDragger(canvas);
 
-            public void selected(SelectEvent event)
-            {
-                // Delegate dragging computations to a dragger.
-                this.dragger.selected(event);
-
-                if (event.getEventAction().equals(SelectEvent.DRAG))
-
-                {
-
-                    for (int i = 0; i < NumberOfNodes; i++)
-                    {
-
-                        Object object = event.getTopPickedObject().getObject();
-                        if (object == nodeData[i].symbolIdentifier)
-                        {
-                            //update the dragged symbol node with the new location
-                            nodeData[i].currentLocation = nodeData[i].symbolIdentifier.getPosition();
-                        }
-                        //pass in the node, have the node updated with the tactical symbol
-                    }
-
-                }
-            }
-        });
     }
     public void configure()
     {
@@ -166,6 +146,7 @@ class DisplayWW extends JPanel
 
         TacticalSymbol newSymbol = setupSymbol(nodeData.symbol, nodeData.currentLocation);
         symbolLayer.addRenderable(newSymbol);
+
         //load this symbol into the Node
         nodeData.symbolIdentifier = newSymbol;
         return symbolLayer;
@@ -181,8 +162,10 @@ class DisplayWW extends JPanel
         TacticalSymbolAttributes attrs = new BasicTacticalSymbolAttributes();
         attrs.setScale(0.75); // Make the symbol 75% its normal size.
         attrs.setOpacity(0.5); // Make the symbol 50% transparent.
+        symname.setModifier("test",1);
+        symname.setShowTextModifiers(true);
         symname.setAttributes(attrs);
-        symname.setShowLocation(false);
+        symname.setShowLocation(true);
         return symname;
 
     }
@@ -198,8 +181,9 @@ class DisplayWW extends JPanel
         TacticalSymbolAttributes attrs = new BasicTacticalSymbolAttributes();
         attrs.setScale(0.75); // Make the symbol 75% its normal size.
         attrs.setOpacity(0.5); // Make the symbol 50% transparent.
+        symname.setShowTextModifiers(true);
         symname.setAttributes(attrs);
-        symname.setShowLocation(false);
+        symname.setShowLocation(true);
         return symname;
 
     }

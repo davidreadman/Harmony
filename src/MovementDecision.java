@@ -45,9 +45,11 @@ public class MovementDecision
      * @param moveTowards true implies we want to move our current position towards the target, false implies we want to move away
      * @return a new position towards/away from the target after movement
      */
+    //https://worldwind.arc.nasa.gov/java/latest/javadoc/gov/nasa/worldwind/geom/Angle.html
     public Position moveWithoutDirection(Position current, Position target, Double distanceInMeters, boolean variation, boolean moveTowards) {
-        Angle bearing = Position.greatCircleDistance(current, target);
+        Angle bearing = Position.greatCircleAzimuth(current, target);
         Double bearingInDegrees = moveTowards ? bearing.degrees : (bearing.degrees + 180) % 360;
+
 
         if(variation) {
             return moveWithVariation(current, bearingInDegrees, distanceInMeters);
