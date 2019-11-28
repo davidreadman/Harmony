@@ -4,6 +4,7 @@ import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.RenderableLayer;
+import gov.nasa.worldwind.symbology.TacticalSymbol;
 import gov.nasa.worldwind.util.BasicDragger;
 
 import javax.swing.*;
@@ -33,8 +34,10 @@ public class JFrameGuiActions extends JFrame
     JRadioButtonMenuItem toggle2525B, toggleNodeLocPanel;
     NodeData[] nodeData;
     NodeData selectedNode;
-    //declared this because it is shared between dragger and 2525Bpanel
-    JLabel NodeLabel;
+    //declared the JPanel components because they are shared between dragger and 2525Bpanel
+    JComboBox iFFList;
+    JComboBox nodeList;
+    JLabel SymbolString;
     int MOVE_TOWARDS_RASPBERRY_CK = 1;
     int MOVE_NORTH;
 
@@ -157,9 +160,11 @@ Set up the Gui Listeners
                             selectedNode = nodeData[i];
                             NodeUUIDText.setText(nodeData[i].NodeUUID);
                             //testing to see how to address the object
-
+                            //identify the iff in the string, adjust the iff in the dropdown iFFList
+                            SymbolString.setText(selectedNode.symbol);
                         }
                         //pass in the node, have the node updated with the tactical symbol
+
                     }
 
                 }
@@ -404,17 +409,17 @@ Set up the Gui Listeners
         //set up a default node
         selectedNode = nodeData[0];
         /* set up the drop down lists*/
-        String[] iFFStrings = {"Friend", "Hostile", "Neutral", "Null"};
-        char[] iFFChars = {'F', 'H', 'N', '-'};
+        String[] iFFStrings = {"Friend", "Hostile", "Neutral"};
+        char[] iFFChars = {'F', 'H', 'N'};
         StringBuilder MilSymString = new StringBuilder(nodeData[0].symbolIdentifier.getIdentifier());
 
-        NodeLabel = new JLabel("Node");
+        JLabel NodeLabel = new JLabel("Node");
         //as null pointers are bad, identify first node as selected
         NodeUUIDText = new JLabel(nodeData[0].NodeUUID);
         final JLabel AffiliationLabel = new JLabel("Affiliation");
         final JLabel StringLabel = new JLabel("String");
         //load up MilSymString with existingstring (ie nodeData.symbol
-        final JLabel SymbolString = new JLabel(MilSymString.toString());
+        SymbolString = new JLabel(MilSymString.toString());
 
 
         /*set up the string of node names */
@@ -451,7 +456,7 @@ Set up the Gui Listeners
             public void actionPerformed(ActionEvent actionEvent)
             {
 
-                //first one sets the friend
+                //the combobox for iFFList has been activated, so first set the char in the stringbuilder
                 MilSymString.setCharAt(1, iFFChars[iFFList.getSelectedIndex()]);
                 //this sets the stringbuilder output to test functionality
                 SymbolString.setText(MilSymString.toString());
@@ -463,7 +468,24 @@ Set up the Gui Listeners
                 //remove this symbol from the renderable layer
                 //https://worldwind.arc.nasa.gov/java/latest/javadoc/gov/nasa/worldwind/Model.html getModel
                 //getlayers returns a list of layers in the model
-             //   Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
+                Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
+
+                //experimentally we can make a node at raspberry creek to test adding a node to this layer
+                   TacticalSymbol replacementSymbol = displayWW.setupSymbol(selectedNode.symbol, selectedNode.currentLocation);
+                   selectedNode.symbolIdentifier = replacementSymbol;
+                   displayWW.canvas.getModel().getLayers().remove(symbolLayer);
+               // displayWW.canvas.getModel().getLayers().add(symbolLayer);
+
+               // System.out.println("symbol id: " +symbolLayer);
+                RenderableLayer replaceLayer;
+                replaceLayer = (RenderableLayer) symbolLayer;
+                replaceLayer.setName("symbolLayer");
+                replaceLayer.removeRenderable(selectedNode.symbolIdentifier);
+                selectedNode.symbolIdentifier = replacementSymbol;
+                replaceLayer.addRenderable(replacementSymbol);
+                displayWW.canvas.getModel().getLayers().add(replaceLayer);
+                //so symbollayer can be removed and added
+              // is the symbolLayer the same in both instances? renderable and basic?
 
                 //symbolLayer does not appear to have a change item in symbol
 

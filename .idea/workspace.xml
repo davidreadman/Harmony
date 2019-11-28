@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="36e190ff-6c8f-4732-b55d-ac2461a42e1a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DisplayWW.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DisplayWW.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/JFrameGuiActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/JFrameGuiActions.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -89,5 +90,12 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="((HashMap)((RenderableLayer)symbolLayer).avList).entrySet().toArray()[1]" custom="gov.nasa.worldwind.layers.RenderableLayer,java.util.HashMap" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

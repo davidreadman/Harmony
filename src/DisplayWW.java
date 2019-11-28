@@ -69,6 +69,7 @@ class DisplayWW extends JPanel
 
         /////////////////////////////////////////////
         //load the symbolLayer into the canvas
+        System.out.println("symbol id: " + symbolLayer);
         canvas.getModel().getLayers().add(symbolLayer);
 
         RenderableLayer shapesLayer = new RenderableLayer();
@@ -120,6 +121,7 @@ class DisplayWW extends JPanel
 
         //load this symbol into the Node
         nodeData.symbolIdentifier = newSymbol;
+
         return symbolLayer;
     }
     public TacticalSymbol setupSymbol(String sidc, Position pos)
