@@ -17,6 +17,7 @@ import gov.nasa.worldwind.symbology.milstd2525.MilStd2525TacticalSymbol;
 import gov.nasa.worldwind.util.BasicDragger;
 import gov.nasa.worldwind.util.WWUtil;
 
+import javax.swing.*;
 import java.awt.*;
 /*
 The DisplayWW Class is used to control and update the WorldWind Canvas, a

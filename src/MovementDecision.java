@@ -12,6 +12,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MovementDecision
 {
     private static final int VARIATION_DEGREES = 20;
+    Position RASPBERRY_CK = Position.fromDegrees(-22.71220, 150.40076, 1);
+    int NORTH = 0;
 
     public static final Globe tempGlobe = new Earth();
 
@@ -43,6 +45,120 @@ public class MovementDecision
 
     public static MovementDirection findElement(double bearingInDegrees) {
         return possibleDirections.stream().filter(e -> e.minimum <= bearingInDegrees && bearingInDegrees <= e.maximum).findFirst().orElse(null);
+    }
+
+     /*
+     Make decision function will expand dramatically in future, at the start it will just move node towards Raspberry Ck
+      */
+
+    /**
+     *
+     * @param currentNode
+     * @param Decision
+     * @return
+     */
+     public Position MakeDecision(NodeData currentNode,int Decision)
+     {
+         double bearingInDegrees;
+         //initial Raspberry cK
+         //find out what direction raspberry ck is in
+         if(Decision ==1)
+         {
+             bearingInDegrees = Position.greatCircleAzimuth(currentNode.currentLocation, RASPBERRY_CK).degrees;
+         }
+         else
+         {
+             bearingInDegrees = NORTH;
+         }
+
+         //and move towards it
+         Position nextPosition;
+         nextPosition = MoveDirectionDistance(currentNode.currentLocation, bearingInDegrees,100);
+         //and update the node next and current Position with the location of the new position
+         currentNode.nextLocation = nextPosition;
+         currentNode.currentLocation = nextPosition;
+         currentNode.symbolIdentifier.setPosition(nextPosition);
+
+                return(nextPosition);
+     }
+     /*
+     two routines here, almost identical except one uses angle and one uses degrees
+
+      */
+
+    /**
+     *
+     * @param currentLocation
+     * @param bearingAsAngle
+     * @param distanceInMeters
+     * @return
+     */
+     public Position MoveDirection(Position currentLocation, Angle bearingAsAngle, double distanceInMeters)
+     {
+         //meters to miles
+         double distanceRadians = distanceInMeters/ tempGlobe.getRadius();
+
+         //great circle using radians
+         Position nextPosition;
+         nextPosition = (new Position(LatLon.greatCircleEndPosition(currentLocation, bearingAsAngle.radians, distanceRadians),0));
+
+         return(nextPosition);
+     }
+
+    /**
+     *
+     * @param currentLocation
+     * @param bearingAsDegrees
+     * @param distanceInMeters
+     * @return
+     */
+    public Position MoveDirectionDistance(Position currentLocation, double bearingAsDegrees, double distanceInMeters)
+    {
+        //meters to miles
+        double distanceRadians = distanceInMeters/ tempGlobe.getRadius();
+        Angle bearing = Angle.fromDegrees(bearingAsDegrees);
+        //great circle using radians
+        Position nextPosition = (new Position(LatLon.greatCircleEndPosition(currentLocation, bearing.radians, distanceRadians),0));
+
+        return(nextPosition);
+    }
+    public Position MoveVDirectionDistance()
+    {
+        Position nextPosition = RASPBERRY_CK;
+        return(nextPosition);
+    }
+    public Position MoveDirectionVDistance()
+    {
+        Position nextPosition = RASPBERRY_CK;
+        return(nextPosition);
+    }
+    public Position MoveVDirectionVDistance()
+    {
+        Position nextPosition = RASPBERRY_CK;
+        return(nextPosition);
+    }
+    public Position MoveTowards()
+    {
+        Position nextPosition = RASPBERRY_CK;
+        return(nextPosition);
+    }
+    public Position MoveAway()
+    {
+        Position nextPosition = RASPBERRY_CK;
+        return(nextPosition);
+    }
+    public double MetersToMiles(double meters)
+    {
+        return(meters);
+
+    }
+    public double MilesToMeters(double miles)
+    {
+        return(miles);
+    }
+    public double HoursToSeconds(double hours)
+    {
+        return(hours);
     }
 
     /**

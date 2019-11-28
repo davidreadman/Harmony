@@ -1,5 +1,6 @@
 public class MovementDirection {
 
+
     public enum DirectionType {
         NORTH,
         SOUTH,

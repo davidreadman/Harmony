@@ -1,3 +1,5 @@
+import gov.nasa.worldwind.event.SelectEvent;
+import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.Layer;
@@ -19,17 +21,19 @@ public class JFrameGuiActions extends JFrame
 
     WriteLog logger;
     boolean loggingFlag = false;
-    JPanel panel2525B,nodeLocPanel;
+    JPanel panel2525B, nodeLocPanel;
     JLabel NodeUUIDText;
     DisplayWW displayWW;
     JMenuBar menuBar;
-    JMenu  menu,submenu,aboutMenu,informationMenu;
+    JMenu menu, submenu, aboutMenu, informationMenu;
     JMenuItem menuItem;
     JRadioButtonMenuItem rbMenuItem, dDSNodeMenuItem, pubMenuItem, logMenuItem;
-    JRadioButtonMenuItem  dDSMetMenuItem, stopPubMenuItem, stopLogMenuItem;
-    JRadioButtonMenuItem toggle2525B,toggleNodeLocPanel;
+    JRadioButtonMenuItem dDSMetMenuItem, stopPubMenuItem, stopLogMenuItem;
+    JRadioButtonMenuItem toggle2525B, toggleNodeLocPanel;
     NodeData[] nodeData;
     NodeData selectedNode;
+    int MOVE_TOWARDS_RASPBERRY_CK = 1;
+    int MOVE_NORTH;
 
     public JFrameGuiActions(HarmonyDataPublisher publishData, NodeData[] nodeData)
     {
@@ -57,9 +61,9 @@ public class JFrameGuiActions extends JFrame
         new HarmonyDataSubscriber(null, dDSPositionMessage);
 
         /* set up default UI fonts */
-        this.setUIFont (new javax.swing.plaf.FontUIResource("Serif",Font.PLAIN,30));
+        setUIFont(new javax.swing.plaf.FontUIResource("Serif", Font.PLAIN, 30));
         this.setTitle("Harmony");
-        this.setDefaultLookAndFeelDecorated(true);
+        setDefaultLookAndFeelDecorated(true);
 
         /*method setupMenuBar*/
         this.setJMenuBar(setupMenuBar());
@@ -75,17 +79,17 @@ public class JFrameGuiActions extends JFrame
         // Add the World Windows to the card panel.
 
         /*displayWW is set up as a JPanel */
-       this.displayWW = new DisplayWW(nodeData);
-       /*add this panel to the cardpanel*/
+        this.displayWW = new DisplayWW(nodeData);
+        /*add this panel to the cardpanel*/
         cardPanel.add(displayWW, "World Wind");
         /* add the panel to the frame */
-         // Add the card panel to the frame.
+        // Add the card panel to the frame.
         this.add(cardPanel, BorderLayout.CENTER);
         JPanel setup2525BHandle = this.setup2525B((CardLayout) cardPanel.getLayout(), cardPanel);
         this.add(setup2525BHandle, BorderLayout.NORTH);
         this.add(this.nodeLocations((CardLayout) cardPanel.getLayout(), cardPanel), BorderLayout.WEST);
         this.pack();
-       // this.add(displayWW);
+        // this.add(displayWW);
         //this.add(displayWW.canvas);
         this.setSize(1800, 1800);
 
@@ -158,30 +162,45 @@ Set up the Gui Listeners
                 }
             }
         });
+
         ActionListener timerListener = new ActionListener()
         {
 
             public void actionPerformed(ActionEvent actionEvent)
             {
-               /*
-                * For each node, find all the nodes that are within it's detection radius.
-                * For each detected node, calculate the distance, angle and direction from that node.
-                */
+                /*
+                 * For each node, find all the nodes that are within it's detection radius.
+                 * For each detected node, calculate the distance, angle and direction from that node.
+                 */
 
-                for(int i=0;i<nodeData.length;i++) {
+                for (int i = 0; i < nodeData.length; i++)
+                {
                     ArrayList<DetectedNode> nodesDetected = new ArrayList<>();
-                    for(int j=0;j<nodeData.length;j++) {
-                        if(i == j) {
+                    for (int j = 0; j < nodeData.length; j++)
+                    {
+                        //if the node is the current node
+                        if (i == j)
+                        {
                             continue;
                         }
+
                         double distance = Position.greatCircleDistance(nodeData[i].currentLocation, nodeData[j].currentLocation).radians * MovementDecision.tempGlobe.getRadius();
-                        if(distance <= nodeData[i].detectionRadiusInKm) {
+                        if (distance <= nodeData[i].detectionRadiusInKm)
+                        {
                             Angle azimuthAngle = Position.greatCircleAzimuth(nodeData[i].currentLocation, nodeData[j].currentLocation);
                             MovementDirection movementDirection = MovementDecision.findElement(azimuthAngle.degrees);
-                            nodesDetected.add(new DetectedNode(nodeData[j],movementDirection.direction,azimuthAngle,distance));
+                            nodesDetected.add(new DetectedNode(nodeData[j], movementDirection.direction, azimuthAngle, distance));
+
+
                         }
                     }
                     nodeData[i].updateNodesDetectedByMe(nodesDetected);
+                    // Make a decision for the next movement (initially based on integer fed to routine
+                    MovementDecision movementDecision = new MovementDecision();
+                    movementDecision.MakeDecision(nodeData[i], 1);
+                    //moved the next line into the movement decision for updating graphics
+                    //nodeData[i].symbolIdentifier.setPosition(movementDecision.MakeDecision(nodeData[i], 1););
+
                 }
                 displayWW.canvas.redraw();
 
@@ -199,7 +218,7 @@ Set up the Gui Listeners
                 //if logging is enabled
                 //if this is the first time logging, set up csv file and set a flag
                 //else just log the data
-                if(loggingFlag && logMenuItem.isSelected())
+                if (loggingFlag && logMenuItem.isSelected())
                 {
                     //send out data for all nodes
                     int numberOfNodes = nodeData.length;
@@ -214,13 +233,13 @@ Set up the Gui Listeners
                     }
                     writeableString = writeableString + "\n";
                     logger.writeStringToFile(writeableString);
-                   // System.out.println("written " + writeableString);
+                    // System.out.println("written " + writeableString);
                     logger.Flush();
                 }
                 /////////////////////////////////////////////
                 /* publish DDS messages */
                 //send out data for all nodes
-                if(pubMenuItem.isSelected())
+                if (pubMenuItem.isSelected())
                 {
                     int numberOfNodes = nodeData.length;
                     for (int i = 0; i < numberOfNodes; i++)
@@ -238,15 +257,18 @@ Set up the Gui Listeners
 
     }
 
-    public static void setUIFont (javax.swing.plaf.FontUIResource f){
+    public static void setUIFont(javax.swing.plaf.FontUIResource f)
+    {
         java.util.Enumeration keys = UIManager.getDefaults().keys();
-        while (keys.hasMoreElements()) {
+        while (keys.hasMoreElements())
+        {
             Object key = keys.nextElement();
-            Object value = UIManager.get (key);
+            Object value = UIManager.get(key);
             if (value instanceof javax.swing.plaf.FontUIResource)
-                UIManager.put (key, f);
+                UIManager.put(key, f);
         }
     }
+
     private JMenuBar setupMenuBar()
     {
          /*
@@ -325,12 +347,12 @@ Set up the Gui Listeners
         aboutMenu.add(menuItem);
 
 
-
         menuBar.add(aboutMenu);
-        return(menuBar);
+        return (menuBar);
 
 
     }
+
     private JPanel nodeLocations(final CardLayout cardLayout, final JPanel cardLayoutParent)
     {
         final JLabel NodeLocationLabel = new JLabel("Node Locations");
@@ -343,21 +365,21 @@ Set up the Gui Listeners
         nodeLocPanel.add(NodeLocationLabel);
         nodeLocPanel.add(JT);
 
-       // nodeLocPanel.setBackground(new Color(0,0,0,200));
+        // nodeLocPanel.setBackground(new Color(0,0,0,200));
         //nodeLocPanel.setOpaque(true);
         JT.setText("Node A\n latitude, longitude\nNodeB\n latitude, longitude");
-
 
 
         nodeLocPanel.setVisible(false);
         return nodeLocPanel;
     }
+
     public JPanel setup2525B(final CardLayout cardLayout, final JPanel cardLayoutParent)
     {
         /* set up the drop down lists*/
-        String[] iFFStrings = { "Friend", "Hostile", "Neutral", "Null"};
-        char[] iFFChars = { 'F', 'H', 'N','-'};
-        StringBuilder MilSymString =  new StringBuilder(nodeData[0].symbolIdentifier.getIdentifier());
+        String[] iFFStrings = {"Friend", "Hostile", "Neutral", "Null"};
+        char[] iFFChars = {'F', 'H', 'N', '-'};
+        StringBuilder MilSymString = new StringBuilder(nodeData[0].symbolIdentifier.getIdentifier());
 
         final JLabel NodeLabel = new JLabel("Node");
         //as null pointers are bad, identify first node as selected
@@ -368,7 +390,7 @@ Set up the Gui Listeners
         final JLabel SymbolString = new JLabel(MilSymString.toString());
 
 
-    /*set up the string of node names */
+        /*set up the string of node names */
         int NumberOfNodes = nodeData.length;
         String[] nodeNames = new String[NumberOfNodes];
 
@@ -395,13 +417,13 @@ Set up the Gui Listeners
         panel2525B.add(NodeUUIDText);
         panel2525B.add(iFFList);
         panel2525B.add(SymbolString);
-       // panel2525B.setBackground(new Color(0,0,0,200));
-       // panel2525B.setOpaque(true);
+        // panel2525B.setBackground(new Color(0,0,0,200));
+        // panel2525B.setOpaque(true);
         iFFList.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent actionEvent)
             {
-                MilSymString.setCharAt(1,iFFChars[iFFList.getSelectedIndex()]);
+                MilSymString.setCharAt(1, iFFChars[iFFList.getSelectedIndex()]);
                 //this sets the stringbuilder output to test functionality
                 SymbolString.setText(MilSymString.toString());
                 //need to set the string in the node to the new value
@@ -418,10 +440,6 @@ Set up the Gui Listeners
                 //replace the symbol in the node with this new symbol
             }
         });
-
-
-
-
 
 
         panel2525B.setVisible(false);
