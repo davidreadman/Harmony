@@ -3,12 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="36e190ff-6c8f-4732-b55d-ac2461a42e1a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DisplayWW.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DisplayWW.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/JFrameGuiActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/JFrameGuiActions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MovementDecision.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MovementDecision.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MovementDirection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MovementDirection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/NodeData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/NodeData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WriteLog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/WriteLog.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

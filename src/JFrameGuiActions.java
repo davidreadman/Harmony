@@ -3,6 +3,7 @@ import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.Layer;
+import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.util.BasicDragger;
 
 import javax.swing.*;
@@ -32,6 +33,8 @@ public class JFrameGuiActions extends JFrame
     JRadioButtonMenuItem toggle2525B, toggleNodeLocPanel;
     NodeData[] nodeData;
     NodeData selectedNode;
+    //declared this because it is shared between dragger and 2525Bpanel
+    JLabel NodeLabel;
     int MOVE_TOWARDS_RASPBERRY_CK = 1;
     int MOVE_NORTH;
 
@@ -257,6 +260,12 @@ Set up the Gui Listeners
 
     }
 
+    /**
+     *
+     * @param f
+     *
+     * Sets the default font to a larger style
+     */
     public static void setUIFont(javax.swing.plaf.FontUIResource f)
     {
         java.util.Enumeration keys = UIManager.getDefaults().keys();
@@ -269,6 +278,10 @@ Set up the Gui Listeners
         }
     }
 
+    /**
+     *
+     * @return
+     */
     private JMenuBar setupMenuBar()
     {
          /*
@@ -353,6 +366,12 @@ Set up the Gui Listeners
 
     }
 
+    /**
+     *
+     * @param cardLayout
+     * @param cardLayoutParent
+     * @return
+     */
     private JPanel nodeLocations(final CardLayout cardLayout, final JPanel cardLayoutParent)
     {
         final JLabel NodeLocationLabel = new JLabel("Node Locations");
@@ -374,19 +393,27 @@ Set up the Gui Listeners
         return nodeLocPanel;
     }
 
+    /**
+     *
+     * @param cardLayout
+     * @param cardLayoutParent
+     * @return
+     */
     public JPanel setup2525B(final CardLayout cardLayout, final JPanel cardLayoutParent)
     {
+        //set up a default node
+        selectedNode = nodeData[0];
         /* set up the drop down lists*/
         String[] iFFStrings = {"Friend", "Hostile", "Neutral", "Null"};
         char[] iFFChars = {'F', 'H', 'N', '-'};
         StringBuilder MilSymString = new StringBuilder(nodeData[0].symbolIdentifier.getIdentifier());
 
-        final JLabel NodeLabel = new JLabel("Node");
+        NodeLabel = new JLabel("Node");
         //as null pointers are bad, identify first node as selected
         NodeUUIDText = new JLabel(nodeData[0].NodeUUID);
         final JLabel AffiliationLabel = new JLabel("Affiliation");
         final JLabel StringLabel = new JLabel("String");
-
+        //load up MilSymString with existingstring (ie nodeData.symbol
         final JLabel SymbolString = new JLabel(MilSymString.toString());
 
 
@@ -403,7 +430,7 @@ Set up the Gui Listeners
         //Indices start at 0, so 4 specifies the pig.
         JComboBox iFFList = new JComboBox(iFFStrings);
         JComboBox nodeList = new JComboBox(nodeNames);
-        iFFList.setSelectedIndex(3);
+        iFFList.setSelectedIndex(0);
         nodeList.setSelectedIndex(0);
 
         //buttonA.setBackground(new Color(0,0,0,200));
@@ -423,6 +450,8 @@ Set up the Gui Listeners
         {
             public void actionPerformed(ActionEvent actionEvent)
             {
+
+                //first one sets the friend
                 MilSymString.setCharAt(1, iFFChars[iFFList.getSelectedIndex()]);
                 //this sets the stringbuilder output to test functionality
                 SymbolString.setText(MilSymString.toString());
@@ -432,7 +461,12 @@ Set up the Gui Listeners
                 //selectedNode.symbolIdentifier is the symbol object
                 //selectedNode.currentLocation is the location
                 //remove this symbol from the renderable layer
-                Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
+                //https://worldwind.arc.nasa.gov/java/latest/javadoc/gov/nasa/worldwind/Model.html getModel
+                //getlayers returns a list of layers in the model
+             //   Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
+
+                //symbolLayer does not appear to have a change item in symbol
+
 
 
                 //create a new symbol with the new string
