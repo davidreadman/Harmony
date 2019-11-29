@@ -56,7 +56,8 @@ public class ParseProperties
 				theseNodes[i].Lon = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lon"));
 				theseNodes[i].currentLocation= new Position(LatLon.fromDegrees(theseNodes[i].Lat,theseNodes[i].Lon), 0);
 				NodeData.NodeType nodeType;
-				switch(prop.getProperty("Node"+(i+1)+"IFF")) {
+				String propertyIFF = prop.getProperty("Node"+(i+1)+"IFF");
+				switch(propertyIFF) {
 					case "B":
 						nodeType = NodeData.NodeType.FRIEND;
 						break;
@@ -74,7 +75,7 @@ public class ParseProperties
 				theseNodes[i].symbol = prop.getProperty("Node"+(i+1)+"2525B");
 				theseNodes[i].operationalSpeed = Speed.fromKilometresPerHour(Double.parseDouble(prop.getProperty("Node"+(i+1)+"OperationalSpeed")));
 				theseNodes[i].maximumSpeed = Speed.fromKilometresPerHour(Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed")));
-				theseNodes[i].detectionRadiusInKm = Double.parseDouble(prop.getProperty("Node"+(i+1)+"RadiusOfDetectionInKm"));
+				theseNodes[i].detectionRadius = Distance.fromKilometres(Double.parseDouble(prop.getProperty("Node"+(i+1)+"RadiusOfDetectionInKm")));
 			}
 			
 			
