@@ -54,8 +54,8 @@ public class NodeData
         decisionsMadeForEachEpoch.putIfAbsent(currentEpoch, new ArrayList<>());
         for(DetectedNode detectedNode : detectedNodes) {
         }
-        if(nodeType == NodeType.FRIEND){
+/*        if(nodeType == NodeType.FRIEND){
             MovementDecision.makeDecision(currentEpoch,this,1);
-        }
+        }*/
     }
 }

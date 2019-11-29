@@ -177,38 +177,22 @@ Set up the Gui Listeners
             public void actionPerformed(ActionEvent actionEvent)
             {
                 /*
+                * TODO:
                  * For each node, find all the nodes that are within it's detection radius.
                  * For each detected node, calculate the distance, angle and direction from that node.
+                 *
                  */
+
 
                 for (int i = 0; i < nodeData.length; i++)
                 {
                     ArrayList<DetectedNode> nodesDetected = new ArrayList<>();
-                    for (int j = 0; j < nodeData.length; j++)
-                    {
-                        //if the node is the current node
-                        if (i == j)
-                        {
-                            continue;
-                        }
-
-                        double distance = Position.greatCircleDistance(nodeData[i].currentLocation, nodeData[j].currentLocation).radians * MovementDecision.tempGlobe.getRadius();
-                        if (distance <= nodeData[i].detectionRadiusInKm)
-                        {
-                            Angle azimuthAngle = Position.greatCircleAzimuth(nodeData[i].currentLocation, nodeData[j].currentLocation);
-                            MovementDirection movementDirection = MovementDecision.findElement(azimuthAngle.degrees);
-                            nodesDetected.add(new DetectedNode(nodeData[j], movementDirection.direction, azimuthAngle, distance));
-
-
-                        }
+                    for (int j = 0; j < nodeData.length; j++) {
+                        // Make a decision for the next movement (initially based on integer fed to routine
+                        MovementDecision.MakeDecision(nodeData[i], 1);
+                        //moved the next line into the movement decision for updating graphics
+                        //nodeData[i].symbolIdentifier.setPosition(movementDecision.MakeDecision(nodeData[i], 1););
                     }
-                    nodeData[i].updateNodesDetectedByMe(nodesDetected);
-                    // Make a decision for the next movement (initially based on integer fed to routine
-                    MovementDecision movementDecision = new MovementDecision();
-                    movementDecision.MakeDecision(nodeData[i], 1);
-                    //moved the next line into the movement decision for updating graphics
-                    //nodeData[i].symbolIdentifier.setPosition(movementDecision.MakeDecision(nodeData[i], 1););
-
                 }
                 displayWW.canvas.redraw();
 
