@@ -12,7 +12,7 @@ public class NodeData
 {
      public enum NodeType {FRIEND, HOSTILE, NEUTRAL, NULL}
 
-    Double Lat;
+        Double Lat;
      Double Lon;
      Position currentLocation;
      Position nextLocation;

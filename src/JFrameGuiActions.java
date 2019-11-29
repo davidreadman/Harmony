@@ -28,10 +28,11 @@ public class JFrameGuiActions extends JFrame
     DisplayWW displayWW;
     JMenuBar menuBar;
     JMenu menu, submenu, aboutMenu, informationMenu;
-    JMenuItem menuItem;
+    JMenuItem menuItem,enableMovementMenuItem;
     JRadioButtonMenuItem rbMenuItem, dDSNodeMenuItem, pubMenuItem, logMenuItem;
     JRadioButtonMenuItem dDSMetMenuItem, stopPubMenuItem, stopLogMenuItem;
     JRadioButtonMenuItem toggle2525B, toggleNodeLocPanel;
+    JRadioButtonMenuItem buttonMenuItem;
     NodeData[] nodeData;
     NodeData selectedNode;
     //declared the JPanel components because they are shared between dragger and 2525Bpanel
@@ -118,6 +119,15 @@ Set up the Gui Listeners
                 }
             }
         });
+        buttonMenuItem.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                StoreProperties storeProperties = new StoreProperties();
+                storeProperties.writeConfig(nodeData);
+                System.out.println("Done");
+            }
+        });
         toggle2525B.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -138,6 +148,9 @@ Set up the Gui Listeners
             }
         });
         int NumberOfNodes = nodeData.length;
+        /*
+        dragger is the worldwind gui detector for when an object in the layers is dragged with the mouse
+         */
         displayWW.canvas.addSelectListener(new SelectListener()
         {
             protected BasicDragger dragger = new BasicDragger(displayWW.canvas);
@@ -150,7 +163,7 @@ Set up the Gui Listeners
                 {
                     for (int i = 0; i < NumberOfNodes; i++)
                     {
-
+                        //check to see which object has been clicked on
                         Object object = event.getTopPickedObject().getObject();
                         if (object == nodeData[i].symbolIdentifier)
                         {
@@ -187,8 +200,13 @@ Set up the Gui Listeners
                 for (int i = 0; i < nodeData.length; i++)
                 {
                     ArrayList<DetectedNode> nodesDetected = new ArrayList<>();
-                    for (int j = 0; j < nodeData.length; j++) {
+
+                   // nodeData[i].updateNodesDetectedByMe(nodesDetected);
+                    //only make a movement if the menu selection has been enabled
+                    if(enableMovementMenuItem.isSelected())
+                    {
                         // Make a decision for the next movement (initially based on integer fed to routine
+
                         MovementDecision.MakeDecision(nodeData[i], 1);
                         //moved the next line into the movement decision for updating graphics
                         //nodeData[i].symbolIdentifier.setPosition(movementDecision.MakeDecision(nodeData[i], 1););
@@ -282,17 +300,24 @@ Set up the Gui Listeners
         menu = new JMenu("Options");
         menuBar.add(menu);
 
-        menuItem = new JMenuItem("");
-        menu.add(menuItem);
+
 
 
         //a group of radio button menu items
         menu.addSeparator();
+        buttonMenuItem = new JRadioButtonMenuItem("Write current config to new config file");
+        buttonMenuItem.setSelected(false);
+        menu.add(buttonMenuItem);
 
         rbMenuItem = new JRadioButtonMenuItem("Enable Logging");
         rbMenuItem.setSelected(false);
 
         menu.add(rbMenuItem);
+
+        enableMovementMenuItem = new JRadioButtonMenuItem("Enable Movement");
+        enableMovementMenuItem.setSelected(false);
+
+        menu.add(enableMovementMenuItem);
         //a group of JMenuItems
         //a group of radio box menu items
         menu.addSeparator();
@@ -453,14 +478,13 @@ Set up the Gui Listeners
                 //https://worldwind.arc.nasa.gov/java/latest/javadoc/gov/nasa/worldwind/Model.html getModel
                 //getlayers returns a list of layers in the model
                 Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
-
-                //experimentally we can make a node at raspberry creek to test adding a node to this layer
-                   TacticalSymbol replacementSymbol = displayWW.setupSymbol(selectedNode.symbol, selectedNode.currentLocation);
-                   selectedNode.symbolIdentifier = replacementSymbol;
-                   displayWW.canvas.getModel().getLayers().remove(symbolLayer);
-               // displayWW.canvas.getModel().getLayers().add(symbolLayer);
-
-               // System.out.println("symbol id: " +symbolLayer);
+                //create a new symbol for the changed 2525B string
+                TacticalSymbol replacementSymbol = displayWW.setupSymbol(selectedNode.symbol, selectedNode.currentLocation);
+                //and load this into the node as a replacement for the old symbol and symbolidentifier
+                // bad - selectedNode.symbolIdentifier = replacementSymbol;
+                //we have this layer stored as a layer, we can remove this entire layer from the model layers
+                displayWW.canvas.getModel().getLayers().remove(symbolLayer);
+               // need to create a new renderable layer because the symbollayer is converted to a standard layer when added to the model
                 RenderableLayer replaceLayer;
                 replaceLayer = (RenderableLayer) symbolLayer;
                 replaceLayer.setName("symbolLayer");
