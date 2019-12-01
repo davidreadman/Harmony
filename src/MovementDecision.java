@@ -26,7 +26,7 @@ public class MovementDecision
      * @param decision
      * @return
      */
-     public static Position MakeDecision(NodeData currentNode,int decision)
+     public static Position MakeDecision(int currentEpoch, NodeData currentNode,int decision)
      {
          double bearingInDegrees;
          //initial Raspberry cK
@@ -43,9 +43,7 @@ public class MovementDecision
          //and move towards it
          Position nextPosition = moveDirectionDistance(currentNode.currentLocation, bearingInDegrees,Distance.fromMiles(100));
          //and update the node next and current Position with the location of the new position
-         currentNode.nextLocation = nextPosition;
-         currentNode.currentLocation = nextPosition;
-         currentNode.symbolIdentifier.setPosition(nextPosition);
+         currentNode.updatePosition(currentEpoch, nextPosition);
 
          return(nextPosition);
      }

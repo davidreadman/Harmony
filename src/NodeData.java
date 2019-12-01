@@ -37,7 +37,10 @@ public class NodeData
          analyseDetectedNodes(currentEpoch);
     }
 
-    public void addPositionForEpoch(int currentEpoch, Position newPosition) {
+    public void updatePosition(int currentEpoch, Position newPosition) {
+        this.nextLocation = newPosition;
+        this.currentLocation = newPosition;
+        this.symbolIdentifier.setPosition(newPosition);
         positionTravelForEachEpoch.put(currentEpoch,newPosition);
     }
 
@@ -54,8 +57,8 @@ public class NodeData
         decisionsMadeForEachEpoch.putIfAbsent(currentEpoch, new ArrayList<>());
         for(DetectedNode detectedNode : detectedNodes) {
         }
-/*        if(nodeType == NodeType.FRIEND){
-            MovementDecision.makeDecision(currentEpoch,this,1);
-        }*/
+        MovementDecision.MakeDecision(currentEpoch,this, 1);
+        addDecisionForCurrentEpoch(currentEpoch,1);
+
     }
 }
