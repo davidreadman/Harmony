@@ -49,33 +49,18 @@ public class ParseProperties
 
 			for (int i = 0 ; i<NumberOfNodes ;i++)
 			{
-				System.out.println(i);
+
 				theseNodes[i] = new NodeData();
 				theseNodes[i].NodeUUID = prop.getProperty("Node"+(i+1)+"UUID");
-				theseNodes[i].Lat = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lat"));
-				theseNodes[i].Lon = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lon"));
-				theseNodes[i].currentLocation= new Position(LatLon.fromDegrees(theseNodes[i].Lat,theseNodes[i].Lon), 0);
-				NodeData.NodeType nodeType;
-				String propertyIFF = prop.getProperty("Node"+(i+1)+"IFF");
-				switch(propertyIFF) {
-					case "B":
-						nodeType = NodeData.NodeType.FRIEND;
-						break;
-					case "R":
-						nodeType = NodeData.NodeType.HOSTILE;
-						break;
-					case "G":
-						nodeType = NodeData.NodeType.NEUTRAL;
-						break;
-					default:
-						nodeType = NodeData.NodeType.NULL;
-						break;
-				}
-				theseNodes[i].nodeType = nodeType;
+				double Lat = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lat"));
+				double Lon = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lon"));
+				theseNodes[i].currentLocation= new Position(LatLon.fromDegrees(Lat,Lon), 0);
+				theseNodes[i].NodeIFF = prop.getProperty("Node"+(i+1)+"IFF");
+				theseNodes[i].nodeType = prop.getProperty("Node"+(i+1)+"Type");
 				theseNodes[i].symbol = prop.getProperty("Node"+(i+1)+"2525B");
-				theseNodes[i].operationalSpeed = Speed.fromKilometresPerHour(Double.parseDouble(prop.getProperty("Node"+(i+1)+"OperationalSpeed")));
-				theseNodes[i].maximumSpeed = Speed.fromKilometresPerHour(Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed")));
-				theseNodes[i].detectionRadius = Distance.fromKilometres(Double.parseDouble(prop.getProperty("Node"+(i+1)+"RadiusOfDetectionInKm")));
+				theseNodes[i].operationalSpeedInKmH = Speed.fromKilometresPerHour(Double.parseDouble(prop.getProperty("Node"+(i+1)+"OperationalSpeed")));
+				theseNodes[i].maximumSpeedInKmH = Speed.fromKilometresPerHour(Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed")));
+				theseNodes[i].detectionRadiusInKm = Distance.fromKilometres(Double.parseDouble(prop.getProperty("Node"+(i+1)+"RadiusOfDetectionInKm")));
 			}
 			
 			

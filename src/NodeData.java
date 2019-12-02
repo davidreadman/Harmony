@@ -7,30 +7,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/*
+The NodeData class holds the information about each node and an overview god mode shared by all NodeData types
+ */
 public class NodeData
 {
-     public enum NodeType {FRIEND, HOSTILE, NEUTRAL, NULL}
-
-        Double Lat;
-     Double Lon;
-     Position currentLocation;
-     Position nextLocation;
+    /*the order of the items in this class should reflect as much as possible the order in the config.properties file*/
      String NodeUUID;
+     Position currentLocation,nextLocation;
+     String nodeType;
+     String NodeIFF;
      String symbol;
      TacticalSymbol symbolIdentifier;
-     NodeType nodeType;
-     Speed operationalSpeed;
-     Speed maximumSpeed;
-     Distance detectionRadius;
-     List<DetectedNode> detectedNodes = new ArrayList<>();
-     //Capture positions travelled at each epoch. This info could be used to fed into SMARTNet
-     Map<Integer, Position> positionTravelForEachEpoch = new HashMap<Integer, Position>();
-     //Capture decisions made at each epoch. This info could be used to fed into SMARTNet.
-     Map<Integer, List<Object>> decisionsMadeForEachEpoch = new HashMap<>();
-    NodeData() {}
+     Speed operationalSpeedInKmH;
+     Speed maximumSpeedInKmH;
+     Distance detectionRadiusInKm;
+     /* the next information is that evaluated by Harmony from the list of nodes and the current node positions */
+
+     List<DetectedNode> friendNodesSeen = new ArrayList<>();
+    List<DetectedNode> hostileNodesSeen = new ArrayList<>();
+    List<DetectedNode> neutralNodesSeen = new ArrayList<>();
+
+     /* the next information is metrics received from the external analysis software (SMARTNet) */
+    
+    NodeData()
+    {
+        friendNodesSeen = new ArrayList<>();
+        hostileNodesSeen = new ArrayList<>();
+        neutralNodesSeen = new ArrayList<>();
+    }
 
 
+/* move to harmonyutilities
     public void updateNodesDetectedByMe(int currentEpoch, List<DetectedNode> newList) {
          detectedNodes.clear();
          detectedNodes.addAll(newList);
@@ -52,7 +60,7 @@ public class NodeData
     /**
      * Analyse the nodes we just detected and make a decision accordingly
      * Then capture the decisions made at the current epoch.
-     */
+
     private void analyseDetectedNodes(int currentEpoch) {
         decisionsMadeForEachEpoch.putIfAbsent(currentEpoch, new ArrayList<>());
         for(DetectedNode detectedNode : detectedNodes) {
@@ -61,4 +69,5 @@ public class NodeData
         addDecisionForCurrentEpoch(currentEpoch,1);
 
     }
+    */
 }

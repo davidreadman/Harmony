@@ -2,10 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36e190ff-6c8f-4732-b55d-ac2461a42e1a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/StoreProperties.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/config.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HarmonyEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HarmonyUtilities.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/JFrameGuiActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/JFrameGuiActions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MovementDecision.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HarmonyMovement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/NodeData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/NodeData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ParseProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ParseProperties.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

@@ -39,6 +39,7 @@ public class JFrameGuiActions extends JFrame
     JComboBox iFFList;
     JComboBox nodeList;
     JLabel SymbolString;
+    int movementCounter = 0,logCounter =0, pubCounter = 0;
     int MOVE_TOWARDS_RASPBERRY_CK = 1;
     int MOVE_NORTH;
 
@@ -206,8 +207,9 @@ Set up the Gui Listeners
                     if(enableMovementMenuItem.isSelected())
                     {
                         // Make a decision for the next movement (initially based on integer fed to routine
+                        movementCounter++;
 
-                        MovementDecision.MakeDecision(nodeData[i], 1);
+                        HarmonyMovement.makeDecision(nodeData[i], 1);
                         //moved the next line into the movement decision for updating graphics
                         //nodeData[i].symbolIdentifier.setPosition(movementDecision.MakeDecision(nodeData[i], 1););
                     }
@@ -230,6 +232,7 @@ Set up the Gui Listeners
                 //else just log the data
                 if (loggingFlag && logMenuItem.isSelected())
                 {
+                    logCounter++;
                     //send out data for all nodes
                     int numberOfNodes = nodeData.length;
                     String writeableString = logger.getTimeStamp() + ",";
@@ -254,6 +257,7 @@ Set up the Gui Listeners
                     int numberOfNodes = nodeData.length;
                     for (int i = 0; i < numberOfNodes; i++)
                     {
+                        pubCounter++;
                         publishData.HarmonyPublish(nodeData[i]);
                     }
                     System.out.println("published");

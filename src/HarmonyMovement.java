@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 //note: distanceInRadians = distanceInMeters / globe.getRadius();
-public class MovementDecision
+public class HarmonyMovement
 {
     private static final Position RASPBERRY_CK = Position.fromDegrees(-22.71220, 150.40076, 1);
     private static final int NORTH = 0;
@@ -26,13 +26,23 @@ public class MovementDecision
      * @param decision
      * @return
      */
-     public static Position MakeDecision(int currentEpoch, NodeData currentNode,int decision)
+     public static Position makeDecision( NodeData currentNode,int decision)
      {
          double bearingInDegrees;
          //initial Raspberry cK
          //find out what direction raspberry ck is in
+         switch(decision)
+         {
+             case 1:
+                 break;
+             case 2:
+                 break;
+             default:
+                 //do nothing
+         }
          if(decision ==1)
          {
+             //travel towards raspberry ck
              bearingInDegrees = Position.greatCircleAzimuth(currentNode.currentLocation, RASPBERRY_CK).degrees;
          }
          else
@@ -43,7 +53,10 @@ public class MovementDecision
          //and move towards it
          Position nextPosition = moveDirectionDistance(currentNode.currentLocation, bearingInDegrees,Distance.fromMiles(100));
          //and update the node next and current Position with the location of the new position
-         currentNode.updatePosition(currentEpoch, nextPosition);
+         currentNode.nextLocation = nextPosition;
+         currentNode.currentLocation = nextPosition;
+         //and set the symbol object for the displayed symbol
+         currentNode.symbolIdentifier.setPosition(nextPosition);
 
          return(nextPosition);
      }
@@ -92,6 +105,30 @@ public class MovementDecision
         Distance distanceToTravel = Distance.fromMiles(randomizedDistanceInMiles);
         return moveDirectionDistance(currentLocation, randomizedBearing, distanceToTravel);
     }
+    /* for any 0 to 360 degrees angle, the opposite angle is 360 minus that angle */
+    private static double oppositeDirection(double bearingAsDegrees)
+    {
+        double theActualBearingIs;
+                if (bearingAsDegrees<0)
+                {
+                    theActualBearingIs = bearingAsDegrees +360;
+                }
+                else if (bearingAsDegrees>360)
+                {
+                    theActualBearingIs = bearingAsDegrees%360;
+                }
+                else
+                {
+                    theActualBearingIs = bearingAsDegrees;
+                }
+
+       return (360 - theActualBearingIs);
+
+    }
+
+        /* propose, instead of these, just apply 'oppositeDirection' to make something move away
+        this allows us to use all the variable stuff from the main methods
+
     private static Position moveTowardsAtOperationalSpeed(NodeData currentNode, DetectedNode detectedNode)
     {
         //max distance to travel is based on the current node's operational speed.
@@ -125,5 +162,7 @@ public class MovementDecision
         //Add 180 degrees as we are moving away from the detected node
         return moveDirection(currentNode.currentLocation, detectedNode.getAzimuthAngle().add(Angle.POS180), distanceToTravel);
     }
+    */
+
 }
 
