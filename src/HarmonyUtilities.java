@@ -52,13 +52,14 @@ public class HarmonyUtilities
                     continue;
                 }
                 //The purpose here is to detect nodes with the current nodes detection radius.
-                Distance distanceFromNode = Distance.fromMiles(Position.greatCircleDistance(currentNode.currentLocation, nodes.get(j).currentLocation).radians * HarmonyMovement.tempGlobe.getRadius());
+
+             //   Distance distanceFromNode = Distance.fromMiles(Position.greatCircleDistance(currentNode.currentLocation, nodes.get(j).currentLocation).radians * HarmonyMovement.tempGlobe.getRadius());
                 //If the distance is within the detection radius, then add to the list of detected nodes
               //  if(distanceFromNode.compareTo(currentNode.detectionRadius) <= 0) {
                     //Calculate the azimuth angle from the current node to the node detected.
                     Angle azimuth = Position.greatCircleAzimuth(currentNode.currentLocation, nodes.get(j).currentLocation);
-                    DetectedNode detectedNode = new DetectedNode(currentNode, nodes.get(j), azimuth, distanceFromNode);
-                    nodesDetectedByMe.add(detectedNode);
+                //    DetectedNode detectedNode = new DetectedNode(currentNode, nodes.get(j), azimuth, distanceFromNode);
+           //         nodesDetectedByMe.add(detectedNode);
               //  }
             }
            // currentNode.updateNodesDetectedByMe(epochCounter, nodesDetectedByMe);

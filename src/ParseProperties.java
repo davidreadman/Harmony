@@ -58,14 +58,11 @@ public class ParseProperties
 				theseNodes[i].NodeIFF = prop.getProperty("Node"+(i+1)+"IFF");
 				theseNodes[i].nodeType = prop.getProperty("Node"+(i+1)+"Type");
 				theseNodes[i].symbol = prop.getProperty("Node"+(i+1)+"2525B");
-				theseNodes[i].operationalSpeedInKmH = Speed.fromKilometresPerHour(Double.parseDouble(prop.getProperty("Node"+(i+1)+"OperationalSpeed")));
-				theseNodes[i].maximumSpeedInKmH = Speed.fromKilometresPerHour(Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed")));
-				theseNodes[i].detectionRadiusInKm = Distance.fromKilometres(Double.parseDouble(prop.getProperty("Node"+(i+1)+"RadiusOfDetectionInKm")));
+				theseNodes[i].operationalSpeedInKmH =  Double.parseDouble(prop.getProperty("Node"+(i+1)+"OperationalSpeed"));
+				theseNodes[i].maximumSpeedInKmH = Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed"));
+				theseNodes[i].detectionRadiusInKm = Double.parseDouble(prop.getProperty("Node"+(i+1)+"RadiusOfDetectionInKm"));
 			}
-			
-			
 			System.out.println(theseNodes[0].NodeUUID);
-			
 			return theseNodes;	
 		}
 		catch (Exception e)

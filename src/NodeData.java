@@ -19,9 +19,9 @@ public class NodeData
      String NodeIFF;
      String symbol;
      TacticalSymbol symbolIdentifier;
-     Speed operationalSpeedInKmH;
-     Speed maximumSpeedInKmH;
-     Distance detectionRadiusInKm;
+     double operationalSpeedInKmH;
+     double maximumSpeedInKmH;
+     double detectionRadiusInKm;
      /* the next information is that evaluated by Harmony from the list of nodes and the current node positions */
 
      List<DetectedNode> friendNodesSeen = new ArrayList<>();

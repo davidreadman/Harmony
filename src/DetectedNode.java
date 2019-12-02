@@ -14,9 +14,9 @@ public class DetectedNode {
     private final NodeData reportingNode;
     private final NodeData nodeDetected;
     private final Angle azimuthAngle;
-    private final Distance distanceFromNode;
+    private final double distanceFromNode;
 
-    public DetectedNode(NodeData reportingNode, NodeData nodeDetected, Angle azimuthAngle, Distance distanceFromNode) {
+    public DetectedNode(NodeData reportingNode, NodeData nodeDetected, Angle azimuthAngle, double distanceFromNode) {
         this.reportingNode = reportingNode;
         this.nodeDetected = nodeDetected;
         this.azimuthAngle = azimuthAngle;
@@ -35,7 +35,7 @@ public class DetectedNode {
         return azimuthAngle;
     }
 
-    public Distance getDistanceFromNode() {
+    public double getDistanceFromNode() {
         return distanceFromNode;
     }
 }

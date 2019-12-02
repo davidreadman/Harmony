@@ -14,6 +14,9 @@ public class HarmonyMovement
     private static final Position RASPBERRY_CK = Position.fromDegrees(-22.71220, 150.40076, 1);
     private static final int NORTH = 0;
     public static final Globe tempGlobe = new Earth();
+    private static final double MILES_TO_KM = 1.60944;
+    public static final int KM_TO_METRES = 1000;
+    public static final double ONE_HUNDRED_METERS = 100;
 
 
      /*
@@ -51,7 +54,7 @@ public class HarmonyMovement
          }
 
          //and move towards it
-         Position nextPosition = moveDirectionDistance(currentNode.currentLocation, bearingInDegrees,Distance.fromMiles(100));
+         Position nextPosition = moveDirectionDistance(currentNode.currentLocation, bearingInDegrees,ONE_HUNDRED_METERS);
          //and update the node next and current Position with the location of the new position
          currentNode.nextLocation = nextPosition;
          currentNode.currentLocation = nextPosition;
@@ -68,42 +71,60 @@ public class HarmonyMovement
      * However, the approach below was taken to assist maintenance if issues arise.
      */
 
-    private static Position moveDirection(Position currentLocation, Angle bearingAsAngle, Distance distanceToTravel)
+    private static Position moveDirectionDistance(Position currentLocation, Angle bearingAsAngle, double distanceInMeters)
     {
         //Convert a distance values in miles to radians
-        double distanceRadians = distanceToTravel.getDistanceInMiles()/ tempGlobe.getRadius();
-
+        double distanceRadians = distanceInMeters/ tempGlobe.getRadius();
         //Use great circle end position to get the next position from the current location.
         return new Position(LatLon.greatCircleEndPosition(currentLocation, bearingAsAngle.radians, distanceRadians),0);
     }
 
-    private static Position moveDirectionDistance(Position currentLocation, double bearingAsDegrees, Distance distanceToTravel)
+    private static Position moveDirectionDistance(Position currentLocation, double bearingAsDegrees, double distanceInMeters)
     {
+        //Convert a distance values in miles to radians
+        double distanceRadians = distanceInMeters/ tempGlobe.getRadius();
         //Generate Angle object with a value in degrees before calling the moveDirection()
         Angle bearing = Angle.fromDegrees(bearingAsDegrees);
-        return moveDirection(currentLocation, bearing, distanceToTravel);
+        //Use great circle end position to get the next position from the current location.
+        return new Position(LatLon.greatCircleEndPosition(currentLocation, bearing.radians, distanceRadians),0);
     }
-    private static Position moveVDirectionDistance(Position currentLocation, double bearingAsDegrees, double variationAsDegrees, Distance distanceToTravel)
+    private static Position moveVDirectionDistance(Position currentLocation, double bearingAsDegrees, double variationAsDegrees, double distanceInMeters)
+    {
+        //Get a value of the bearing +/- variation
+        //https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadLocalRandom.html
+        double randomizedBearing = ThreadLocalRandom.current().nextDouble(bearingAsDegrees-variationAsDegrees, bearingAsDegrees+variationAsDegrees+0.01);
+        return moveDirectionDistance(currentLocation, randomizedBearing, distanceInMeters);
+    }
+    private static Position moveDirectionVDistance(Position currentLocation, double bearingAsDegrees, double minimumDistanceInMeters, double maximumDistanceInMeters)
+    {
+        //Get a distance value between the minimum and maximum distance
+        double randomisedDistanceInMeters = ThreadLocalRandom.current().nextDouble(minimumDistanceInMeters, maximumDistanceInMeters);
+        return moveDirectionDistance(currentLocation, bearingAsDegrees, randomisedDistanceInMeters);
+    }
+    private static Position moveVDirectionVDistance(Position currentLocation, double bearingAsDegrees, double variationAsDegrees, double minDistanceInMeters, double maxDistanceInMeters)
     {
         //Get a value of the bearing +/- variation
         double randomizedBearing = ThreadLocalRandom.current().nextDouble(bearingAsDegrees-variationAsDegrees, bearingAsDegrees+variationAsDegrees+0.01);
-        return moveDirectionDistance(currentLocation, randomizedBearing, distanceToTravel);
-    }
-    private static Position moveDirectionVDistance(Position currentLocation, double bearingAsDegrees, Distance minDistance, Distance maxDistance)
-    {
         //Get a distance value between the minimum and maximum distance
-        double randomizedDistanceInMiles = ThreadLocalRandom.current().nextDouble(minDistance.getDistanceInMiles(), maxDistance.getDistanceInMiles()+0.01);
-        Distance distanceToTravel = Distance.fromMiles(randomizedDistanceInMiles);
-        return moveDirectionDistance(currentLocation, bearingAsDegrees, distanceToTravel);
+        double randomisedDistanceInMeters = ThreadLocalRandom.current().nextDouble(minDistanceInMeters, maxDistanceInMeters+0.01);
+
+        return moveDirectionDistance(currentLocation, randomizedBearing, randomisedDistanceInMeters);
     }
-    private static Position moveVDirectionVDistance(Position currentLocation, double bearingAsDegrees, double variationAsDegrees, Distance minDistance, Distance maxDistance)
+    //identify the bearing to the target in degrees
+    private static double bearingToTargetInDegrees(Position currentLocation, Position targetLocation)
     {
-        //Get a value of the bearing +/- variation
-        double randomizedBearing = ThreadLocalRandom.current().nextDouble(bearingAsDegrees-variationAsDegrees, bearingAsDegrees+variationAsDegrees+0.01);
-        //Get a distance value between the minimum and maximum distance
-        double randomizedDistanceInMiles = ThreadLocalRandom.current().nextDouble(minDistance.getDistanceInMiles(), maxDistance.getDistanceInMiles()+0.01);
-        Distance distanceToTravel = Distance.fromMiles(randomizedDistanceInMiles);
-        return moveDirectionDistance(currentLocation, randomizedBearing, distanceToTravel);
+        double bearingInDegrees = Position.greatCircleAzimuth(currentLocation, targetLocation).degrees;
+        return (bearingInDegrees);
+    }
+    //identify the distance to the target in meters
+    private static double distanceToTargetInMeters(Position currentLocation, Position targetLocation)
+    {
+        double distanceInRadians = Position.greatCircleDistance(currentLocation, targetLocation).radians;
+        //to get a distance in meters, multiply the distance in radians by the radius of the globe
+        //https://nasaworldwind.github.io/WorldWindJava/gov/nasa/worldwind/geom/LatLon.html
+        //see notes on greatCircleDistance
+        double distanceInMeters = distanceInRadians * tempGlobe.getRadius();
+        return (distanceInMeters);
     }
     /* for any 0 to 360 degrees angle, the opposite angle is 360 minus that angle */
     private static double oppositeDirection(double bearingAsDegrees)
@@ -126,43 +147,28 @@ public class HarmonyMovement
 
     }
 
-        /* propose, instead of these, just apply 'oppositeDirection' to make something move away
-        this allows us to use all the variable stuff from the main methods
-
-    private static Position moveTowardsAtOperationalSpeed(NodeData currentNode, DetectedNode detectedNode)
+    public static double kmToMiles(double miles)
     {
-        //max distance to travel is based on the current node's operational speed.
-        Distance maxDistanceToTravel = Distance.fromMetres(currentNode.operationalSpeed.getMetresPerSecond());
-        //If the distance to our target is less than the maximum distance a node can travel
-        //Set the distanceToTravel to be that distance.
-        Distance distanceToTravel = (maxDistanceToTravel.compareTo(detectedNode.getDistanceFromNode()) == 1) ? detectedNode.getDistanceFromNode() : maxDistanceToTravel;
-        return moveDirection(currentNode.currentLocation, detectedNode.getAzimuthAngle(), distanceToTravel);
+        double kiloMeters = miles * MILES_TO_KM;
+        return (kiloMeters);
     }
-
-    private static Position moveTowardsAtMaximumSpeed(NodeData currentNode, DetectedNode detectedNode) {
-        //max distance to travel is based on the current node's maximum speed
-        Distance maxDistanceToTravel = Distance.fromMetres(currentNode.maximumSpeed.getMetresPerSecond());
-        //If the distance to our target is less than the maximum distance a node can travel
-        //Set the distanceToTravel to be that distance.
-        Distance distanceToTravel = (maxDistanceToTravel.compareTo(detectedNode.getDistanceFromNode()) == 1) ? detectedNode.getDistanceFromNode() : maxDistanceToTravel;
-        return moveDirection(currentNode.currentLocation, detectedNode.getAzimuthAngle(), distanceToTravel);
-    }
-
-    private static Position moveAwayAtOperationalSpeed(NodeData currentNode, DetectedNode detectedNode)
+    public static double milesToKm(double miles)
     {
-        //distance to travel is based on the current node's operational speed.
-        Distance distanceToTravel = Distance.fromMetres(currentNode.operationalSpeed.getMetresPerSecond());
-        //Add 180 degrees as we are moving away from the detected node
-        return moveDirection(currentNode.currentLocation, detectedNode.getAzimuthAngle().add(Angle.POS180), distanceToTravel);
+        double kiloMeters = miles * MILES_TO_KM;
+        return (kiloMeters);
+    }
+    public static double kmHToMilesH(double miles)
+    {
+        double kiloMeters = miles * MILES_TO_KM;
+        return (kiloMeters);
+    }
+    public static double kmSToMilesS(double miles)
+    {
+        double kiloMeters = miles * MILES_TO_KM;
+        return (kiloMeters);
     }
 
-    private static Position moveAwayAtMaximumSpeed(NodeData currentNode, DetectedNode detectedNode) {
-        //distance to travel is based on the current node's maximum speed
-        Distance distanceToTravel = Distance.fromMetres(currentNode.maximumSpeed.getMetresPerSecond());
-        //Add 180 degrees as we are moving away from the detected node
-        return moveDirection(currentNode.currentLocation, detectedNode.getAzimuthAngle().add(Angle.POS180), distanceToTravel);
-    }
-    */
+
 
 }
 
