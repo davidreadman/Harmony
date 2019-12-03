@@ -60,7 +60,7 @@ public class HoconFileGenerator {
             List<NodeData> hostiles = new ArrayList<>();
             List<NodeData> neutrals = new ArrayList<>();
             for(NodeData node: nodes) {
-                switch (node.NodeIFF) {
+                switch (node.nodeIFF) {
                     case "FRIEND":
                         friends.add(node);
                         break;
@@ -78,7 +78,7 @@ public class HoconFileGenerator {
                 NodeData node = nodes.get(i);
                 nodeUUIDs.add(String.format("\"%s\"", node.NodeUUID));
                 String positionRecipients = "";
-                switch (node.NodeIFF) {
+                switch (node.nodeIFF) {
                     case "FRIEND":
                         positionRecipients = getPositionRecipientsForNode(friends, node.NodeUUID);
                         break;

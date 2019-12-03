@@ -33,24 +33,25 @@ public class StoreProperties
             {
 
                 String line1= "Node"+(i+1)+"UUID = " + nodeData[i].NodeUUID+"\n";
-               // Node1Lat = -22.76840992443997
-                String line2= "Node"+(i+1)+"Lat = " + nodeData[i].currentLocation.getLatitude()+"\n";
-             //   Node1Lon = 150.36795105104991
-                String line3= "Node"+(i+1)+"Lon = " + nodeData[i].currentLocation.getLongitude()+"\n";
+                //note: used this to remove degrees symbol present in the angle.degrees number
+                int lengthOfString = nodeData[i].currentLocation.getLatitude().toString().length();
+                String line2= "Node"+(i+1)+"Lat = " + nodeData[i].currentLocation.getLatitude().toString().substring(0,lengthOfString-1)+"\n";
+                lengthOfString = nodeData[i].currentLocation.getLongitude().toString().length();
+                String line3= "Node"+(i+1)+"Lon = " + nodeData[i].currentLocation.getLongitude().toString().substring(0,lengthOfString-1)+"\n";
               //  Node1Type = Armoured Wheeled Vehicle
                 String line4= "Node"+(i+1)+"Type = " + nodeData[i].nodeType+"\n";
              //   Node1IFF = B
-                String line5= "Node"+(i+1)+"IFF = " + nodeData[i].NodeUUID+"\n";
+                String line5= "Node"+(i+1)+"IFF = " + nodeData[i].nodeIFF+"\n";
              //   Node12525B = SFGPUCRVA-bf---
-                String line6= "Node"+(i+1)+"2525B = " + nodeData[i].NodeUUID+"\n";
+                String line6= "Node"+(i+1)+"2525B = " + nodeData[i].symbol+"\n";
             //            Node1OperationalSpeed = 40
-                String line7= "Node"+(i+1)+"OperationalSpeed = " + nodeData[i].NodeUUID+"\n";
+                String line7= "Node"+(i+1)+"OperationalSpeed = " + nodeData[i].operationalSpeedInKmH+"\n";
             //    Node1MaxSpeed = 100
-                String line8= "Node"+(i+1)+"MaxSpeed = " + nodeData[i].NodeUUID+"\n";
+                String line8= "Node"+(i+1)+"MaxSpeed = " + nodeData[i].maximumSpeedInKmH+"\n";
             //    Node1RadiusOfDetectionInKm = 20
-                String line9= "Node"+(i+1)+"RadiusOfDetectionInKm = " + nodeData[i].NodeUUID+"\n";
+                String line9= "Node"+(i+1)+"RadiusOfDetectionInKm = " + nodeData[i].detectionRadiusInKm+"\n";
 
-                content = (""+line1);
+                content = (""+line1+line2+line3+line4+line5+line6+line7+line8+line9+"\n\n\n");
                 contentInBytes = content.getBytes();
                 outputStream.write(contentInBytes);
 
@@ -61,7 +62,7 @@ public class StoreProperties
             outputStream.flush();
             outputStream.close();
 
-            System.out.println("Done");
+            System.out.println("Prop file stored");
         }
         catch (IOException e)
         {

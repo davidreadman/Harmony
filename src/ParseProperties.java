@@ -42,6 +42,7 @@ public class ParseProperties
 			Date time = new Date (System.currentTimeMillis());
 			//get the number of nodes defined in the properties file
 			int NumberOfNodes = Integer.parseInt(prop.getProperty("Nodes"));
+			System.out.println("number of nodes: " + NumberOfNodes);
 			//create an array to hold these nodes
 			NodeData[] theseNodes = new NodeData[NumberOfNodes];
 			//loop through the number of nodes to fill array
@@ -55,7 +56,7 @@ public class ParseProperties
 				double Lat = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lat"));
 				double Lon = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lon"));
 				theseNodes[i].currentLocation= new Position(LatLon.fromDegrees(Lat,Lon), 0);
-				theseNodes[i].NodeIFF = prop.getProperty("Node"+(i+1)+"IFF");
+				theseNodes[i].nodeIFF = prop.getProperty("Node"+(i+1)+"IFF");
 				theseNodes[i].nodeType = prop.getProperty("Node"+(i+1)+"Type");
 				theseNodes[i].symbol = prop.getProperty("Node"+(i+1)+"2525B");
 				theseNodes[i].operationalSpeedInKmH =  Double.parseDouble(prop.getProperty("Node"+(i+1)+"OperationalSpeed"));

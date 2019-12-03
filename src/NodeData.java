@@ -1,3 +1,4 @@
+import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.symbology.TacticalSymbol;
@@ -14,17 +15,25 @@ public class NodeData
 {
     /*the order of the items in this class should reflect as much as possible the order in the config.properties file*/
      String NodeUUID;
-     Position currentLocation,nextLocation;
+     /*initially ;used currentLocation and nextLocation, but these were changed at the same time, previousLocation
+     allows more information to use for direction of travel
+      */
+     Position currentLocation,previousLocation;
      String nodeType;
-     String NodeIFF;
+     String nodeIFF;
      String symbol;
      TacticalSymbol symbolIdentifier;
      double operationalSpeedInKmH;
      double maximumSpeedInKmH;
      double detectionRadiusInKm;
+     String closestHostile;
+     //could put in a 'closest road'
      /* the next information is that evaluated by Harmony from the list of nodes and the current node positions */
-
-     List<DetectedNode> friendNodesSeen = new ArrayList<>();
+    /*initial implementation, this is not created, can be inferred from currentLocation and nextLocation, may need
+    a previousLocation
+     */
+    double directionOfTravel;
+    List<DetectedNode> friendNodesSeen = new ArrayList<>();
     List<DetectedNode> hostileNodesSeen = new ArrayList<>();
     List<DetectedNode> neutralNodesSeen = new ArrayList<>();
 
@@ -45,12 +54,7 @@ public class NodeData
          analyseDetectedNodes(currentEpoch);
     }
 
-    public void updatePosition(int currentEpoch, Position newPosition) {
-        this.nextLocation = newPosition;
-        this.currentLocation = newPosition;
-        this.symbolIdentifier.setPosition(newPosition);
-        positionTravelForEachEpoch.put(currentEpoch,newPosition);
-    }
+
 
     public void addDecisionForCurrentEpoch(int currentEpoch, int decision) {
         decisionsMadeForEachEpoch.putIfAbsent(currentEpoch, new ArrayList<>());

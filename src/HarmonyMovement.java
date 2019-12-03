@@ -24,45 +24,42 @@ public class HarmonyMovement
       */
 
     /**
-     *
      * @param currentNode
      * @param decision
      * @return
      */
-     public static Position makeDecision( NodeData currentNode,int decision)
-     {
-         double bearingInDegrees;
-         //initial Raspberry cK
-         //find out what direction raspberry ck is in
-         switch(decision)
-         {
-             case 1:
-                 break;
-             case 2:
-                 break;
-             default:
-                 //do nothing
-         }
-         if(decision ==1)
-         {
-             //travel towards raspberry ck
-             bearingInDegrees = Position.greatCircleAzimuth(currentNode.currentLocation, RASPBERRY_CK).degrees;
-         }
-         else
-         {
-             bearingInDegrees = NORTH;
-         }
+    public static Position makeDecision(NodeData currentNode, String decision)
+    {
+         /*future work: use the current direction of movement as the initialiser for bearing so the default faces same
+         direction on break(do nothing)
+          */
+        double bearingInDegrees = 0;
+        double distanceToTravel = 0;
+        //initial Raspberry cK
+        //find out what direction raspberry ck is in
+        System.out.println("decision made : " + decision);
+        switch (decision)
+        {
+            case "Move Raspberry Ck":
+                bearingInDegrees = Position.greatCircleAzimuth(currentNode.currentLocation, RASPBERRY_CK).degrees;
+                distanceToTravel = ONE_HUNDRED_METERS;
+                break;
+            case "Move North":
+                bearingInDegrees = NORTH;
+                break;
+            default:
+                //do nothing
+                System.out.println("do nothing ");
+        }
 
-         //and move towards it
-         Position nextPosition = moveDirectionDistance(currentNode.currentLocation, bearingInDegrees,ONE_HUNDRED_METERS);
-         //and update the node next and current Position with the location of the new position
-         currentNode.nextLocation = nextPosition;
-         currentNode.currentLocation = nextPosition;
-         //and set the symbol object for the displayed symbol
-         currentNode.symbolIdentifier.setPosition(nextPosition);
+        //and move towards it
+        Position nextPosition = moveDirectionDistance(currentNode.currentLocation, bearingInDegrees, distanceToTravel);
+        //and update the node next and current Position with the location of the new position
+        updatePosition(nextPosition, currentNode);
 
-         return(nextPosition);
-     }
+
+        return (nextPosition);
+    }
 
 
     /*
@@ -74,48 +71,53 @@ public class HarmonyMovement
     private static Position moveDirectionDistance(Position currentLocation, Angle bearingAsAngle, double distanceInMeters)
     {
         //Convert a distance values in miles to radians
-        double distanceRadians = distanceInMeters/ tempGlobe.getRadius();
+        double distanceRadians = distanceInMeters / tempGlobe.getRadius();
         //Use great circle end position to get the next position from the current location.
-        return new Position(LatLon.greatCircleEndPosition(currentLocation, bearingAsAngle.radians, distanceRadians),0);
+        return new Position(LatLon.greatCircleEndPosition(currentLocation, bearingAsAngle.radians, distanceRadians), 0);
     }
 
     private static Position moveDirectionDistance(Position currentLocation, double bearingAsDegrees, double distanceInMeters)
     {
         //Convert a distance values in miles to radians
-        double distanceRadians = distanceInMeters/ tempGlobe.getRadius();
+        double distanceRadians = distanceInMeters / tempGlobe.getRadius();
         //Generate Angle object with a value in degrees before calling the moveDirection()
         Angle bearing = Angle.fromDegrees(bearingAsDegrees);
         //Use great circle end position to get the next position from the current location.
-        return new Position(LatLon.greatCircleEndPosition(currentLocation, bearing.radians, distanceRadians),0);
+        return new Position(LatLon.greatCircleEndPosition(currentLocation, bearing.radians, distanceRadians), 0);
     }
+
     private static Position moveVDirectionDistance(Position currentLocation, double bearingAsDegrees, double variationAsDegrees, double distanceInMeters)
     {
         //Get a value of the bearing +/- variation
         //https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadLocalRandom.html
-        double randomizedBearing = ThreadLocalRandom.current().nextDouble(bearingAsDegrees-variationAsDegrees, bearingAsDegrees+variationAsDegrees+0.01);
+        double randomizedBearing = ThreadLocalRandom.current().nextDouble(bearingAsDegrees - variationAsDegrees, bearingAsDegrees + variationAsDegrees + 0.01);
         return moveDirectionDistance(currentLocation, randomizedBearing, distanceInMeters);
     }
+
     private static Position moveDirectionVDistance(Position currentLocation, double bearingAsDegrees, double minimumDistanceInMeters, double maximumDistanceInMeters)
     {
         //Get a distance value between the minimum and maximum distance
         double randomisedDistanceInMeters = ThreadLocalRandom.current().nextDouble(minimumDistanceInMeters, maximumDistanceInMeters);
         return moveDirectionDistance(currentLocation, bearingAsDegrees, randomisedDistanceInMeters);
     }
+
     private static Position moveVDirectionVDistance(Position currentLocation, double bearingAsDegrees, double variationAsDegrees, double minDistanceInMeters, double maxDistanceInMeters)
     {
         //Get a value of the bearing +/- variation
-        double randomizedBearing = ThreadLocalRandom.current().nextDouble(bearingAsDegrees-variationAsDegrees, bearingAsDegrees+variationAsDegrees+0.01);
+        double randomizedBearing = ThreadLocalRandom.current().nextDouble(bearingAsDegrees - variationAsDegrees, bearingAsDegrees + variationAsDegrees + 0.01);
         //Get a distance value between the minimum and maximum distance
-        double randomisedDistanceInMeters = ThreadLocalRandom.current().nextDouble(minDistanceInMeters, maxDistanceInMeters+0.01);
+        double randomisedDistanceInMeters = ThreadLocalRandom.current().nextDouble(minDistanceInMeters, maxDistanceInMeters + 0.01);
 
         return moveDirectionDistance(currentLocation, randomizedBearing, randomisedDistanceInMeters);
     }
+
     //identify the bearing to the target in degrees
     private static double bearingToTargetInDegrees(Position currentLocation, Position targetLocation)
     {
         double bearingInDegrees = Position.greatCircleAzimuth(currentLocation, targetLocation).degrees;
         return (bearingInDegrees);
     }
+
     //identify the distance to the target in meters
     private static double distanceToTargetInMeters(Position currentLocation, Position targetLocation)
     {
@@ -126,47 +128,53 @@ public class HarmonyMovement
         double distanceInMeters = distanceInRadians * tempGlobe.getRadius();
         return (distanceInMeters);
     }
-    /* for any 0 to 360 degrees angle, the opposite angle is 360 minus that angle */
+
+    /* for any 0 to 360 degrees angle, the opposite angle is 180 plus that angle mod 360 */
     private static double oppositeDirection(double bearingAsDegrees)
     {
         double theActualBearingIs;
-                if (bearingAsDegrees<0)
-                {
-                    theActualBearingIs = bearingAsDegrees +360;
-                }
-                else if (bearingAsDegrees>360)
-                {
-                    theActualBearingIs = bearingAsDegrees%360;
-                }
-                else
-                {
-                    theActualBearingIs = bearingAsDegrees;
-                }
+        if (bearingAsDegrees < 0)
+        {
+            theActualBearingIs = bearingAsDegrees + 360;
+        } else if (bearingAsDegrees > 360)
+        {
+            theActualBearingIs = bearingAsDegrees % 360;
+        } else
+        {
+            theActualBearingIs = bearingAsDegrees;
+        }
 
-       return (360 - theActualBearingIs);
+        return ((180 + theActualBearingIs) % 360);
 
     }
 
-    public static double kmToMiles(double miles)
+    /* update the locations and direction of travel */
+    public static void updatePosition(Position newPosition, NodeData nodeData)
     {
-        double kiloMeters = miles * MILES_TO_KM;
-        return (kiloMeters);
+        nodeData.previousLocation = nodeData.currentLocation;
+        nodeData.currentLocation = newPosition;
+        nodeData.directionOfTravel = bearingToTargetInDegrees(nodeData.previousLocation, nodeData.currentLocation);
+        //and set the symbol object for the displayed symbol
+        nodeData.symbolIdentifier.setPosition(newPosition);
     }
-    public static double milesToKm(double miles)
+    //initially just loading the 'closest enemy' into the node
+    public static void situationalAwareness(NodeData[] nodeData,NodeData thisNode)
     {
-        double kiloMeters = miles * MILES_TO_KM;
-        return (kiloMeters);
+        double closestFoe;
+        //sweep through all the nodes to see which is closest
+        for (int i = 0; i < nodeData.length; i++)
+        {
+            //Skip node since it's the same as the node at index i.
+            if (nodeData[i]==thisNode)
+            {
+                continue;
+            }
+
+
+
+        }
     }
-    public static double kmHToMilesH(double miles)
-    {
-        double kiloMeters = miles * MILES_TO_KM;
-        return (kiloMeters);
-    }
-    public static double kmSToMilesS(double miles)
-    {
-        double kiloMeters = miles * MILES_TO_KM;
-        return (kiloMeters);
-    }
+
 
 
 

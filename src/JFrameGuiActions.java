@@ -206,10 +206,10 @@ Set up the Gui Listeners
                     //only make a movement if the menu selection has been enabled
                     if(enableMovementMenuItem.isSelected())
                     {
-                        // Make a decision for the next movement (initially based on integer fed to routine
+                        // Make a decision for the next movement
                         movementCounter++;
 
-                        HarmonyMovement.makeDecision(nodeData[i], 1);
+                        HarmonyMovement.makeDecision(nodeData[i], "Move Raspberry Ck");
                         //moved the next line into the movement decision for updating graphics
                         //nodeData[i].symbolIdentifier.setPosition(movementDecision.MakeDecision(nodeData[i], 1););
                     }
