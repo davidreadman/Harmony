@@ -13,10 +13,14 @@ public class HarmonyMovement
 {
     private static final Position RASPBERRY_CK = Position.fromDegrees(-22.71220, 150.40076, 1);
     private static final int NORTH = 0;
+    private static final int EAST = 90;
+    private static final int SOUTH = 180;
+    private static final int WEST = 270;
     public static final Globe tempGlobe = new Earth();
     private static final double MILES_TO_KM = 1.60944;
     public static final int KM_TO_METRES = 1000;
     public static final double ONE_HUNDRED_METERS = 100;
+    private static final double METRES_PER_SECOND_TO_KM_PER_HOUR = 3.6;
 
 
      /*
@@ -61,20 +65,16 @@ public class HarmonyMovement
         return (nextPosition);
     }
 
+    public static Position makeDecision(NodeData currentNode, DetectedNode detectedNode, String decision) {
+        //If there is no detected node object then we call the other makeDecision function
+        if(detectedNode == null) {
+            return makeDecision(currentNode, decision);
+        } else {
 
-    /*
-     * This function is used by all the functions below it.
-     * We could have copied and pasted the lines of code to help understand the logic as to what is happening in each function
-     * However, the approach below was taken to assist maintenance if issues arise.
-     */
-
-    private static Position moveDirectionDistance(Position currentLocation, Angle bearingAsAngle, double distanceInMeters)
-    {
-        //Convert a distance values in miles to radians
-        double distanceRadians = distanceInMeters / tempGlobe.getRadius();
-        //Use great circle end position to get the next position from the current location.
-        return new Position(LatLon.greatCircleEndPosition(currentLocation, bearingAsAngle.radians, distanceRadians), 0);
+        }
+        return null;
     }
+
 
     private static Position moveDirectionDistance(Position currentLocation, double bearingAsDegrees, double distanceInMeters)
     {
@@ -112,14 +112,14 @@ public class HarmonyMovement
     }
 
     //identify the bearing to the target in degrees
-    private static double bearingToTargetInDegrees(Position currentLocation, Position targetLocation)
+    public static double bearingToTargetInDegrees(Position currentLocation, Position targetLocation)
     {
         double bearingInDegrees = Position.greatCircleAzimuth(currentLocation, targetLocation).degrees;
         return (bearingInDegrees);
     }
 
     //identify the distance to the target in meters
-    private static double distanceToTargetInMeters(Position currentLocation, Position targetLocation)
+    public static double distanceToTargetInMeters(Position currentLocation, Position targetLocation)
     {
         double distanceInRadians = Position.greatCircleDistance(currentLocation, targetLocation).radians;
         //to get a distance in meters, multiply the distance in radians by the radius of the globe
@@ -157,26 +157,6 @@ public class HarmonyMovement
         //and set the symbol object for the displayed symbol
         nodeData.symbolIdentifier.setPosition(newPosition);
     }
-    //initially just loading the 'closest enemy' into the node
-    public static void situationalAwareness(NodeData[] nodeData,NodeData thisNode)
-    {
-        double closestFoe;
-        //sweep through all the nodes to see which is closest
-        for (int i = 0; i < nodeData.length; i++)
-        {
-            //Skip node since it's the same as the node at index i.
-            if (nodeData[i]==thisNode)
-            {
-                continue;
-            }
-
-
-
-        }
-    }
-
-
-
 
 }
 
