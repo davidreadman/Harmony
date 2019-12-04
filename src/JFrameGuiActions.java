@@ -422,7 +422,7 @@ Set up the Gui Listeners
         //set up a default node
         selectedNode = nodeData[0];
         /* set up the drop down lists*/
-        String[] iFFStrings = {"Friend", "Hostile", "Neutral"};
+        String[] iFFStrings = {"FRIEND", "HOSTILE", "NEUTRAL"};
         char[] iFFChars = {'F', 'H', 'N'};
         StringBuilder MilSymString = new StringBuilder(nodeData[0].symbolIdentifier.getIdentifier());
 
@@ -473,6 +473,8 @@ Set up the Gui Listeners
                 MilSymString.setCharAt(1, iFFChars[iFFList.getSelectedIndex()]);
                 //this sets the stringbuilder output to test functionality
                 SymbolString.setText(MilSymString.toString());
+                //set the node affiliation based on the selected index from the iFFList
+                selectedNode.nodeIFF = iFFStrings[iFFList.getSelectedIndex()];
                 //need to set the string in the node to the new value
                 selectedNode.symbol = MilSymString.toString();
                 //need to update the tactical symbol to this

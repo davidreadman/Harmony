@@ -12,7 +12,7 @@ public class StoreProperties
     public void writeConfig(NodeData[] nodeData)
     {
         //create a file
-        String propFileName = "newconfig1.properties";
+        String propFileName = "newconfig.properties";
         FileOutputStream outputStream;
         File file;
         String content = "Nodes = "+nodeData.length+"\n\n";
