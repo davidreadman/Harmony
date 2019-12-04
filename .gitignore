@@ -1,6 +1,7 @@
 
 *.log
-
+*.csv
+*.conf
 out/artifacts/Harmony_jar/
-
+.idea/workspace.xml
 out/production/Harmony/

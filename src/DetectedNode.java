@@ -1,15 +1,5 @@
-import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 
-/**
- * This class stores information about the node detected
- * The fields are the following
- * 1. That node that was detected.
- * 2. The angle from the detected node
- * 3. The distance from the detected node.
- * 4. The node that reported this information.
- * This information can be used to either move towards/away from the detected node.
- */
 public class DetectedNode
 {
 
@@ -32,6 +22,7 @@ public class DetectedNode
     private final int levelOfConfidence;
     /* friend, hostile or neutral (to be expanded later */
     private final String nodeIFF;
+
     public DetectedNode(String nodeUUID, Position currentLocation, double directionOfTravel, double distanceToTargetInMeters,
                         double bearingInDegreesToTarget, String detectedByUUID,
                         String nodeType, int levelOfConfidence, String nodeIFF)
@@ -67,4 +58,10 @@ public class DetectedNode
     {
         return this.distanceToTargetInMeters;
     }
+
+    public String getNodeType() { return this.nodeType; }
+
+    public int getLevelOfConfidence() { return this.levelOfConfidence; }
+
+    public String getNodeIFF(){ return this.nodeIFF; }
 }
