@@ -13,7 +13,7 @@ import java.util.List;
 public class HarmonyUtilities
 {
     int movementCounter = 0,logCounter =0, pubCounter = 0;
-    WriteLog logger = new WriteLog();
+    WriteLog logger;
     HarmonyDataPublisher publishData;
     StoreProperties storeProperties = new StoreProperties();
 
@@ -53,18 +53,29 @@ public class HarmonyUtilities
         System.out.println("published");
     }
 
-    public void logToCSV() {
-        logCounter++;
-        String metric = "This will be a future metric";
-        String decision = "This will be a future decision";
-        List<String> nodesAsCSVFormat = new ArrayList<String>();
-        for(NodeData currentNode: nodes) {
-            //Develop csv for each node
-            nodesAsCSVFormat.add(String.format("%s,%f,%f,%s,%s", currentNode.NodeUUID, currentNode.currentLocation.asDegreesArray()[0], currentNode.currentLocation.asDegreesArray()[1],metric,decision));
+    public void createLogFile() {
+        if(logger == null) {
+            logger = new WriteLog();
         }
-        String writableString = String.format("%s,%s\n", logger.getTimeStamp(), String.join(",", nodesAsCSVFormat));
-        logger.writeStringToFile(writableString);
-        logger.Flush();
+    }
+
+    public void logToCSV() {
+        if(logger != null) {
+            logCounter++;
+            List<String> nodesAsCSVFormat = new ArrayList<>();
+            for(NodeData currentNode: nodes) {
+                //Develop csv for each node
+                nodesAsCSVFormat.add(String.format("%s,%f,%f,%s,%s", currentNode.NodeUUID, currentNode.currentLocation.asDegreesArray()[0], currentNode.currentLocation.asDegreesArray()[1],currentNode.currentMetric,currentNode.currentDecision));
+            }
+            String timestamp = logger.getTimeStamp();
+            String writableString = String.format("%s,%s\n", timestamp, String.join(",", nodesAsCSVFormat));
+
+            //Only write line to file starting with timestamp if we haven't done so already.
+            if(!logger.linesWritten.stream().anyMatch(line -> line.startsWith(timestamp))) {
+                logger.writeStringToFile(writableString);
+            }
+            logger.Flush();
+        }
     }
 
     public void triggerMovementForEachNode() {

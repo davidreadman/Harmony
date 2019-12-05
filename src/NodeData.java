@@ -37,6 +37,11 @@ public class NodeData
     List<DetectedNode> hostileNodesSeen;
     List<DetectedNode> neutralNodesSeen;
 
+    /* Used for logging purposes as node is the source of truth */
+    /* We want to log the current decision that it made and the corresponding metric */
+    String currentMetric = "";
+    String currentDecision = "";
+
      /* the next information is metrics received from the external analysis software (SMARTNet) */
     
     NodeData()

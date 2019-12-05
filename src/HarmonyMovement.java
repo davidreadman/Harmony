@@ -42,6 +42,7 @@ public class HarmonyMovement
         //initial Raspberry cK
         //find out what direction raspberry ck is in
         System.out.println("decision made : " + decision);
+        currentNode.currentDecision = decision;
         switch (decision)
         {
             case "Move Raspberry Ck":
@@ -51,6 +52,10 @@ public class HarmonyMovement
             case "Move North":
                 bearingInDegrees = NORTH;
                 break;
+            case "Move South":
+                bearingInDegrees = SOUTH;
+                break;
+
             default:
                 //do nothing
                 System.out.println("do nothing ");

@@ -22,10 +22,15 @@ public class JFrameGuiActions extends JFrame
     JLabel NodeUUIDText;
     DisplayWW displayWW;
     JMenuBar menuBar;
-    JMenu menu, submenu, aboutMenu, informationMenu;
+    JMenu menu;
+    JMenu aboutMenu;
+    JMenu informationMenu;
     JMenuItem menuItem,enableMovementMenuItem;
-    JRadioButtonMenuItem rbMenuItem, dDSNodeMenuItem, pubMenuItem, logMenuItem;
-    JRadioButtonMenuItem dDSMetMenuItem, stopPubMenuItem, stopLogMenuItem;
+    JRadioButtonMenuItem rbMenuItem;
+    JRadioButtonMenuItem dDSNodeMenuItem;
+    JRadioButtonMenuItem pubMenuItem;
+    JRadioButtonMenuItem dDSMetMenuItem;
+    JRadioButtonMenuItem stopPubMenuItem;
     JRadioButtonMenuItem toggle2525B, toggleNodeLocPanel;
     JRadioButtonMenuItem buttonMenuItem;
     JRadioButtonMenuItem configCreatorMenuItem;
@@ -102,15 +107,12 @@ public class JFrameGuiActions extends JFrame
 Set up the Gui Listeners
  */
 
-        logMenuItem.addActionListener(new ActionListener()
+        rbMenuItem.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
-
-                if (!loggingFlag)//first time selected
-                {
-                    loggingFlag = true;
-                }
+                loggingFlag = !loggingFlag;
+                harmonyUtilities.createLogFile();
             }
         });
         buttonMenuItem.addActionListener(new ActionListener()
@@ -206,7 +208,7 @@ Set up the Gui Listeners
                 //if logging is enabled
                 //if this is the first time logging, set up csv file and set a flag
                 //else just log the data
-                if (loggingFlag && logMenuItem.isSelected())
+                if (loggingFlag)
                 {
                     harmonyUtilities.logToCSV();
                 }
@@ -274,7 +276,6 @@ Set up the Gui Listeners
 
         rbMenuItem = new JRadioButtonMenuItem("Enable Logging");
         rbMenuItem.setSelected(false);
-
         menu.add(rbMenuItem);
 
         enableMovementMenuItem = new JRadioButtonMenuItem("Enable Movement");
@@ -309,16 +310,6 @@ Set up the Gui Listeners
         menu.add(stopPubMenuItem);
         /*start and stop logging */
         menu.addSeparator();
-        ButtonGroup logGroup = new ButtonGroup();
-        logMenuItem = new JRadioButtonMenuItem("Start Logging Positions");
-        logGroup.add(logMenuItem);
-        logMenuItem.setSelected(false);
-        menu.add(logMenuItem);
-
-        stopLogMenuItem = new JRadioButtonMenuItem("Stop Logging Positions");
-        logGroup.add(stopLogMenuItem);
-        stopLogMenuItem.setSelected(true);
-        menu.add(stopLogMenuItem);
 
         //Build Information menu
         informationMenu = new JMenu("Information");
@@ -405,8 +396,8 @@ Set up the Gui Listeners
 
         //Create the combo box, select item at index 4.
         //Indices start at 0, so 4 specifies the pig.
-        JComboBox iFFList = new JComboBox(iFFStrings);
-        JComboBox nodeList = new JComboBox(nodeNames);
+        iFFList = new JComboBox(iFFStrings);
+        nodeList = new JComboBox(nodeNames);
         iFFList.setSelectedIndex(0);
         nodeList.setSelectedIndex(0);
 
