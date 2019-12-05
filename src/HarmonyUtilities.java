@@ -1,10 +1,7 @@
 import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class is responsible for working behind the scenes while the GUI is operating
@@ -18,17 +15,17 @@ public class HarmonyUtilities
     StoreProperties storeProperties = new StoreProperties();
 
     //The nodes within the simulation. This includes friends and hostiles
-    private ArrayList<NodeData> nodes = new ArrayList<NodeData>();
+    private ArrayList<NodeData> nodes;
 
     public HarmonyUtilities(NodeData[] nodeData, HarmonyDataPublisher publishData)
     {
-        for (NodeData node : nodeData)
-        {
-            nodes.add(node);
-        }
+        nodes = new ArrayList<>(Arrays.asList(nodeData));
         this.publishData = publishData;
     }
 
+    public void updateWithLatestNodeArray(NodeData[] nodeData) {
+        nodes = new ArrayList<>(Arrays.asList(nodeData));
+    }
 
     public ArrayList<NodeData> getCurrentNodes()
     {
@@ -43,6 +40,15 @@ public class HarmonyUtilities
     public void removeNode(NodeData node)
     {
         nodes.remove(node);
+    }
+
+    public String getAllCurrentNodePositionsAsAString(){
+        List<String> nodesWithTheirCurrentPositions = new ArrayList<>();
+        for(NodeData currentNode: nodes) {
+            double[] positionAsArray = currentNode.currentLocation.asDegreesArray();
+            nodesWithTheirCurrentPositions.add(String.format("%s: %f, %f", currentNode.NodeUUID, positionAsArray[0], positionAsArray[1]));
+        }
+        return String.join("\n", nodesWithTheirCurrentPositions);
     }
 
     public void publishDataForEachNode() {

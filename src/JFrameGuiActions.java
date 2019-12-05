@@ -41,6 +41,7 @@ public class JFrameGuiActions extends JFrame
     JComboBox nodeList;
     JLabel SymbolString;
     String[] iFFStrings = {"FRIEND", "HOSTILE", "NEUTRAL"};
+    JTextArea nodePositionsTextArea = new JTextArea();
 
     public JFrameGuiActions(HarmonyDataPublisher publishData, NodeData[] nodeData)
     {
@@ -93,9 +94,9 @@ public class JFrameGuiActions extends JFrame
         /* add the panel to the frame */
         // Add the card panel to the frame.
         this.add(cardPanel, BorderLayout.CENTER);
-        JPanel setup2525BHandle = this.setup2525B((CardLayout) cardPanel.getLayout(), cardPanel);
+        JPanel setup2525BHandle = this.setup2525B();
         this.add(setup2525BHandle, BorderLayout.NORTH);
-        this.add(this.nodeLocations((CardLayout) cardPanel.getLayout(), cardPanel), BorderLayout.WEST);
+        this.add(this.nodeLocations(), BorderLayout.WEST);
         this.pack();
         // this.add(displayWW);
         //this.add(displayWW.canvas);
@@ -186,9 +187,7 @@ Set up the Gui Listeners
                             SymbolString.setText(selectedNode.symbol);
                         }
                         //pass in the node, have the node updated with the tactical symbol
-
                     }
-
                 }
             }
         });
@@ -201,6 +200,7 @@ Set up the Gui Listeners
                 if(enableMovementMenuItem.isSelected())
                 {
                    harmonyUtilities.triggerMovementForEachNode();
+                   nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
                 }
                 displayWW.canvas.redraw();
             }
@@ -345,38 +345,30 @@ Set up the Gui Listeners
 
     /**
      *
-     * @param cardLayout
-     * @param cardLayoutParent
      * @return
      */
-    private JPanel nodeLocations(final CardLayout cardLayout, final JPanel cardLayoutParent)
+    private JPanel nodeLocations()
     {
         final JLabel NodeLocationLabel = new JLabel("Node Locations");
-
-        JTextField JT = new JTextField("");
-
+        nodePositionsTextArea.setLineWrap(true);
 
         this.nodeLocPanel = new JPanel(new GridLayout(2, 2));
         nodeLocPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         nodeLocPanel.add(NodeLocationLabel);
-        nodeLocPanel.add(JT);
+        nodeLocPanel.add(nodePositionsTextArea);
 
         // nodeLocPanel.setBackground(new Color(0,0,0,200));
         //nodeLocPanel.setOpaque(true);
-        JT.setText("Node A\n latitude, longitude\nNodeB\n latitude, longitude");
-
-
+        nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
         nodeLocPanel.setVisible(false);
         return nodeLocPanel;
     }
 
     /**
      *
-     * @param cardLayout
-     * @param cardLayoutParent
      * @return
      */
-    public JPanel setup2525B(final CardLayout cardLayout, final JPanel cardLayoutParent)
+    public JPanel setup2525B()
     {
         //set up a default node
         selectedNode = nodeData[0];
