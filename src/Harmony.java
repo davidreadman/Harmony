@@ -97,12 +97,11 @@ public class Harmony
 		/*
 		ParseProperties class reads in values from .properties file for nodal information
 		 */
-        ParseProperties properties = new ParseProperties();
         //set up data publisher (could also be done within the subclass guiactions)
         HarmonyDataPublisher publishdata = new HarmonyDataPublisher();
 
         //Read in initialisation file and load into the NodeData array
-        NodeData[] blueNode = properties.parseConfig();
+        NodeData[] blueNode = ParseProperties.parseConfig();
 
         //set up worldwind canvas
        // DisplayWW outputToDisplay = new DisplayWW(blueNode);

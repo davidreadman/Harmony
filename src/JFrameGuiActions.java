@@ -40,6 +40,7 @@ public class JFrameGuiActions extends JFrame
     JComboBox iFFList;
     JComboBox nodeList;
     JLabel SymbolString;
+    String[] iFFStrings = {"FRIEND", "HOSTILE", "NEUTRAL"};
 
     public JFrameGuiActions(HarmonyDataPublisher publishData, NodeData[] nodeData)
     {
@@ -174,6 +175,14 @@ Set up the Gui Listeners
                             NodeUUIDText.setText(nodeData[i].NodeUUID);
                             //testing to see how to address the object
                             //identify the iff in the string, adjust the iff in the dropdown iFFList
+                            int selectedIndex = -1;
+                            for(int iffIndex = 0; iffIndex< iFFStrings.length;iffIndex++) {
+                                if(iFFStrings[iffIndex].equals(selectedNode.nodeIFF)) {
+                                    selectedIndex = iffIndex;
+                                    break;
+                                }
+                            }
+                            iFFList.setSelectedIndex(selectedIndex);
                             SymbolString.setText(selectedNode.symbol);
                         }
                         //pass in the node, have the node updated with the tactical symbol
@@ -372,7 +381,6 @@ Set up the Gui Listeners
         //set up a default node
         selectedNode = nodeData[0];
         /* set up the drop down lists*/
-        String[] iFFStrings = {"FRIEND", "HOSTILE", "NEUTRAL"};
         char[] iFFChars = {'F', 'H', 'N'};
         StringBuilder MilSymString = new StringBuilder(nodeData[0].symbolIdentifier.getIdentifier());
 
