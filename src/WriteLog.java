@@ -15,6 +15,7 @@ public class WriteLog
     //CSVWriter writer;
     FileWriter outputfile;
     File file;
+    List<String> linesWritten = new ArrayList<>();
 
     //constructor
     WriteLog()
@@ -51,26 +52,12 @@ public class WriteLog
         }
     }
 
-    void writeStringToFile()
-    {
-
-        try
-        {
-            outputfile.write("test1, test2, test 3");
-        } catch (IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-    }
-
     void writeStringToFile(String outputString)
     {
         try
         {
-
             outputfile.write(outputString);
+            linesWritten.add(outputString);
         } catch (IOException e)
         {
             // TODO Auto-generated catch block

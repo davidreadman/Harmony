@@ -26,16 +26,21 @@ public class NodeData
      double operationalSpeedInKmH;
      double maximumSpeedInKmH;
      double detectionRadiusInKm;
-     String closestHostile;
+     String closestEnemy; //hostile for a friend node, friend for a hostile node
      //could put in a 'closest road'
      /* the next information is that evaluated by Harmony from the list of nodes and the current node positions */
     /*initial implementation, this is not created, can be inferred from currentLocation and nextLocation, may need
     a previousLocation
      */
     double directionOfTravel;
-    List<DetectedNode> friendNodesSeen = new ArrayList<>();
-    List<DetectedNode> hostileNodesSeen = new ArrayList<>();
-    List<DetectedNode> neutralNodesSeen = new ArrayList<>();
+    List<DetectedNode> friendNodesSeen;
+    List<DetectedNode> hostileNodesSeen;
+    List<DetectedNode> neutralNodesSeen;
+
+    /* Used for logging purposes as node is the source of truth */
+    /* We want to log the current decision that it made and the corresponding metric */
+    String currentMetric = "";
+    String currentDecision = "";
 
      /* the next information is metrics received from the external analysis software (SMARTNet) */
     

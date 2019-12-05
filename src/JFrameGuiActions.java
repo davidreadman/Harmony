@@ -1,7 +1,5 @@
 import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
-import gov.nasa.worldwind.geom.Angle;
-import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.symbology.TacticalSymbol;
@@ -12,39 +10,40 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 
 public class JFrameGuiActions extends JFrame
 {
 
-    WriteLog logger;
+    HarmonyUtilities harmonyUtilities;
     boolean loggingFlag = false;
     JPanel panel2525B, nodeLocPanel;
     JLabel NodeUUIDText;
     DisplayWW displayWW;
     JMenuBar menuBar;
-    JMenu menu, submenu, aboutMenu, informationMenu;
+    JMenu menu;
+    JMenu aboutMenu;
+    JMenu informationMenu;
     JMenuItem menuItem,enableMovementMenuItem;
-    JRadioButtonMenuItem rbMenuItem, dDSNodeMenuItem, pubMenuItem, logMenuItem;
-    JRadioButtonMenuItem dDSMetMenuItem, stopPubMenuItem, stopLogMenuItem;
+    JRadioButtonMenuItem rbMenuItem;
+    JRadioButtonMenuItem dDSNodeMenuItem;
+    JRadioButtonMenuItem pubMenuItem;
+    JRadioButtonMenuItem dDSMetMenuItem;
+    JRadioButtonMenuItem stopPubMenuItem;
     JRadioButtonMenuItem toggle2525B, toggleNodeLocPanel;
     JRadioButtonMenuItem buttonMenuItem;
+    JRadioButtonMenuItem configCreatorMenuItem;
     NodeData[] nodeData;
     NodeData selectedNode;
     //declared the JPanel components because they are shared between dragger and 2525Bpanel
     JComboBox iFFList;
     JComboBox nodeList;
     JLabel SymbolString;
-    int movementCounter = 0,logCounter =0, pubCounter = 0;
-    int MOVE_TOWARDS_RASPBERRY_CK = 1;
-    int MOVE_NORTH;
 
     public JFrameGuiActions(HarmonyDataPublisher publishData, NodeData[] nodeData)
     {
+        this.harmonyUtilities = new HarmonyUtilities(nodeData, publishData);
         this.nodeData = nodeData;
         /* setup the binding of properties to allow for change monitoring across threads */
         DDSPositionMessage dDSPositionMessage = new DDSPositionMessage();
@@ -108,25 +107,25 @@ public class JFrameGuiActions extends JFrame
 Set up the Gui Listeners
  */
 
-        logMenuItem.addActionListener(new ActionListener()
+        rbMenuItem.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
-
-                if (!loggingFlag)//first time selected
-                {
-                    logger = new WriteLog();
-                    loggingFlag = true;
-                }
+                loggingFlag = !loggingFlag;
+                harmonyUtilities.createLogFile();
             }
         });
         buttonMenuItem.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
-                StoreProperties storeProperties = new StoreProperties();
-                storeProperties.writeConfig(nodeData);
-                System.out.println("Done");
+               harmonyUtilities.createNewConfigPropertiesFile();
+            }
+        });
+        configCreatorMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                harmonyUtilities.createHoconFile();
             }
         });
         toggle2525B.addActionListener(new ActionListener()
@@ -190,32 +189,11 @@ Set up the Gui Listeners
 
             public void actionPerformed(ActionEvent actionEvent)
             {
-                /*
-                * TODO:
-                 * For each node, find all the nodes that are within it's detection radius.
-                 * For each detected node, calculate the distance, angle and direction from that node.
-                 *
-                 */
-
-
-                for (int i = 0; i < nodeData.length; i++)
+                if(enableMovementMenuItem.isSelected())
                 {
-                    ArrayList<DetectedNode> nodesDetected = new ArrayList<>();
-
-                   // nodeData[i].updateNodesDetectedByMe(nodesDetected);
-                    //only make a movement if the menu selection has been enabled
-                    if(enableMovementMenuItem.isSelected())
-                    {
-                        // Make a decision for the next movement
-                        movementCounter++;
-
-                        HarmonyMovement.makeDecision(nodeData[i], "Move Raspberry Ck");
-                        //moved the next line into the movement decision for updating graphics
-                        //nodeData[i].symbolIdentifier.setPosition(movementDecision.MakeDecision(nodeData[i], 1););
-                    }
+                   harmonyUtilities.triggerMovementForEachNode();
                 }
                 displayWW.canvas.redraw();
-
             }
         };
         Timer timer = new Timer(1000, timerListener);
@@ -230,37 +208,16 @@ Set up the Gui Listeners
                 //if logging is enabled
                 //if this is the first time logging, set up csv file and set a flag
                 //else just log the data
-                if (loggingFlag && logMenuItem.isSelected())
+                if (loggingFlag)
                 {
-                    logCounter++;
-                    //send out data for all nodes
-                    int numberOfNodes = nodeData.length;
-                    String writeableString = logger.getTimeStamp() + ",";
-                    for (int i = 0; i < numberOfNodes; i++)
-                    {
-                        writeableString = writeableString + nodeData[i].NodeUUID + ",";
-                        writeableString = writeableString + nodeData[i].currentLocation.asDegreesArray()[0] + ",";
-                        writeableString = writeableString + nodeData[i].currentLocation.asDegreesArray()[1] + ",";
-                        writeableString = writeableString + "This will be a future metric,";
-                        writeableString = writeableString + "This will be a future decision,";
-                    }
-                    writeableString = writeableString + "\n";
-                    logger.writeStringToFile(writeableString);
-                    // System.out.println("written " + writeableString);
-                    logger.Flush();
+                    harmonyUtilities.logToCSV();
                 }
                 /////////////////////////////////////////////
                 /* publish DDS messages */
                 //send out data for all nodes
                 if (pubMenuItem.isSelected())
                 {
-                    int numberOfNodes = nodeData.length;
-                    for (int i = 0; i < numberOfNodes; i++)
-                    {
-                        pubCounter++;
-                        publishData.HarmonyPublish(nodeData[i]);
-                    }
-                    System.out.println("published");
+                    harmonyUtilities.publishDataForEachNode();
                 }
                 //////////////////////////////////////////////
             }
@@ -313,9 +270,12 @@ Set up the Gui Listeners
         buttonMenuItem.setSelected(false);
         menu.add(buttonMenuItem);
 
+        configCreatorMenuItem = new JRadioButtonMenuItem("Write current config to HOCON file");
+        configCreatorMenuItem.setSelected(false);
+        menu.add(configCreatorMenuItem);
+
         rbMenuItem = new JRadioButtonMenuItem("Enable Logging");
         rbMenuItem.setSelected(false);
-
         menu.add(rbMenuItem);
 
         enableMovementMenuItem = new JRadioButtonMenuItem("Enable Movement");
@@ -350,16 +310,6 @@ Set up the Gui Listeners
         menu.add(stopPubMenuItem);
         /*start and stop logging */
         menu.addSeparator();
-        ButtonGroup logGroup = new ButtonGroup();
-        logMenuItem = new JRadioButtonMenuItem("Start Logging Positions");
-        logGroup.add(logMenuItem);
-        logMenuItem.setSelected(false);
-        menu.add(logMenuItem);
-
-        stopLogMenuItem = new JRadioButtonMenuItem("Stop Logging Positions");
-        logGroup.add(stopLogMenuItem);
-        stopLogMenuItem.setSelected(true);
-        menu.add(stopLogMenuItem);
 
         //Build Information menu
         informationMenu = new JMenu("Information");
@@ -446,8 +396,8 @@ Set up the Gui Listeners
 
         //Create the combo box, select item at index 4.
         //Indices start at 0, so 4 specifies the pig.
-        JComboBox iFFList = new JComboBox(iFFStrings);
-        JComboBox nodeList = new JComboBox(nodeNames);
+        iFFList = new JComboBox(iFFStrings);
+        nodeList = new JComboBox(nodeNames);
         iFFList.setSelectedIndex(0);
         nodeList.setSelectedIndex(0);
 
@@ -477,6 +427,7 @@ Set up the Gui Listeners
                 selectedNode.nodeIFF = iFFStrings[iFFList.getSelectedIndex()];
                 //need to set the string in the node to the new value
                 selectedNode.symbol = MilSymString.toString();
+                selectedNode.nodeIFF = iFFStrings[iFFList.getSelectedIndex()];
                 //need to update the tactical symbol to this
                 //selectedNode.symbolIdentifier is the symbol object
                 //selectedNode.currentLocation is the location
