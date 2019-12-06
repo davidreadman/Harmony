@@ -7,9 +7,13 @@ import gov.nasa.worldwind.util.BasicDragger;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -25,7 +29,7 @@ public class JFrameGuiActions extends JFrame
     JMenu menu;
     JMenu aboutMenu;
     JMenu informationMenu;
-    JMenuItem menuItem,enableMovementMenuItem;
+    JMenuItem menuItem, enableMovementMenuItem;
     JRadioButtonMenuItem rbMenuItem;
     JRadioButtonMenuItem dDSNodeMenuItem;
     JRadioButtonMenuItem pubMenuItem;
@@ -121,12 +125,14 @@ Set up the Gui Listeners
         {
             public void actionPerformed(ActionEvent e)
             {
-               harmonyUtilities.createNewConfigPropertiesFile();
+                harmonyUtilities.createNewConfigPropertiesFile();
             }
         });
-        configCreatorMenuItem.addActionListener(new ActionListener() {
+        configCreatorMenuItem.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 harmonyUtilities.createHoconFile();
             }
         });
@@ -167,6 +173,7 @@ Set up the Gui Listeners
                     {
                         //check to see which object has been clicked on
                         Object object = event.getTopPickedObject().getObject();
+                        int selectedIndex = 2;
                         if (object == nodeData[i].symbolIdentifier)
                         {
                             //update the dragged symbol node with the new location
@@ -176,16 +183,21 @@ Set up the Gui Listeners
                             NodeUUIDText.setText(nodeData[i].NodeUUID);
                             //testing to see how to address the object
                             //identify the iff in the string, adjust the iff in the dropdown iFFList
-                            int selectedIndex = -1;
-                            for(int iffIndex = 0; iffIndex< iFFStrings.length;iffIndex++) {
-                                if(iFFStrings[iffIndex].equals(selectedNode.nodeIFF)) {
+
+                            for (int iffIndex = 0; iffIndex < iFFStrings.length; iffIndex++)
+                            {
+                                if (iFFStrings[iffIndex].equals(selectedNode.nodeIFF))
+                                {
                                     selectedIndex = iffIndex;
                                     break;
+
                                 }
                             }
-                            iFFList.setSelectedIndex(selectedIndex);
+                            //need to change the selected nodes drop down list at this point else all up to this are changed
                             SymbolString.setText(selectedNode.symbol);
+                            iFFList.setSelectedIndex(selectedIndex);
                         }
+
                         //pass in the node, have the node updated with the tactical symbol
                     }
                 }
@@ -197,10 +209,10 @@ Set up the Gui Listeners
 
             public void actionPerformed(ActionEvent actionEvent)
             {
-                if(enableMovementMenuItem.isSelected())
+                if (enableMovementMenuItem.isSelected())
                 {
-                   harmonyUtilities.triggerMovementForEachNode();
-                   nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
+                    harmonyUtilities.triggerMovementForEachNode();
+                    nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
                 }
                 displayWW.canvas.redraw();
             }
@@ -238,10 +250,7 @@ Set up the Gui Listeners
     }
 
     /**
-     *
-     * @param f
-     *
-     * Sets the default font to a larger style
+     * @param f Sets the default font to a larger style
      */
     public static void setUIFont(javax.swing.plaf.FontUIResource f)
     {
@@ -256,7 +265,6 @@ Set up the Gui Listeners
     }
 
     /**
-     *
      * @return
      */
     private JMenuBar setupMenuBar()
@@ -269,8 +277,6 @@ Set up the Gui Listeners
         menuBar = new JMenuBar();
         menu = new JMenu("Options");
         menuBar.add(menu);
-
-
 
 
         //a group of radio button menu items
@@ -344,7 +350,6 @@ Set up the Gui Listeners
     }
 
     /**
-     *
      * @return
      */
     private JPanel nodeLocations()
@@ -365,7 +370,6 @@ Set up the Gui Listeners
     }
 
     /**
-     *
      * @return
      */
     public JPanel setup2525B()
@@ -412,13 +416,21 @@ Set up the Gui Listeners
         panel2525B.add(NodeUUIDText);
         panel2525B.add(iFFList);
         panel2525B.add(SymbolString);
-        // panel2525B.setBackground(new Color(0,0,0,200));
-        // panel2525B.setOpaque(true);
-        iFFList.addActionListener(new ActionListener()
+/*using popupmenu listener instead of actionlistener because we modify the ifflist value in the draggable
+and that invokes the actionlistener, if we do want to invoke the ifflist value as a listener then itemListener can be used
+used the invisible because the selection of new dropdown is invoked at this point
+ */
+        iFFList.addPopupMenuListener(new PopupMenuListener()
         {
-            public void actionPerformed(ActionEvent actionEvent)
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
             {
 
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
+            {
                 //the combobox for iFFList has been activated, so first set the char in the stringbuilder
                 MilSymString.setCharAt(1, iFFChars[iFFList.getSelectedIndex()]);
                 //this sets the stringbuilder output to test functionality
@@ -441,7 +453,7 @@ Set up the Gui Listeners
                 // bad - selectedNode.symbolIdentifier = replacementSymbol;
                 //we have this layer stored as a layer, we can remove this entire layer from the model layers
                 displayWW.canvas.getModel().getLayers().remove(symbolLayer);
-               // need to create a new renderable layer because the symbollayer is converted to a standard layer when added to the model
+                // need to create a new renderable layer because the symbollayer is converted to a standard layer when added to the model
                 RenderableLayer replaceLayer;
                 replaceLayer = (RenderableLayer) symbolLayer;
                 replaceLayer.setName("symbolLayer");
@@ -450,17 +462,27 @@ Set up the Gui Listeners
                 replaceLayer.addRenderable(replacementSymbol);
                 displayWW.canvas.getModel().getLayers().add(replaceLayer);
                 //so symbollayer can be removed and added
-              // is the symbolLayer the same in both instances? renderable and basic?
+                // is the symbolLayer the same in both instances? renderable and basic?
 
                 //symbolLayer does not appear to have a change item in symbol
-
 
 
                 //create a new symbol with the new string
                 //add this new symbol to the renderable layer
                 //replace the symbol in the node with this new symbol
             }
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e)
+            {
+
+            }
+
         });
+
+
+        // panel2525B.setOpaque(true);
+
 
 
         panel2525B.setVisible(false);
