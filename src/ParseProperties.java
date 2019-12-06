@@ -14,14 +14,8 @@ import java.util.Date;
 
 public class ParseProperties
 {
-
-	public ParseProperties()
+	public static NodeData[] parseConfig() throws IOException
 	{
-		// TODO Auto-generated constructor stub
-	}
-	public NodeData[] parseConfig() throws IOException
-	{
-		
 		InputStream inputStream = null;
 		double lat;
 		double lon;

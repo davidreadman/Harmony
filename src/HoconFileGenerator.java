@@ -143,8 +143,7 @@ public class HoconFileGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        ParseProperties parseProperties = new ParseProperties();
-        NodeData[] nodeDataArr = parseProperties.parseConfig();
+        NodeData[] nodeDataArr = ParseProperties.parseConfig();
         writeToHocon(nodeDataArr);
     }
 }
