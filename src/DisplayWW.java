@@ -19,6 +19,8 @@ import gov.nasa.worldwind.util.WWUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+
 /*
 The DisplayWW Class is used to control and update the WorldWind Canvas, a
  */
@@ -30,7 +32,7 @@ class DisplayWW extends JPanel
 
 
 
-    public DisplayWW(NodeData[] nodeData)
+    public DisplayWW(ArrayList<NodeData> nodeData)
     {
         //set up default configurations for Shoalwater bay
         configure();
@@ -52,15 +54,15 @@ class DisplayWW extends JPanel
         //set up a symbolLayer containing all the symbols
         RenderableLayer symbolLayer = new RenderableLayer();
         symbolLayer.setName("symbolLayer");
-        int NumberOfNodes = nodeData.length;
-        System.out.println("number of nodes: " + nodeData.length);
+        int NumberOfNodes = nodeData.size();
+        System.out.println("number of nodes: " + nodeData.size());
         for (int i = 0; i < NumberOfNodes; i++)
         {
-            System.out.println("symbol: " + nodeData[i].symbol);
+            System.out.println("symbol: " + nodeData.get(i).symbol);
             //pass in the node, have the node updated with the tactical symbol
-            symbolLayer = addSymbol(symbolLayer,nodeData[i]);
+            symbolLayer = addSymbol(symbolLayer,nodeData.get(i));
             //check if identifier is updated
-            System.out.println("symbol id: " + nodeData[i].symbolIdentifier);
+            System.out.println("symbol id: " + nodeData.get(i).symbolIdentifier);
         }
         //////////////////////////////////////
 
@@ -84,8 +86,8 @@ class DisplayWW extends JPanel
 
 
         RenderableLayer linesLayer = new RenderableLayer();
-        Position pointA = nodeData[0].currentLocation;
-        Position pointB = nodeData[1].currentLocation;
+        Position pointA = nodeData.get(0).currentLocation;
+        Position pointB = nodeData.get(1).currentLocation;
         Path path = new Path(pointA,pointB);
          linesLayer.addRenderable(path);
         canvas.getModel().getLayers().add(linesLayer);

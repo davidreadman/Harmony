@@ -1,12 +1,8 @@
-import gov.nasa.worldwind.geom.Angle;
-import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.symbology.TacticalSymbol;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /*
 The NodeData class holds the information about each node and an overview god mode shared by all NodeData types
@@ -26,7 +22,7 @@ public class NodeData
      double operationalSpeedInKmH;
      double maximumSpeedInKmH;
      double detectionRadiusInKm;
-     String closestEnemy; //hostile for a friend node, friend for a hostile node
+     String closestEnemy = ""; //hostile for a friend node, friend for a hostile node
      //could put in a 'closest road'
      /* the next information is that evaluated by Harmony from the list of nodes and the current node positions */
     /*initial implementation, this is not created, can be inferred from currentLocation and nextLocation, may need
@@ -51,32 +47,4 @@ public class NodeData
         neutralNodesSeen = new ArrayList<>();
     }
 
-
-/* move to harmonyutilities
-    public void updateNodesDetectedByMe(int currentEpoch, List<DetectedNode> newList) {
-         detectedNodes.clear();
-         detectedNodes.addAll(newList);
-         analyseDetectedNodes(currentEpoch);
-    }
-
-
-
-    public void addDecisionForCurrentEpoch(int currentEpoch, int decision) {
-        decisionsMadeForEachEpoch.putIfAbsent(currentEpoch, new ArrayList<>());
-        decisionsMadeForEachEpoch.get(currentEpoch).add(decision);
-    }
-
-    /**
-     * Analyse the nodes we just detected and make a decision accordingly
-     * Then capture the decisions made at the current epoch.
-
-    private void analyseDetectedNodes(int currentEpoch) {
-        decisionsMadeForEachEpoch.putIfAbsent(currentEpoch, new ArrayList<>());
-        for(DetectedNode detectedNode : detectedNodes) {
-        }
-        MovementDecision.MakeDecision(currentEpoch,this, 1);
-        addDecisionForCurrentEpoch(currentEpoch,1);
-
-    }
-    */
 }

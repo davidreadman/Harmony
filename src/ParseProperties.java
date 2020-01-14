@@ -1,20 +1,19 @@
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 
-import javax.xml.soap.Node;
 import java.io.FileInputStream;
-import java.util.Properties;
-import java.lang.Double;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Properties;
 
 
 public class ParseProperties
 {
-	public static NodeData[] parseConfig() throws IOException
+	public static ArrayList<NodeData> parseConfig() throws IOException
 	{
 		InputStream inputStream = null;
 		double lat;
@@ -58,7 +57,7 @@ public class ParseProperties
 				theseNodes[i].detectionRadiusInKm = Double.parseDouble(prop.getProperty("Node"+(i+1)+"RadiusOfDetectionInKm"));
 			}
 			System.out.println(theseNodes[0].NodeUUID);
-			return theseNodes;	
+			return new ArrayList<NodeData>(Arrays.asList(theseNodes));
 		}
 		catch (Exception e)
 		{
@@ -66,7 +65,7 @@ public class ParseProperties
 			//because it has to have a return
 			NodeData[] tempArray = new NodeData[1];
 			
-			return tempArray;
+			return new ArrayList<NodeData>(Arrays.asList(tempArray));
 		
 		}
 		finally

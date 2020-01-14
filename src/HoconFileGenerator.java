@@ -1,19 +1,12 @@
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class HoconFileGenerator {
-
-    public static void writeToHocon(NodeData[] nodeDataArr) {
-        ArrayList<NodeData> nodes = new ArrayList<>(Arrays.asList(nodeDataArr));
-        writeToHocon(nodes);
-    }
 
     private static String getPositionRecipientsForNode(List<NodeData> nodes, String nodeUUID) {
         List<String> others = new ArrayList<>();
@@ -54,8 +47,8 @@ public class HoconFileGenerator {
 
     public static void writeToHocon(ArrayList<NodeData> nodes) {
         try {
-            List<String> nodeUUIDs = new ArrayList<String>();
-            List<String> entities = new ArrayList<String>();
+            List<String> nodeUUIDs = new ArrayList<>();
+            List<String> entities = new ArrayList<>();
             List<NodeData> friends = new ArrayList<>();
             List<NodeData> hostiles = new ArrayList<>();
             List<NodeData> neutrals = new ArrayList<>();
@@ -143,7 +136,7 @@ public class HoconFileGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        NodeData[] nodeDataArr = ParseProperties.parseConfig();
-        writeToHocon(nodeDataArr);
+        ArrayList<NodeData> nodes = ParseProperties.parseConfig();
+        writeToHocon(nodes);
     }
 }

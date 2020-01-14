@@ -4,8 +4,6 @@ import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.globes.Earth;
 import gov.nasa.worldwind.globes.Globe;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 //note: distanceInRadians = distanceInMeters / globe.getRadius();
@@ -38,48 +36,72 @@ public class HarmonyMovement
          direction on break(do nothing)
           */
         double bearingInDegrees = 0;
-        double distanceToTravel = 0;
+        double distanceToTravelInMetres = 0;
         //initial Raspberry cK
         //find out what direction raspberry ck is in
-        System.out.println("decision made : " + decision);
-        currentNode.currentDecision = decision;
         switch (decision)
         {
             case "Move Raspberry Ck":
                 bearingInDegrees = Position.greatCircleAzimuth(currentNode.currentLocation, RASPBERRY_CK).degrees;
-                distanceToTravel = ONE_HUNDRED_METERS;
+                double currentDistanceFromRaspberryCreek = distanceToTargetInMeters(currentNode.currentLocation, RASPBERRY_CK);
+                if(currentDistanceFromRaspberryCreek < currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR) {
+                    distanceToTravelInMetres = currentDistanceFromRaspberryCreek;
+                }
+                else {
+                    distanceToTravelInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
+                }
                 break;
             case "Move North":
                 bearingInDegrees = NORTH;
+                distanceToTravelInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
                 break;
             case "Move South":
                 bearingInDegrees = SOUTH;
+                distanceToTravelInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
                 break;
-
+            case "Move West":
+                bearingInDegrees = WEST;
+                distanceToTravelInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
+                break;
+            case "Move East":
+                bearingInDegrees = EAST;
+                distanceToTravelInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
+                break;
+            case "Move Away from Closest Enemy":
+                DetectedNode detectedFriend = currentNode.friendNodesSeen.stream().filter(node -> node.getnodeUUID().equals(currentNode.closestEnemy)).findFirst().orElse(currentNode.friendNodesSeen.get(0));
+                bearingInDegrees = oppositeDirection(detectedFriend.getBearingInDegreesToTarget());
+                //Attempt to travel at maximum speed to get away from the enemy.
+                distanceToTravelInMetres = currentNode.maximumSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
+                break;
+            case "Move Towards Closest Enemy":
+                DetectedNode detectedHostile = currentNode.hostileNodesSeen.stream().filter(node -> node.getnodeUUID().equals(currentNode.closestEnemy)).findFirst().orElse(currentNode.hostileNodesSeen.get(0));
+                bearingInDegrees = detectedHostile.getBearingInDegreesToTarget();
+                //Attempt to travel at maximum speed to get towards the enemy
+                if(detectedHostile.getDistanceToTargetInMeters() < currentNode.maximumSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR) {
+                    distanceToTravelInMetres = detectedHostile.getDistanceToTargetInMeters();
+                }
+                else {
+                    distanceToTravelInMetres = currentNode.maximumSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
+                }
+                break;
             default:
-                //do nothing
-                System.out.println("do nothing ");
+                break;
         }
 
-        //and move towards it
-        Position nextPosition = moveDirectionDistance(currentNode.currentLocation, bearingInDegrees, distanceToTravel);
-        //and update the node next and current Position with the location of the new position
-        updatePosition(nextPosition, currentNode);
-
-
+        //Only move if we really need to.
+        Position nextPosition;
+        if(distanceToTravelInMetres > 0) {
+            nextPosition = moveDirectionDistance(currentNode.currentLocation, bearingInDegrees, distanceToTravelInMetres);
+            //and update the node next and current Position with the location of the new position
+            updatePosition(nextPosition, currentNode);
+        }
+        else {
+            nextPosition = currentNode.currentLocation;
+        }
+        System.out.println(String.format("Decision taken by %s: %s", currentNode.NodeUUID, decision));
+        currentNode.currentDecision = decision;
         return (nextPosition);
     }
-
-    public static Position makeDecision(NodeData currentNode, DetectedNode detectedNode, String decision) {
-        //If there is no detected node object then we call the other makeDecision function
-        if(detectedNode == null) {
-            return makeDecision(currentNode, decision);
-        } else {
-
-        }
-        return null;
-    }
-
 
     private static Position moveDirectionDistance(Position currentLocation, double bearingAsDegrees, double distanceInMeters)
     {
@@ -151,6 +173,14 @@ public class HarmonyMovement
 
         return ((180 + theActualBearingIs) % 360);
 
+    }
+
+    public static boolean hasNodeReachedRaspberryCreek(NodeData currentNode) {
+        return hasNodeReachedDestination(currentNode, RASPBERRY_CK);
+    }
+
+    public static boolean hasNodeReachedDestination(NodeData currentNode, Position destination) {
+        return distanceToTargetInMeters(currentNode.currentLocation, destination) == 0;
     }
 
     /* update the locations and direction of travel */

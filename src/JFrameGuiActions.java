@@ -10,16 +10,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
 
 public class JFrameGuiActions extends JFrame
 {
-
+    boolean simulationOver = false;
     HarmonyUtilities harmonyUtilities;
     boolean loggingFlag = false;
     JPanel panel2525B, nodeLocPanel;
@@ -29,44 +30,37 @@ public class JFrameGuiActions extends JFrame
     JMenu menu;
     JMenu aboutMenu;
     JMenu informationMenu;
-    JMenuItem menuItem, enableMovementMenuItem;
+    JMenuItem menuItem, enableMovementMenuItem, restartMenuItem, buttonMenuItem, configCreatorMenuItem, setDurationItem;
     JRadioButtonMenuItem rbMenuItem;
     JRadioButtonMenuItem dDSNodeMenuItem;
     JRadioButtonMenuItem pubMenuItem;
     JRadioButtonMenuItem dDSMetMenuItem;
     JRadioButtonMenuItem stopPubMenuItem;
     JRadioButtonMenuItem toggle2525B, toggleNodeLocPanel;
-    JRadioButtonMenuItem buttonMenuItem;
-    JRadioButtonMenuItem configCreatorMenuItem;
-    NodeData[] nodeData;
     NodeData selectedNode;
     //declared the JPanel components because they are shared between dragger and 2525Bpanel
-    JComboBox iFFList;
-    JComboBox nodeList;
+    JComboBox<String> iFFList;
+    JComboBox<String> nodeList;
     JLabel SymbolString;
     String[] iFFStrings = {"FRIEND", "HOSTILE", "NEUTRAL"};
+    java.util.List<String> iffStringsList = new ArrayList<>(Arrays.asList(iFFStrings));
     JTextArea nodePositionsTextArea = new JTextArea();
 
-    public JFrameGuiActions(HarmonyDataPublisher publishData, NodeData[] nodeData)
+    public JFrameGuiActions(HarmonyDataPublisher publishData, ArrayList<NodeData> nodeData)
     {
         this.harmonyUtilities = new HarmonyUtilities(nodeData, publishData);
-        this.nodeData = nodeData;
+        //this.nodeData = nodeData;
         /* setup the binding of properties to allow for change monitoring across threads */
         DDSPositionMessage dDSPositionMessage = new DDSPositionMessage();
         /* listen for a change in the position message */
-        PropertyChangeListener pcl = new PropertyChangeListener()
-        {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt)
+        PropertyChangeListener pcl = evt -> {
+            if (evt.getSource() instanceof DDSPositionMessage)
             {
-                if (evt.getSource() instanceof DDSPositionMessage)
-                {
-                    DDSPositionMessage pd = (DDSPositionMessage) evt.getSource();
-                    System.out.println(String.format("Received event from %s: %s has been changed from %s to %s", pd.getDDSPositionMessage(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue()));
-                    //on a DDS Message is the *current* best time to make a decision on a new position
-                    //a nice quick test could be a new random location based on existing location
-                    //curently living in timer, but moveAtAngle to here next after the position message has been altered to include node data
-                }
+                DDSPositionMessage pd = (DDSPositionMessage) evt.getSource();
+                System.out.println(String.format("Received event from %s: %s has been changed from %s to %s", pd.getDDSPositionMessage(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue()));
+                //on a DDS Message is the *current* best time to make a decision on a new position
+                //a nice quick test could be a new random location based on existing location
+                //curently living in timer, but moveAtAngle to here next after the position message has been altered to include node data
             }
         };
         dDSPositionMessage.addPropertyChangeListener(pcl);
@@ -102,8 +96,6 @@ public class JFrameGuiActions extends JFrame
         this.add(setup2525BHandle, BorderLayout.NORTH);
         this.add(this.nodeLocations(), BorderLayout.WEST);
         this.pack();
-        // this.add(displayWW);
-        //this.add(displayWW.canvas);
         this.setSize(1800, 1800);
 
 
@@ -112,50 +104,66 @@ public class JFrameGuiActions extends JFrame
 /*
 Set up the Gui Listeners
  */
+        restartMenuItem.addActionListener(e -> {
+            try {
+                harmonyUtilities.restartSimulation();
+                simulationOver = false;
+                //update the positions on view.
+                nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+        rbMenuItem.addActionListener(e -> {
+            loggingFlag = !loggingFlag;
+            harmonyUtilities.createLogFile();
+        });
+        buttonMenuItem.addActionListener(e -> harmonyUtilities.createNewConfigPropertiesFile());
+        configCreatorMenuItem.addActionListener(e -> harmonyUtilities.createHoconFile());
+        toggle2525B.addActionListener(e -> {
+            /*the toggle button call .isSelected returns false or true, use this to show or hide panel*/
+            panel2525B.setVisible(toggle2525B.isSelected());
 
-        rbMenuItem.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                loggingFlag = !loggingFlag;
-                harmonyUtilities.createLogFile();
-            }
-        });
-        buttonMenuItem.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                harmonyUtilities.createNewConfigPropertiesFile();
-            }
-        });
-        configCreatorMenuItem.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                harmonyUtilities.createHoconFile();
-            }
-        });
-        toggle2525B.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                /*the toggle button call .isSelected returns false or true, use this to show or hide panel*/
-                panel2525B.setVisible(toggle2525B.isSelected());
-
-            }
         });
 
-        toggleNodeLocPanel.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                /*the toggle button call .isSelected returns false or true, use this to show or hide panel*/
-                nodeLocPanel.setVisible(toggleNodeLocPanel.isSelected());
+        toggleNodeLocPanel.addActionListener(e -> {
+            /*the toggle button call .isSelected returns false or true, use this to show or hide panel*/
+            nodeLocPanel.setVisible(toggleNodeLocPanel.isSelected());
 
+        });
+
+        setDurationItem.addActionListener(e -> {
+            JTextField txtDurationValue = new JTextField(5);
+            String[] durationUnitsArr = {"days", "hours", "minutes", "seconds"};
+            JComboBox cbDurationUnits = new JComboBox(durationUnitsArr);
+            JPanel myPanel = new JPanel();
+            myPanel.add(txtDurationValue);
+            myPanel.add(cbDurationUnits);
+            int result = JOptionPane.showConfirmDialog(null, myPanel, "Specify duration of the Simulation",JOptionPane.OK_CANCEL_OPTION);
+            if(result == JOptionPane.OK_OPTION) {
+                 Integer durationValue = Integer.parseInt(txtDurationValue.getText());
+                 Duration duration;
+                 switch(cbDurationUnits.getSelectedIndex()) {
+                     case 0:
+                         duration = Duration.ofDays(durationValue);
+                         break;
+                     case 1:
+                         duration = Duration.ofHours(durationValue);
+                         break;
+                     case 2:
+                         duration = Duration.ofMinutes(durationValue);
+                         break;
+                     case 3:
+                         duration = Duration.ofSeconds(durationValue);
+                         break;
+                     default:
+                         throw new IllegalStateException("Unexpected value: " + cbDurationUnits.getSelectedIndex());
+                 }
+                 harmonyUtilities.setMaxEpochCounter(duration);
+                 setDurationItem.setEnabled(false);
             }
         });
-        int NumberOfNodes = nodeData.length;
+
         /*
         dragger is the worldwind gui detector for when an object in the layers is dragged with the mouse
          */
@@ -169,33 +177,25 @@ Set up the Gui Listeners
                 this.dragger.selected(event);
                 if (event.getEventAction().equals(SelectEvent.DRAG))
                 {
-                    for (int i = 0; i < NumberOfNodes; i++)
+                    for (int i = 0; i < harmonyUtilities.nodes.size(); i++)
                     {
                         //check to see which object has been clicked on
                         Object object = event.getTopPickedObject().getObject();
-                        int selectedIndex = 2;
-                        if (object == nodeData[i].symbolIdentifier)
+                        if (object == harmonyUtilities.nodes.get(i).symbolIdentifier)
                         {
                             //update the dragged symbol node with the new location
-                            nodeData[i].currentLocation = nodeData[i].symbolIdentifier.getPosition();
+                            harmonyUtilities.nodes.get(i).currentLocation = harmonyUtilities.nodes.get(i).symbolIdentifier.getPosition();
                             //and let the 2525B routing know which one is selected
-                            selectedNode = nodeData[i];
-                            NodeUUIDText.setText(nodeData[i].NodeUUID);
+                            selectedNode = harmonyUtilities.nodes.get(i);
+                            NodeUUIDText.setText(harmonyUtilities.nodes.get(i).NodeUUID);
                             //testing to see how to address the object
-                            //identify the iff in the string, adjust the iff in the dropdown iFFList
-
-                            for (int iffIndex = 0; iffIndex < iFFStrings.length; iffIndex++)
-                            {
-                                if (iFFStrings[iffIndex].equals(selectedNode.nodeIFF))
-                                {
-                                    selectedIndex = iffIndex;
-                                    break;
-
-                                }
-                            }
                             //need to change the selected nodes drop down list at this point else all up to this are changed
                             SymbolString.setText(selectedNode.symbol);
-                            iFFList.setSelectedIndex(selectedIndex);
+
+                            //identify the iff in the string, adjust the iff in the dropdown iFFList
+                            iFFList.setSelectedIndex(iffStringsList.indexOf(selectedNode.nodeIFF));
+                            //update the positions on view.
+                            nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
                         }
 
                         //pass in the node, have the node updated with the tactical symbol
@@ -204,11 +204,10 @@ Set up the Gui Listeners
             }
         });
 
-        ActionListener timerListener = new ActionListener()
-        {
-
-            public void actionPerformed(ActionEvent actionEvent)
-            {
+        ActionListener timerListener = actionEvent -> {
+            int currentStateOfSimulation = harmonyUtilities.currentStateOfSimulation();
+            if(currentStateOfSimulation == -1) {
+                harmonyUtilities.situationalAwareness();
                 if (enableMovementMenuItem.isSelected())
                 {
                     harmonyUtilities.triggerMovementForEachNode();
@@ -216,32 +215,63 @@ Set up the Gui Listeners
                 }
                 displayWW.canvas.redraw();
             }
+            else {
+                if(!simulationOver) {
+                    String reasonForEndOfSimulation = "";
+                    switch(currentStateOfSimulation) {
+                        case 1:
+                            reasonForEndOfSimulation = "Simulation has ended as all nodes have reached Raspberry Creek";
+                            break;
+                        case 2:
+                            reasonForEndOfSimulation = "Simulation has ended as all Hostile nodes are dead";
+                            break;
+                        case 3:
+                            reasonForEndOfSimulation = "Simulation has reached the specified duration";
+                            break;
+                        default:
+                            break;
+                    }
+                    int numHours, numMinutes, numSeconds;
+                    numHours = (int)harmonyUtilities.movementCounter/3600;
+                    numMinutes = (int)(harmonyUtilities.movementCounter % 3600) / 60;
+                    numSeconds = (int)(harmonyUtilities.movementCounter % 60);
+                    String durationString = "";
+                    if(numHours > 0) {
+                        durationString = String.format("%d hours", numHours);
+                    }
+                    if(numMinutes > 0) {
+                        durationString = String.format("%s%s%d minutes", durationString, durationString.isEmpty() ? "" : " ", numMinutes);
+                    }
+                    if(numSeconds > 0) {
+                        durationString = String.format("%s%s%d seconds", durationString, durationString.isEmpty() ? "" : " ", numSeconds);
+                    }
+                    JOptionPane.showMessageDialog(new JFrame("End Of simulation"), String.format("%s. The simulation ran for %s", reasonForEndOfSimulation, durationString), "End of simulation", JOptionPane.INFORMATION_MESSAGE);
+                    simulationOver = true;
+                    harmonyUtilities.closeLogFile();
+                    enableMovementMenuItem.setSelected(false);
+                }
+            }
         };
         Timer timer = new Timer(1000, timerListener);
         timer.start();
-        ActionListener secondTimerListener = new ActionListener()
-        {
+        ActionListener secondTimerListener = actionEvent -> {
 
-            public void actionPerformed(ActionEvent actionEvent)
+            /* set up and log data to csv file */
+            //if logging is enabled
+            //if this is the first time logging, set up csv file and set a flag
+            //else just log the data
+            if (loggingFlag)
             {
-
-                /* set up and log data to csv file */
-                //if logging is enabled
-                //if this is the first time logging, set up csv file and set a flag
-                //else just log the data
-                if (loggingFlag)
-                {
-                    harmonyUtilities.logToCSV();
-                }
-                /////////////////////////////////////////////
-                /* publish DDS messages */
-                //send out data for all nodes
-                if (pubMenuItem.isSelected())
-                {
-                    harmonyUtilities.publishDataForEachNode();
-                }
-                //////////////////////////////////////////////
+                harmonyUtilities.logToCSV();
             }
+            /////////////////////////////////////////////
+            /* publish DDS messages */
+            //send out data for all nodes
+            if (pubMenuItem.isSelected())
+            {
+                harmonyUtilities.publishDataForEachNode();
+            }
+            //////////////////////////////////////////////
         };
         Timer secondTimer = new Timer(3000, secondTimerListener);
         secondTimer.start();
@@ -254,7 +284,7 @@ Set up the Gui Listeners
      */
     public static void setUIFont(javax.swing.plaf.FontUIResource f)
     {
-        java.util.Enumeration keys = UIManager.getDefaults().keys();
+        Enumeration keys = UIManager.getDefaults().keys();
         while (keys.hasMoreElements())
         {
             Object key = keys.nextElement();
@@ -264,9 +294,6 @@ Set up the Gui Listeners
         }
     }
 
-    /**
-     * @return
-     */
     private JMenuBar setupMenuBar()
     {
          /*
@@ -281,12 +308,10 @@ Set up the Gui Listeners
 
         //a group of radio button menu items
         menu.addSeparator();
-        buttonMenuItem = new JRadioButtonMenuItem("Write current config to new config file");
-        buttonMenuItem.setSelected(false);
+        buttonMenuItem = new JMenuItem("Write current config to new config file");
         menu.add(buttonMenuItem);
 
-        configCreatorMenuItem = new JRadioButtonMenuItem("Write current config to HOCON file");
-        configCreatorMenuItem.setSelected(false);
+        configCreatorMenuItem = new JMenuItem("Write current config to HOCON file");
         menu.add(configCreatorMenuItem);
 
         rbMenuItem = new JRadioButtonMenuItem("Enable Logging");
@@ -323,6 +348,13 @@ Set up the Gui Listeners
         pubGroup.add(stopPubMenuItem);
         stopPubMenuItem.setSelected(true);
         menu.add(stopPubMenuItem);
+
+        setDurationItem = new JMenuItem("Set Duration of Simulation");
+        menu.add(setDurationItem);
+
+        restartMenuItem = new JMenuItem("Restart Simulation");
+        menu.add(restartMenuItem);
+
         /*start and stop logging */
         menu.addSeparator();
 
@@ -349,9 +381,6 @@ Set up the Gui Listeners
 
     }
 
-    /**
-     * @return
-     */
     private JPanel nodeLocations()
     {
         final JLabel NodeLocationLabel = new JLabel("Node Locations");
@@ -369,20 +398,17 @@ Set up the Gui Listeners
         return nodeLocPanel;
     }
 
-    /**
-     * @return
-     */
     public JPanel setup2525B()
     {
         //set up a default node
-        selectedNode = nodeData[0];
+        selectedNode = harmonyUtilities.nodes.get(0);
         /* set up the drop down lists*/
         char[] iFFChars = {'F', 'H', 'N'};
-        StringBuilder MilSymString = new StringBuilder(nodeData[0].symbolIdentifier.getIdentifier());
+        StringBuilder MilSymString = new StringBuilder(selectedNode.symbolIdentifier.getIdentifier());
 
         JLabel NodeLabel = new JLabel("Node");
         //as null pointers are bad, identify first node as selected
-        NodeUUIDText = new JLabel(nodeData[0].NodeUUID);
+        NodeUUIDText = new JLabel(selectedNode.NodeUUID);
         final JLabel AffiliationLabel = new JLabel("Affiliation");
         final JLabel StringLabel = new JLabel("String");
         //load up MilSymString with existingstring (ie nodeData.symbol
@@ -390,18 +416,18 @@ Set up the Gui Listeners
 
 
         /*set up the string of node names */
-        int NumberOfNodes = nodeData.length;
+        int NumberOfNodes = harmonyUtilities.nodes.size();
         String[] nodeNames = new String[NumberOfNodes];
 
         for (int i = 0; i < NumberOfNodes; i++)
         {
-            nodeNames[i] = nodeData[i].NodeUUID;
+            nodeNames[i] = harmonyUtilities.nodes.get(i).NodeUUID;
         }
 
         //Create the combo box, select item at index 4.
         //Indices start at 0, so 4 specifies the pig.
-        iFFList = new JComboBox(iFFStrings);
-        nodeList = new JComboBox(nodeNames);
+        iFFList = new JComboBox<>(iFFStrings);
+        nodeList = new JComboBox<>(nodeNames);
         iFFList.setSelectedIndex(0);
         nodeList.setSelectedIndex(0);
 

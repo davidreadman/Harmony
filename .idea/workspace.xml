@@ -5,7 +5,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/JFrameGuiActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/JFrameGuiActions.java" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,6 +21,11 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1QlcEVDZsptaYCUI6XxtvTonypB" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -38,18 +42,6 @@
       <recent name="C:\Users\dread\Documents\projects\Harmony" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
   <component name="RunManager">
     <configuration name="Harmony" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Harmony" />
@@ -63,6 +55,18 @@
         <item itemvalue="Application.Harmony" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -89,6 +93,48 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="3402" height="401" key="GridCell.Tab.0.bottom" timestamp="1578876541881">
+      <screen x="0" y="0" width="3440" height="1400" />
+    </state>
+    <state width="3402" height="401" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1578876541881" />
+    <state width="3402" height="401" key="GridCell.Tab.0.center" timestamp="1578876541880">
+      <screen x="0" y="0" width="3440" height="1400" />
+    </state>
+    <state width="3402" height="401" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1578876541880" />
+    <state width="3402" height="401" key="GridCell.Tab.0.left" timestamp="1578876541880">
+      <screen x="0" y="0" width="3440" height="1400" />
+    </state>
+    <state width="3402" height="401" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1578876541880" />
+    <state width="3402" height="401" key="GridCell.Tab.0.right" timestamp="1578876541880">
+      <screen x="0" y="0" width="3440" height="1400" />
+    </state>
+    <state width="3402" height="401" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1578876541880" />
+    <state width="3419" height="492" key="GridCell.Tab.1.bottom" timestamp="1576712206306">
+      <screen x="0" y="0" width="3440" height="1400" />
+    </state>
+    <state width="3419" height="492" key="GridCell.Tab.1.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1576712206306" />
+    <state width="3419" height="492" key="GridCell.Tab.1.center" timestamp="1576712206306">
+      <screen x="0" y="0" width="3440" height="1400" />
+    </state>
+    <state width="3419" height="492" key="GridCell.Tab.1.center/0.0.3440.1400@0.0.3440.1400" timestamp="1576712206306" />
+    <state width="3419" height="492" key="GridCell.Tab.1.left" timestamp="1576712206306">
+      <screen x="0" y="0" width="3440" height="1400" />
+    </state>
+    <state width="3419" height="492" key="GridCell.Tab.1.left/0.0.3440.1400@0.0.3440.1400" timestamp="1576712206306" />
+    <state width="3419" height="492" key="GridCell.Tab.1.right" timestamp="1576712206306">
+      <screen x="0" y="0" width="3440" height="1400" />
+    </state>
+    <state width="3419" height="492" key="GridCell.Tab.1.right/0.0.3440.1400@0.0.3440.1400" timestamp="1576712206306" />
+    <state x="1415" y="523" key="com.intellij.ide.util.TipDialog" timestamp="1578871006772">
+      <screen x="0" y="0" width="3440" height="1400" />
+    </state>
+    <state x="1415" y="523" key="com.intellij.ide.util.TipDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1578871006772" />
+    <state x="1383" y="315" width="672" height="678" key="search.everywhere.popup" timestamp="1576720549993">
+      <screen x="0" y="0" width="3440" height="1400" />
+    </state>
+    <state x="1383" y="315" width="672" height="678" key="search.everywhere.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1576720549992" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

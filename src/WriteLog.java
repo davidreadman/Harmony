@@ -101,9 +101,8 @@ public class WriteLog
         //LocalDateTime parsedDate = LocalDateTime.parse(text, formatter);
 
         //remove annoying extra stuff that localtimedate sticks in
-        String timeStamp = text.replace("-", "")
+        return text.replace("-", "")
                 .replace("T", "").replace(":", "");
-        return timeStamp;
     }
 
 }

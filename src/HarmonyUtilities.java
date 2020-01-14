@@ -1,6 +1,5 @@
-import gov.nasa.worldwind.geom.Angle;
-import gov.nasa.worldwind.geom.Position;
-
+import java.io.IOException;
+import java.time.Duration;
 import java.util.*;
 
 /**
@@ -10,38 +9,48 @@ import java.util.*;
 public class HarmonyUtilities
 {
     int movementCounter = 0,logCounter =0, pubCounter = 0;
+    //A value to indicate a time limit for the simulation;
+    long maxEpochCounter = 0;
     WriteLog logger;
     HarmonyDataPublisher publishData;
     StoreProperties storeProperties = new StoreProperties();
 
-    //The nodes within the simulation. This includes friends and hostiles
-    private ArrayList<NodeData> nodes;
+    private static final double DISTANCE_THRESHOLD_FOR_DIRECT_CONTACT_IN_METRES = 500;
 
-    public HarmonyUtilities(NodeData[] nodeData, HarmonyDataPublisher publishData)
+    //A Map to show which blue spots are equally close to a red.
+    //When two or more blue spots are no more than 500 metres of each other, we know that the red spot is 'trapped'
+    HashMap<String, ArrayList<String>> friendsThatAreVeryCloseToHostile = new HashMap<>();
+
+    //The nodes within the simulation. This includes friends and hostiles
+    ArrayList<NodeData> nodes;
+
+    public HarmonyUtilities(ArrayList<NodeData> nodeData, HarmonyDataPublisher publishData)
     {
-        nodes = new ArrayList<>(Arrays.asList(nodeData));
+        nodes = nodeData;
         this.publishData = publishData;
     }
 
-    public void updateWithLatestNodeArray(NodeData[] nodeData) {
-        nodes = new ArrayList<>(Arrays.asList(nodeData));
+
+    public void restartSimulation() throws IOException {
+        //Assuming that the we haven't added/removed any nodes. Update each node to it's starting position from the config.properties
+        movementCounter = 0;
+        ArrayList<NodeData> nodesFromConfig = ParseProperties.parseConfig();
+        for(NodeData configNode: nodesFromConfig) {
+            for(NodeData currentNode: this.nodes) {
+                if(configNode.NodeUUID.equals(currentNode.NodeUUID)) {
+                    HarmonyMovement.updatePosition(configNode.currentLocation, currentNode);
+                    break;
+                }
+            }
+        }
     }
 
-    public ArrayList<NodeData> getCurrentNodes()
-    {
-        return nodes;
+    public void setMaxEpochCounter(Duration duration) {
+        //Going by one epoch per second
+        this.maxEpochCounter = duration.getSeconds();
     }
 
-    public void addNode(NodeData node)
-    {
-        nodes.add(node);
-    }
-
-    public void removeNode(NodeData node)
-    {
-        nodes.remove(node);
-    }
-
+    //This is used to display the current positions on the GUI.
     public String getAllCurrentNodePositionsAsAString(){
         List<String> nodesWithTheirCurrentPositions = new ArrayList<>();
         for(NodeData currentNode: nodes) {
@@ -77,17 +86,52 @@ public class HarmonyUtilities
             String writableString = String.format("%s,%s\n", timestamp, String.join(",", nodesAsCSVFormat));
 
             //Only write line to file starting with timestamp if we haven't done so already.
-            if(!logger.linesWritten.stream().anyMatch(line -> line.startsWith(timestamp))) {
+            if(logger.linesWritten.stream().noneMatch(line -> line.startsWith(timestamp))) {
                 logger.writeStringToFile(writableString);
             }
             logger.Flush();
         }
     }
 
+    public void closeLogFile() {
+        if(logger != null) {
+            logger.closeAndFlush();
+        }
+    }
+
     public void triggerMovementForEachNode() {
+        movementCounter++;
         for(NodeData currentNode: nodes) {
-            movementCounter++;
-            HarmonyMovement.makeDecision(currentNode, "Move Raspberry Ck");
+            String decision = "Move Raspberry Ck";
+
+            if(!currentNode.closestEnemy.isEmpty()) {
+                if(currentNode.nodeIFF.equals("FRIEND")) {
+                    decision = "Move Towards Closest Enemy";
+                } else if(currentNode.nodeIFF.equals("HOSTILE")) {
+                    decision = "Move Away from Closest Enemy";
+                }
+            }
+
+            if(currentNode.nodeIFF.equals("FRIEND")) {
+                //If friendly node is in direct contact with a hostile along with at least another friendly
+                //They have surrounded the hostile and don't need to move.
+                if(friendsThatAreVeryCloseToHostile.containsKey(currentNode.closestEnemy)) {
+                    boolean isHostileTrapped = friendsThatAreVeryCloseToHostile.get(currentNode.closestEnemy).size() >= 2;
+                    if(isHostileTrapped) {
+                        decision = "Stay in current position. Trapped a hostile with at least one other friendly";
+                    }
+                }
+            }
+            if(currentNode.nodeIFF.equals("HOSTILE")) {
+                //Check if hostile is close to two or more friendlies. If so, they're 'trapped' and can't move.
+                if(friendsThatAreVeryCloseToHostile.containsKey(currentNode.NodeUUID)) {
+                    boolean isTrapped = friendsThatAreVeryCloseToHostile.get(currentNode.NodeUUID).size() >=2;
+                    if(isTrapped) {
+                        decision = "Stay in current position. Trapped by at least two friendlies";
+                    }
+                }
+            }
+            HarmonyMovement.makeDecision(currentNode, decision);
         }
     }
 
@@ -99,6 +143,29 @@ public class HarmonyUtilities
     public void createNewConfigPropertiesFile() {
         storeProperties.writeConfig(nodes);
         System.out.println("Created new Config properties file");
+    }
+
+    /**
+     * Return the current state of the simulation.
+     * Basically if it's running return -1 or return a positive value to indicate the simulation is over
+     * @return -1 if it's incomplete,
+     *          1 if all nodes have reached raspberry creek,
+     *          2 if all hostiles are 'dead',
+     *          3 if we ran out of time
+     */
+    public int currentStateOfSimulation() {
+        if(nodes.stream().allMatch(node -> HarmonyMovement.hasNodeReachedRaspberryCreek(node))) {
+            return 1;
+        }
+        else if(nodes.stream().noneMatch(node -> node.nodeIFF.equals("HOSTILE"))) {
+            return 2;
+        }
+        else if(maxEpochCounter > 0 && movementCounter == maxEpochCounter) {
+            return 3;
+        }
+        else {
+            return -1;
+        }
     }
 
     //set this up in HarmonyMovement, dont want to changfe this too much as it shows how to
@@ -116,7 +183,7 @@ public class HarmonyUtilities
                 double distance = HarmonyMovement.distanceToTargetInMeters(currentNode.currentLocation, nodes.get(j).currentLocation);
                 if (distance <= maxDistanceInMetres) {
                     double angleInDegrees = HarmonyMovement.bearingToTargetInDegrees(currentNode.currentLocation, nodes.get(j).currentLocation);
-                    DetectedNode detectedNode = new DetectedNode(nodes.get(j).NodeUUID, nodes.get(j).currentLocation, -1, angleInDegrees, distance, currentNode.NodeUUID, nodes.get(j).nodeType, -1, nodes.get(j).nodeIFF);
+                    DetectedNode detectedNode = new DetectedNode(nodes.get(j).NodeUUID, nodes.get(j).currentLocation, -1, distance, angleInDegrees, currentNode.NodeUUID, nodes.get(j).nodeType, -1, nodes.get(j).nodeIFF);
                     switch(detectedNode.getNodeIFF()) {
                         case "FRIEND":
                             currentNode.friendNodesSeen.add(detectedNode);
@@ -133,34 +200,43 @@ public class HarmonyUtilities
                 }
             }
 
-            Comparator<DetectedNode> detectedNodeComparator = new Comparator<DetectedNode>() {
-                @Override
-                //Compare by distance
-                public int compare(DetectedNode o1, DetectedNode o2) {
-                    if (o1.getDistanceToTargetInMeters() > o2.getDistanceToTargetInMeters()) {
-                        return 1;
-                    } else if (o1.getDistanceToTargetInMeters() == o2.getDistanceToTargetInMeters()) {
-                        return 0;
-                    } else {
-                        return -1;
-                    }
-                }
-            };
+            //Compare by distance
+            Comparator<DetectedNode> detectedNodeComparator = Comparator.comparingDouble(DetectedNode::getDistanceToTargetInMeters);
             //Arrange hostileNodesSeen in order of ascending distance from current node and assign the first node to be the closest hostile
             if(currentNode.nodeIFF.equals("FRIEND")) {
-                Collections.sort(currentNode.hostileNodesSeen, detectedNodeComparator);
-                currentNode.closestEnemy = currentNode.hostileNodesSeen.get(0).getnodeUUID();
+                if(!currentNode.hostileNodesSeen.isEmpty()) {
+                    currentNode.hostileNodesSeen.sort(detectedNodeComparator);
+                    DetectedNode detectedHostile = currentNode.hostileNodesSeen.get(0);
+                    String closestHostileUUID = detectedHostile.getnodeUUID();
+
+                    currentNode.closestEnemy = closestHostileUUID;
+
+                    if(detectedHostile.getDistanceToTargetInMeters() <= DISTANCE_THRESHOLD_FOR_DIRECT_CONTACT_IN_METRES) {
+                        friendsThatAreVeryCloseToHostile.putIfAbsent(closestHostileUUID, new ArrayList<>());
+                        friendsThatAreVeryCloseToHostile.get(closestHostileUUID).add(currentNode.NodeUUID);
+                    }
+                    else {
+                        if(friendsThatAreVeryCloseToHostile.containsKey(closestHostileUUID)) {
+                            friendsThatAreVeryCloseToHostile.get(closestHostileUUID).remove(currentNode.NodeUUID);
+                        }
+                    }
+                }
+                //considering if friend had moved away, we need to indicate that there's no closest enemy
+                else {
+                    currentNode.closestEnemy = "";
+                }
             }
             else if(currentNode.nodeIFF.equals("HOSTILE")) {
-                Collections.sort(currentNode.friendNodesSeen, detectedNodeComparator);
-                currentNode.closestEnemy = currentNode.friendNodesSeen.get(0).getnodeUUID();
+                if(!currentNode.friendNodesSeen.isEmpty()) {
+                    currentNode.friendNodesSeen.sort(detectedNodeComparator);
+                    currentNode.closestEnemy = currentNode.friendNodesSeen.get(0).getnodeUUID();
+                }
+                //considering if friend had moved away, we need to indicate that there's no closest enemy
+                else {
+                    currentNode.closestEnemy = "";
+                }
             }
         }
     }
 
-    public void makeDecisionsForEachNode() {
-        for(NodeData currentNode: nodes) {
-
-        }
-    }
 }
