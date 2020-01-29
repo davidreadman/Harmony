@@ -13,15 +13,26 @@ import java.util.Properties;
 
 public class ParseProperties
 {
-	public static ArrayList<NodeData> parseConfig() throws IOException
+	/**
+	 * Call parseConfig with the inbuilt configuration file
+	 * @return
+	 * @throws IOException
+	 */
+	public static ArrayList<NodeData> parseConfig() throws IOException {
+		return parseConfig("config.properties");
+	}
+
+	/**
+	 * Generate a list of nodes based on any configuration file.
+	 * @param propFileName
+	 * @return
+	 * @throws IOException
+	 */
+	public static ArrayList<NodeData> parseConfig(String propFileName) throws IOException
 	{
 		InputStream inputStream = null;
-		double lat;
-		double lon;
 		try {
 			Properties prop = new Properties();
-
-			String propFileName = "config.properties";
 			//the following line is to read from a properties file embedded in the jar
 			//inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
 			inputStream = new FileInputStream(propFileName);
@@ -43,7 +54,6 @@ public class ParseProperties
 
 			for (int i = 0 ; i<NumberOfNodes ;i++)
 			{
-
 				theseNodes[i] = new NodeData();
 				theseNodes[i].NodeUUID = prop.getProperty("Node"+(i+1)+"UUID");
 				double Lat = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lat"));
@@ -57,7 +67,7 @@ public class ParseProperties
 				theseNodes[i].detectionRadiusInKm = Double.parseDouble(prop.getProperty("Node"+(i+1)+"RadiusOfDetectionInKm"));
 			}
 			System.out.println(theseNodes[0].NodeUUID);
-			return new ArrayList<NodeData>(Arrays.asList(theseNodes));
+			return new ArrayList<>(Arrays.asList(theseNodes));
 		}
 		catch (Exception e)
 		{

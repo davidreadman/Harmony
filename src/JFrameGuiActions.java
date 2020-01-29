@@ -30,7 +30,7 @@ public class JFrameGuiActions extends JFrame
     JMenu menu;
     JMenu aboutMenu;
     JMenu informationMenu;
-    JMenuItem menuItem, enableMovementMenuItem, restartMenuItem, buttonMenuItem, configCreatorMenuItem, setDurationItem;
+    JMenuItem menuItem, enableMovementMenuItem, restartMenuItem, buttonMenuItem, configCreatorMenuItem, setDurationItem, currentDurationItem;
     JRadioButtonMenuItem rbMenuItem;
     JRadioButtonMenuItem dDSNodeMenuItem;
     JRadioButtonMenuItem pubMenuItem;
@@ -45,6 +45,7 @@ public class JFrameGuiActions extends JFrame
     String[] iFFStrings = {"FRIEND", "HOSTILE", "NEUTRAL"};
     java.util.List<String> iffStringsList = new ArrayList<>(Arrays.asList(iFFStrings));
     JTextArea nodePositionsTextArea = new JTextArea();
+    String durationStringAsSetByTheUser = "";
 
     public JFrameGuiActions(HarmonyDataPublisher publishData, ArrayList<NodeData> nodeData)
     {
@@ -110,6 +111,7 @@ Set up the Gui Listeners
                 simulationOver = false;
                 //update the positions on view.
                 nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
+                currentDurationItem.setText("");
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -159,6 +161,7 @@ Set up the Gui Listeners
                      default:
                          throw new IllegalStateException("Unexpected value: " + cbDurationUnits.getSelectedIndex());
                  }
+                 durationStringAsSetByTheUser = String.format("%d %s", durationValue, durationUnitsArr[cbDurationUnits.getSelectedIndex()]);
                  harmonyUtilities.setMaxEpochCounter(duration);
                  setDurationItem.setEnabled(false);
             }
@@ -226,31 +229,18 @@ Set up the Gui Listeners
                             reasonForEndOfSimulation = "Simulation has ended as all Hostile nodes are dead";
                             break;
                         case 3:
-                            reasonForEndOfSimulation = "Simulation has reached the specified duration";
+                            reasonForEndOfSimulation = "Simulation has reached the specified duration of " + durationStringAsSetByTheUser;
                             break;
                         default:
                             break;
                     }
-                    int numHours, numMinutes, numSeconds;
-                    numHours = (int)harmonyUtilities.movementCounter/3600;
-                    numMinutes = (int)(harmonyUtilities.movementCounter % 3600) / 60;
-                    numSeconds = (int)(harmonyUtilities.movementCounter % 60);
-                    String durationString = "";
-                    if(numHours > 0) {
-                        durationString = String.format("%d hours", numHours);
-                    }
-                    if(numMinutes > 0) {
-                        durationString = String.format("%s%s%d minutes", durationString, durationString.isEmpty() ? "" : " ", numMinutes);
-                    }
-                    if(numSeconds > 0) {
-                        durationString = String.format("%s%s%d seconds", durationString, durationString.isEmpty() ? "" : " ", numSeconds);
-                    }
-                    JOptionPane.showMessageDialog(new JFrame("End Of simulation"), String.format("%s. The simulation ran for %s", reasonForEndOfSimulation, durationString), "End of simulation", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(new JFrame("End Of simulation"), String.format("%s.", reasonForEndOfSimulation), "End of simulation", JOptionPane.INFORMATION_MESSAGE);
                     simulationOver = true;
                     harmonyUtilities.closeLogFile();
                     enableMovementMenuItem.setSelected(false);
                 }
             }
+            currentDurationItem.setText(generateDurationString());
         };
         Timer timer = new Timer(1000, timerListener);
         timer.start();
@@ -276,6 +266,28 @@ Set up the Gui Listeners
         Timer secondTimer = new Timer(3000, secondTimerListener);
         secondTimer.start();
 
+
+    }
+
+    /**
+     * Generate a string to show how long the simulation has been running for
+     * or to show how much time is remaining in the simulation.
+     * @return
+     */
+    private String generateDurationString() {
+        if(harmonyUtilities.maxEpochCounter > 0) {
+            long epochRemainingCounter = harmonyUtilities.maxEpochCounter - harmonyUtilities.movementCounter;
+            long numHoursRemaining = epochRemainingCounter/3600;
+            long numMinutesRemaining = (epochRemainingCounter%3600)/60;
+            long numSecondsRemaining = epochRemainingCounter % 60;
+            return String.format("Time remaining: %02d:%02d:%02d", numHoursRemaining, numMinutesRemaining, numSecondsRemaining);
+        }
+        else {
+            int numHours = harmonyUtilities.movementCounter /3600;
+            int numMinutes = (harmonyUtilities.movementCounter % 3600) / 60;
+            int numSeconds = harmonyUtilities.movementCounter % 60;
+            return String.format("Time elapsed: %02d:%02d:%02d", numHours, numMinutes, numSeconds);
+        }
 
     }
 
@@ -376,6 +388,10 @@ Set up the Gui Listeners
 
 
         menuBar.add(aboutMenu);
+
+        currentDurationItem = new JMenuItem("");
+        menuBar.add(currentDurationItem);
+
         return (menuBar);
 
 
