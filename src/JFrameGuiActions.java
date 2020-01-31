@@ -23,7 +23,7 @@ public class JFrameGuiActions extends JFrame
     boolean simulationOver = false;
     HarmonyUtilities harmonyUtilities;
     boolean loggingFlag = false;
-    JPanel panel2525B, nodeLocPanel;
+    JLayeredPane panel2525B, nodeLocPanel;
     JLabel NodeUUIDText;
     DisplayWW displayWW;
     JMenuBar menuBar;
@@ -44,12 +44,14 @@ public class JFrameGuiActions extends JFrame
     JLabel SymbolString;
     String[] iFFStrings = {"FRIEND", "HOSTILE", "NEUTRAL"};
     java.util.List<String> iffStringsList = new ArrayList<>(Arrays.asList(iFFStrings));
-    JTextArea nodePositionsTextArea = new JTextArea();
+    JTextArea nodePositionsTextArea;
     String durationStringAsSetByTheUser = "";
 
     public JFrameGuiActions(HarmonyDataPublisher publishData, ArrayList<NodeData> nodeData)
     {
         this.harmonyUtilities = new HarmonyUtilities(nodeData, publishData);
+        this.nodePositionsTextArea = new JTextArea();
+        this.nodePositionsTextArea.setRows(nodeData.size());
         //this.nodeData = nodeData;
         /* setup the binding of properties to allow for change monitoring across threads */
         DDSPositionMessage dDSPositionMessage = new DDSPositionMessage();
@@ -94,9 +96,10 @@ public class JFrameGuiActions extends JFrame
         /* add the panel to the frame */
         // Add the card panel to the frame.
         this.add(cardPanel, BorderLayout.CENTER);
-        JPanel setup2525BHandle = this.setup2525B();
-        this.add(setup2525BHandle, BorderLayout.NORTH);
-        this.add(this.nodeLocations(), BorderLayout.WEST);
+        this.setup2525B();
+        this.add(this.panel2525B, BorderLayout.NORTH);
+        this.setUpNodeLocationsPane();
+        this.add(this.nodeLocPanel, BorderLayout.WEST);
         this.pack();
         this.setSize(1800, 1800);
 
@@ -398,24 +401,25 @@ Set up the Gui Listeners
 
     }
 
-    private JPanel nodeLocations()
+    private void setUpNodeLocationsPane()
     {
-        final JLabel NodeLocationLabel = new JLabel("Node Locations");
+        JLabel nodeLocationLabel = new JLabel("Node Locations");
+        nodeLocationLabel.setHorizontalAlignment(SwingConstants.CENTER);
         nodePositionsTextArea.setLineWrap(true);
 
-        this.nodeLocPanel = new JPanel(new GridLayout(2, 2));
+        this.nodeLocPanel = new JLayeredPane();
+        nodeLocPanel.setLayout(new GridLayout(2, 1));
         nodeLocPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        nodeLocPanel.add(NodeLocationLabel);
-        nodeLocPanel.add(nodePositionsTextArea);
+        nodeLocPanel.add(nodeLocationLabel);
 
-        // nodeLocPanel.setBackground(new Color(0,0,0,200));
-        //nodeLocPanel.setOpaque(true);
         nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
+
+        nodeLocPanel.add(nodePositionsTextArea);
         nodeLocPanel.setVisible(false);
-        return nodeLocPanel;
     }
 
-    public JPanel setup2525B()
+
+    public void setup2525B()
     {
         //set up a default node
         selectedNode = harmonyUtilities.nodes.get(0);
@@ -423,20 +427,26 @@ Set up the Gui Listeners
         char[] iFFChars = {'F', 'H', 'N'};
         StringBuilder MilSymString = new StringBuilder(selectedNode.symbolIdentifier.getIdentifier());
 
-        JLabel NodeLabel = new JLabel("Node");
+        JLabel nodeLabel = new JLabel("Node");
+        Font labelFont = nodeLabel.getFont();
+        labelFont = labelFont.deriveFont(labelFont.getStyle() | Font.BOLD);
+        nodeLabel.setFont(labelFont);
+
         //as null pointers are bad, identify first node as selected
         NodeUUIDText = new JLabel(selectedNode.NodeUUID);
-        final JLabel AffiliationLabel = new JLabel("Affiliation");
-        final JLabel StringLabel = new JLabel("String");
+        JLabel affiliationLabel = new JLabel("Affiliation");
+        affiliationLabel.setFont(labelFont);
+        JLabel stringLabel = new JLabel("String");
+        stringLabel.setFont(labelFont);
         //load up MilSymString with existingstring (ie nodeData.symbol
         SymbolString = new JLabel(MilSymString.toString());
 
 
         /*set up the string of node names */
-        int NumberOfNodes = harmonyUtilities.nodes.size();
-        String[] nodeNames = new String[NumberOfNodes];
+        int numberOfNodes = harmonyUtilities.nodes.size();
+        String[] nodeNames = new String[numberOfNodes];
 
-        for (int i = 0; i < NumberOfNodes; i++)
+        for (int i = 0; i < numberOfNodes; i++)
         {
             nodeNames[i] = harmonyUtilities.nodes.get(i).NodeUUID;
         }
@@ -450,11 +460,12 @@ Set up the Gui Listeners
 
         //buttonA.setBackground(new Color(0,0,0,200));
         //buttonA.setOpaque(true);
-        this.panel2525B = new JPanel(new GridLayout(2, 3));
+        this.panel2525B = new JLayeredPane();
+        panel2525B.setLayout(new GridLayout(2, 3));
         panel2525B.setBorder(new EmptyBorder(10, 10, 10, 10));
-        panel2525B.add(NodeLabel);
-        panel2525B.add(AffiliationLabel);
-        panel2525B.add(StringLabel);
+        panel2525B.add(nodeLabel);
+        panel2525B.add(affiliationLabel);
+        panel2525B.add(stringLabel);
         //panel2525B.add(nodeList);
         panel2525B.add(NodeUUIDText);
         panel2525B.add(iFFList);
@@ -522,13 +533,7 @@ used the invisible because the selection of new dropdown is invoked at this poin
             }
 
         });
-
-
         // panel2525B.setOpaque(true);
-
-
-
         panel2525B.setVisible(false);
-        return panel2525B;
     }
 }
