@@ -80,7 +80,8 @@ public class JFrameGuiActions extends JFrame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /* add the worldwind canvas to the JFrame */
         /*using cardpanel, look at changing this at a later stage to JLayeredPane */
-        JPanel cardPanel = new JPanel();
+        //JPanel cardPanel = new JPanel();
+        JLayeredPane cardPanel = new JLayeredPane();
         cardPanel.setLayout(new CardLayout());
 
 
