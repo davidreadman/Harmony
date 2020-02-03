@@ -2,6 +2,7 @@ import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.RenderableLayer;
+import gov.nasa.worldwind.pick.PickedObject;
 import gov.nasa.worldwind.symbology.TacticalSymbol;
 import gov.nasa.worldwind.util.BasicDragger;
 
@@ -182,30 +183,30 @@ Set up the Gui Listeners
             {
                 // Delegate dragging computations to a dragger.
                 this.dragger.selected(event);
-                if (event.getEventAction().equals(SelectEvent.DRAG))
-                {
-                    for (int i = 0; i < harmonyUtilities.nodes.size(); i++)
-                    {
-                        //check to see which object has been clicked on
-                        Object object = event.getTopPickedObject().getObject();
-                        if (object == harmonyUtilities.nodes.get(i).symbolIdentifier)
-                        {
-                            //update the dragged symbol node with the new location
-                            harmonyUtilities.nodes.get(i).currentLocation = harmonyUtilities.nodes.get(i).symbolIdentifier.getPosition();
-                            //and let the 2525B routing know which one is selected
-                            selectedNode = harmonyUtilities.nodes.get(i);
-                            NodeUUIDText.setText(harmonyUtilities.nodes.get(i).NodeUUID);
-                            //testing to see how to address the object
-                            //need to change the selected nodes drop down list at this point else all up to this are changed
-                            SymbolString.setText(selectedNode.symbol);
+                if(event.getObjects() != null && event.getObjects().size() >= 1) {
+                    Object object = event.getTopPickedObject().getObject();
+                    for(NodeData currentNode : harmonyUtilities.nodes) {
+                        if(object == currentNode.symbolIdentifier) {
+                            String selectedEvent = event.getEventAction();
+                            switch(selectedEvent) {
+                                case SelectEvent.LEFT_CLICK:
+                                    selectedNode = currentNode;
+                                    NodeUUIDText.setText(selectedNode.NodeUUID);
+                                    //testing to see how to address the object
+                                    //need to change the selected nodes drop down list at this point else all up to this are changed
+                                    SymbolString.setText(selectedNode.symbol);
 
-                            //identify the iff in the string, adjust the iff in the dropdown iFFList
-                            iFFList.setSelectedIndex(iffStringsList.indexOf(selectedNode.nodeIFF));
-                            //update the positions on view.
-                            nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
+                                    //identify the iff in the string, adjust the iff in the dropdown iFFList
+                                    iFFList.setSelectedIndex(iffStringsList.indexOf(selectedNode.nodeIFF));
+                                    break;
+                                case SelectEvent.DRAG:
+                                    currentNode.currentLocation = currentNode.symbolIdentifier.getPosition();
+                                    nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
-
-                        //pass in the node, have the node updated with the tactical symbol
                     }
                 }
             }
