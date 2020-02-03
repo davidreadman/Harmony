@@ -55,7 +55,7 @@ public class HarmonyUtilities
         List<String> nodesWithTheirCurrentPositions = new ArrayList<>();
         for(NodeData currentNode: nodes) {
             double[] positionAsArray = currentNode.currentLocation.asDegreesArray();
-            nodesWithTheirCurrentPositions.add(String.format("%s: %f, %f", currentNode.NodeUUID, positionAsArray[0], positionAsArray[1]));
+            nodesWithTheirCurrentPositions.add(String.format("%s: \n%f, %f", currentNode.NodeUUID, positionAsArray[0], positionAsArray[1]));
         }
         return String.join("\n", nodesWithTheirCurrentPositions);
     }
