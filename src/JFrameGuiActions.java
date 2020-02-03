@@ -336,7 +336,7 @@ Set up the Gui Listeners
         menu.add(rbMenuItem);
 
         enableMovementMenuItem = new JRadioButtonMenuItem("Enable Movement");
-        enableMovementMenuItem.setSelected(false);
+        enableMovementMenuItem.setSelected(true);
 
         menu.add(enableMovementMenuItem);
         //a group of JMenuItems
