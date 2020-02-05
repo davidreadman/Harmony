@@ -2,7 +2,6 @@ import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.RenderableLayer;
-import gov.nasa.worldwind.pick.PickedObject;
 import gov.nasa.worldwind.symbology.TacticalSymbol;
 import gov.nasa.worldwind.util.BasicDragger;
 
@@ -48,7 +47,7 @@ public class JFrameGuiActions extends JFrame
     JTextArea nodePositionsTextArea;
     String durationStringAsSetByTheUser = "";
 
-    public JFrameGuiActions(HarmonyDataPublisher publishData, ArrayList<NodeData> nodeData)
+    public JFrameGuiActions(HarmonyDataPublisher publishData, ArrayList<NodeData> nodeData, SimulationSettings simulationSettings)
     {
         this.harmonyUtilities = new HarmonyUtilities(nodeData, publishData);
         this.nodePositionsTextArea = new JTextArea();
@@ -76,8 +75,9 @@ public class JFrameGuiActions extends JFrame
         this.setTitle("Harmony");
         setDefaultLookAndFeelDecorated(true);
 
+        this.loggingFlag = simulationSettings.enableLogging;
         /*method setupMenuBar*/
-        this.setJMenuBar(setupMenuBar());
+        this.setJMenuBar(setupMenuBar(simulationSettings));
 
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,9 +97,9 @@ public class JFrameGuiActions extends JFrame
         /* add the panel to the frame */
         // Add the card panel to the frame.
         this.add(cardPanel, BorderLayout.CENTER);
-        this.setup2525B();
+        this.setup2525B(simulationSettings.show2525B);
         this.add(this.panel2525B, BorderLayout.NORTH);
-        this.setUpNodeLocationsPane();
+        this.setUpNodeLocationsPane(simulationSettings.showNodeLocations);
         this.add(this.nodeLocPanel, BorderLayout.WEST);
         this.pack();
         this.setSize(1800, 1800);
@@ -116,7 +116,7 @@ Set up the Gui Listeners
                 simulationOver = false;
                 //update the positions on view.
                 nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
-                currentDurationItem.setText("");
+                currentDurationItem.setText(generateDurationString());
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -141,7 +141,7 @@ Set up the Gui Listeners
 
         setDurationItem.addActionListener(e -> {
             JTextField txtDurationValue = new JTextField(5);
-            String[] durationUnitsArr = {"days", "hours", "minutes", "seconds"};
+            String[] durationUnitsArr = {"day(s)", "hour(s)", "minute(s)", "second(s)"};
             JComboBox cbDurationUnits = new JComboBox(durationUnitsArr);
             JPanel myPanel = new JPanel();
             myPanel.add(txtDurationValue);
@@ -311,7 +311,7 @@ Set up the Gui Listeners
         }
     }
 
-    private JMenuBar setupMenuBar()
+    private JMenuBar setupMenuBar(SimulationSettings simulationSettings)
     {
          /*
         https://docs.oracle.com/javase/tutorial/uiswing/components/menu.html
@@ -332,11 +332,11 @@ Set up the Gui Listeners
         menu.add(configCreatorMenuItem);
 
         rbMenuItem = new JRadioButtonMenuItem("Enable Logging");
-        rbMenuItem.setSelected(false);
+        rbMenuItem.setSelected(simulationSettings.enableLogging);
         menu.add(rbMenuItem);
 
         enableMovementMenuItem = new JRadioButtonMenuItem("Enable Movement");
-        enableMovementMenuItem.setSelected(true);
+        enableMovementMenuItem.setSelected(simulationSettings.startSimulation);
 
         menu.add(enableMovementMenuItem);
         //a group of JMenuItems
@@ -345,10 +345,11 @@ Set up the Gui Listeners
         ButtonGroup dDSGroup = new ButtonGroup();
         dDSNodeMenuItem = new JRadioButtonMenuItem("Send Node information/Receive Metrics");
         dDSGroup.add(dDSNodeMenuItem);
-        dDSNodeMenuItem.setSelected(true);
+        dDSNodeMenuItem.setSelected(simulationSettings.sendNodeInformation);
         menu.add(dDSNodeMenuItem);
 
         dDSMetMenuItem = new JRadioButtonMenuItem("Receive Node Information/Send Metrics");
+        dDSMetMenuItem.setSelected(simulationSettings.sendMetrics);
         dDSGroup.add(dDSMetMenuItem);
         menu.add(dDSMetMenuItem);
 
@@ -358,12 +359,12 @@ Set up the Gui Listeners
         pubMenuItem = new JRadioButtonMenuItem("Start Publishing DDS Messages");
 
         pubGroup.add(pubMenuItem);
-        pubMenuItem.setSelected(false);
+        pubMenuItem.setSelected(simulationSettings.publishDDSMessages);
         menu.add(pubMenuItem);
 
         stopPubMenuItem = new JRadioButtonMenuItem("Stop Publishing DDS Messages");
         pubGroup.add(stopPubMenuItem);
-        stopPubMenuItem.setSelected(true);
+        stopPubMenuItem.setSelected(!simulationSettings.publishDDSMessages);
         menu.add(stopPubMenuItem);
 
         setDurationItem = new JMenuItem("Set Duration of Simulation");
@@ -378,10 +379,10 @@ Set up the Gui Listeners
         //Build Information menu
         informationMenu = new JMenu("Information");
         toggleNodeLocPanel = new JRadioButtonMenuItem("show/hide Node locations");
-        toggleNodeLocPanel.setSelected(false);
+        toggleNodeLocPanel.setSelected(simulationSettings.showNodeLocations);
         informationMenu.add(toggleNodeLocPanel);
         toggle2525B = new JRadioButtonMenuItem("show/hide 2525B");
-        toggle2525B.setSelected(false);
+        toggle2525B.setSelected(simulationSettings.show2525B);
         informationMenu.add(toggle2525B);
         menuBar.add(informationMenu);
 
@@ -394,15 +395,19 @@ Set up the Gui Listeners
 
         menuBar.add(aboutMenu);
 
-        currentDurationItem = new JMenuItem("");
+        if(simulationSettings.simulatonDuration != null) {
+            harmonyUtilities.setMaxEpochCounter(simulationSettings.simulatonDuration);
+            durationStringAsSetByTheUser = simulationSettings.durationString;
+            setDurationItem.setEnabled(false);
+        }
+
+        currentDurationItem = new JMenuItem(generateDurationString());
         menuBar.add(currentDurationItem);
 
         return (menuBar);
-
-
     }
 
-    private void setUpNodeLocationsPane()
+    private void setUpNodeLocationsPane(boolean isVisible)
     {
         JLabel nodeLocationLabel = new JLabel("Node Locations");
         nodeLocationLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -416,11 +421,11 @@ Set up the Gui Listeners
         nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
 
         nodeLocPanel.add(nodePositionsTextArea);
-        nodeLocPanel.setVisible(false);
+        nodeLocPanel.setVisible(isVisible);
     }
 
 
-    public void setup2525B()
+    public void setup2525B(boolean isVisible)
     {
         //set up a default node
         selectedNode = harmonyUtilities.nodes.get(0);
@@ -535,6 +540,6 @@ used the invisible because the selection of new dropdown is invoked at this poin
 
         });
         // panel2525B.setOpaque(true);
-        panel2525B.setVisible(false);
+        panel2525B.setVisible(isVisible);
     }
 }

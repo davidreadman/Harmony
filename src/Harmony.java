@@ -50,7 +50,8 @@ public class Harmony
 
         //Read in initialisation file and load into the NodeData array
         ArrayList<NodeData> blueNodes = ParseProperties.parsePlan();
-        new JFrameGuiActions( publishdata, blueNodes).setVisible(true);
+        SimulationSettings simulationSettings = ParseProperties.parseConfig();
+        new JFrameGuiActions( publishdata, blueNodes, simulationSettings).setVisible(true);
 
     }
 

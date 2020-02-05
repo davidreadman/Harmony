@@ -41,7 +41,7 @@ public class ParseProperties
 				prop.load(inputStream);
 			} else {
 				throw new FileNotFoundException("property file '" +propFileName + " not found");
-				
+
 			}
 			Date time = new Date (System.currentTimeMillis());
 			//get the number of nodes defined in the properties file
@@ -84,6 +84,63 @@ public class ParseProperties
 		}
 		
 		
+	}
+
+	public static SimulationSettings parseConfig() throws IOException {
+		return parseConfig("config.properties");
+	}
+
+	public static SimulationSettings parseConfig(String propFileName) throws IOException {
+		SimulationSettings simulationSettings = new SimulationSettings();
+
+		InputStream inputStream = null;
+		try {
+			Properties prop = new Properties();
+			//the following line is to read from a properties file embedded in the jar
+			//inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+			inputStream = new FileInputStream(propFileName);
+
+			if (inputStream !=null){
+				prop.load(inputStream);
+			} else {
+				throw new FileNotFoundException("property file '" +propFileName + " not found");
+
+			}
+
+			if(prop.containsKey("startSimulation")) {
+				simulationSettings.startSimulation = prop.getProperty("startSimulation").toLowerCase().equals("yes");
+			}
+			if(prop.containsKey("simulationDuration")) {
+				simulationSettings.setUpDuration(prop.getProperty("simulationDuration"));
+			}
+			if(prop.containsKey("enableLogging")) {
+				simulationSettings.enableLogging = prop.getProperty("enableLogging").toLowerCase().equals("yes");
+			}
+			if(prop.containsKey("show2525B")) {
+				simulationSettings.show2525B = prop.getProperty("show2525B").toLowerCase().equals("yes");
+			}
+			if(prop.containsKey("showNodeLocations")) {
+				simulationSettings.showNodeLocations = prop.getProperty("showNodeLocations").toLowerCase().equals("yes");
+			}
+			if(prop.containsKey("publishDDSMessages")) {
+				simulationSettings.publishDDSMessages = prop.getProperty("publishDDSMessages").toLowerCase().equals("yes");
+			}
+			if(prop.containsKey("sendNodeInformation")) {
+				simulationSettings.sendNodeInformation = prop.getProperty("sendNodeInformation").toLowerCase().equals("yes");
+			}
+			if(prop.containsKey("sendMetrics")) {
+				simulationSettings.sendMetrics = prop.getProperty("sendMetrics").toLowerCase().equals("yes");
+			}
+		}
+		catch(Exception e) {
+			System.out.println("Exception: " + e);
+		}
+		finally {
+			if(inputStream != null) {
+				inputStream.close();
+			}
+		}
+		return simulationSettings;
 	}
 
 }
