@@ -49,7 +49,7 @@ public class Harmony
         HarmonyDataPublisher publishdata = new HarmonyDataPublisher();
 
         //Read in initialisation file and load into the NodeData array
-        ArrayList<NodeData> blueNodes = ParseProperties.parseConfig();
+        ArrayList<NodeData> blueNodes = ParseProperties.parsePlan();
         new JFrameGuiActions( publishdata, blueNodes).setVisible(true);
 
     }

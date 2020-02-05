@@ -36,24 +36,12 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\rohit.gopalan\Documents\Harmony\out\artifacts\Harmony_jar" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\dread\Documents\projects\Harmony" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\rohit.gopalan\Documents\Harmony\out\artifacts\Harmony_jar" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="Harmony" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -100,26 +88,30 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1400" y="435" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1580441460168" />
+    <state x="1236" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1580875651022">
+      <screen x="0" y="0" width="3440" height="1400" />
+    </state>
+    <state x="1236" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1580875651022" />
     <state x="1467" y="555" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1580430084968">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1467" y="555" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.3440.1400@0.0.3440.1400" timestamp="1580430084968" />
-    <state width="3419" height="403" key="GridCell.Tab.0.bottom" timestamp="1580692077428">
+    <state width="3419" height="403" key="GridCell.Tab.0.bottom" timestamp="1580875651082">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="3419" height="403" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1580692077428" />
-    <state width="3419" height="403" key="GridCell.Tab.0.center" timestamp="1580692077428">
+    <state width="3419" height="403" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1580875651082" />
+    <state width="3419" height="403" key="GridCell.Tab.0.center" timestamp="1580875651081">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="3419" height="403" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1580692077428" />
-    <state width="3419" height="403" key="GridCell.Tab.0.left" timestamp="1580692077428">
+    <state width="3419" height="403" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1580875651081" />
+    <state width="3419" height="403" key="GridCell.Tab.0.left" timestamp="1580875651081">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="3419" height="403" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1580692077428" />
-    <state width="3419" height="403" key="GridCell.Tab.0.right" timestamp="1580692077428">
+    <state width="3419" height="403" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1580875651081" />
+    <state width="3419" height="403" key="GridCell.Tab.0.right" timestamp="1580875651081">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="3419" height="403" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1580692077428" />
+    <state width="3419" height="403" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1580875651081" />
     <state width="3419" height="492" key="GridCell.Tab.1.bottom" timestamp="1580431560787">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>

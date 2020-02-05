@@ -215,7 +215,6 @@ Set up the Gui Listeners
         ActionListener timerListener = actionEvent -> {
             int currentStateOfSimulation = harmonyUtilities.currentStateOfSimulation();
             if(currentStateOfSimulation == -1) {
-                harmonyUtilities.situationalAwareness();
                 if (enableMovementMenuItem.isSelected())
                 {
                     harmonyUtilities.triggerMovementForEachNode();
@@ -243,6 +242,7 @@ Set up the Gui Listeners
                     simulationOver = true;
                     harmonyUtilities.closeLogFile();
                     enableMovementMenuItem.setSelected(false);
+                    setDurationItem.setEnabled(true);
                 }
             }
             currentDurationItem.setText(generateDurationString());

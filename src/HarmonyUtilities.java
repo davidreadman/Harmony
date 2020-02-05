@@ -32,9 +32,9 @@ public class HarmonyUtilities
 
 
     public void restartSimulation() throws IOException {
-        //Assuming that the we haven't added/removed any nodes. Update each node to it's starting position from the config.properties
+        //Assuming that the we haven't added/removed any nodes. Update each node to it's starting position from the plan.properties
         movementCounter = 0;
-        ArrayList<NodeData> nodesFromConfig = ParseProperties.parseConfig();
+        ArrayList<NodeData> nodesFromConfig = ParseProperties.parsePlan();
         for(NodeData configNode: nodesFromConfig) {
             for(NodeData currentNode: this.nodes) {
                 if(configNode.NodeUUID.equals(currentNode.NodeUUID)) {
@@ -167,76 +167,4 @@ public class HarmonyUtilities
             return -1;
         }
     }
-
-    //set this up in HarmonyMovement, dont want to changfe this too much as it shows how to
-    //do the arraylists
-    public void situationalAwareness() {
-        for (int i = 0; i < nodes.size(); i++) {
-            NodeData currentNode = nodes.get(i);
-            double maxDistanceInMetres = HarmonyMovement.KM_TO_METRES * currentNode.detectionRadiusInKm;
-            for (int j = 0; j < nodes.size(); j++) {
-                //Skip node at index j since it's the same as the node at index i.
-                if (i == j) {
-                    continue;
-                }
-                //The purpose here is to detect nodes with the current nodes detection radius.
-                double distance = HarmonyMovement.distanceToTargetInMeters(currentNode.currentLocation, nodes.get(j).currentLocation);
-                if (distance <= maxDistanceInMetres) {
-                    double angleInDegrees = HarmonyMovement.bearingToTargetInDegrees(currentNode.currentLocation, nodes.get(j).currentLocation);
-                    DetectedNode detectedNode = new DetectedNode(nodes.get(j).NodeUUID, nodes.get(j).currentLocation, -1, distance, angleInDegrees, currentNode.NodeUUID, nodes.get(j).nodeType, -1, nodes.get(j).nodeIFF);
-                    switch(detectedNode.getNodeIFF()) {
-                        case "FRIEND":
-                            currentNode.friendNodesSeen.add(detectedNode);
-                            break;
-                        case "HOSTILE":
-                            currentNode.hostileNodesSeen.add(detectedNode);
-                            break;
-                        case "NEUTRAL":
-                            currentNode.neutralNodesSeen.add(detectedNode);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-
-            //Compare by distance
-            Comparator<DetectedNode> detectedNodeComparator = Comparator.comparingDouble(DetectedNode::getDistanceToTargetInMeters);
-            //Arrange hostileNodesSeen in order of ascending distance from current node and assign the first node to be the closest hostile
-            if(currentNode.nodeIFF.equals("FRIEND")) {
-                if(!currentNode.hostileNodesSeen.isEmpty()) {
-                    currentNode.hostileNodesSeen.sort(detectedNodeComparator);
-                    DetectedNode detectedHostile = currentNode.hostileNodesSeen.get(0);
-                    String closestHostileUUID = detectedHostile.getnodeUUID();
-
-                    currentNode.closestEnemy = closestHostileUUID;
-
-                    if(detectedHostile.getDistanceToTargetInMeters() <= DISTANCE_THRESHOLD_FOR_DIRECT_CONTACT_IN_METRES) {
-                        friendsThatAreVeryCloseToHostile.putIfAbsent(closestHostileUUID, new ArrayList<>());
-                        friendsThatAreVeryCloseToHostile.get(closestHostileUUID).add(currentNode.NodeUUID);
-                    }
-                    else {
-                        if(friendsThatAreVeryCloseToHostile.containsKey(closestHostileUUID)) {
-                            friendsThatAreVeryCloseToHostile.get(closestHostileUUID).remove(currentNode.NodeUUID);
-                        }
-                    }
-                }
-                //considering if friend had moved away, we need to indicate that there's no closest enemy
-                else {
-                    currentNode.closestEnemy = "";
-                }
-            }
-            else if(currentNode.nodeIFF.equals("HOSTILE")) {
-                if(!currentNode.friendNodesSeen.isEmpty()) {
-                    currentNode.friendNodesSeen.sort(detectedNodeComparator);
-                    currentNode.closestEnemy = currentNode.friendNodesSeen.get(0).getnodeUUID();
-                }
-                //considering if friend had moved away, we need to indicate that there's no closest enemy
-                else {
-                    currentNode.closestEnemy = "";
-                }
-            }
-        }
-    }
-
 }

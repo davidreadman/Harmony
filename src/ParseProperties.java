@@ -14,12 +14,12 @@ import java.util.Properties;
 public class ParseProperties
 {
 	/**
-	 * Call parseConfig with the inbuilt configuration file
+	 * Call parsePlan with the inbuilt configuration file
 	 * @return
 	 * @throws IOException
 	 */
-	public static ArrayList<NodeData> parseConfig() throws IOException {
-		return parseConfig("config.properties");
+	public static ArrayList<NodeData> parsePlan() throws IOException {
+		return parsePlan("plan.properties");
 	}
 
 	/**
@@ -28,7 +28,7 @@ public class ParseProperties
 	 * @return
 	 * @throws IOException
 	 */
-	public static ArrayList<NodeData> parseConfig(String propFileName) throws IOException
+	public static ArrayList<NodeData> parsePlan(String propFileName) throws IOException
 	{
 		InputStream inputStream = null;
 		try {
@@ -40,7 +40,7 @@ public class ParseProperties
 			if (inputStream !=null){
 				prop.load(inputStream);
 			} else {
-				throw new FileNotFoundException("property file '" +propFileName + " config.properties not found");
+				throw new FileNotFoundException("property file '" +propFileName + " not found");
 				
 			}
 			Date time = new Date (System.currentTimeMillis());
@@ -64,7 +64,6 @@ public class ParseProperties
 				theseNodes[i].symbol = prop.getProperty("Node"+(i+1)+"2525B");
 				theseNodes[i].operationalSpeedInKmH =  Double.parseDouble(prop.getProperty("Node"+(i+1)+"OperationalSpeed"));
 				theseNodes[i].maximumSpeedInKmH = Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed"));
-				theseNodes[i].detectionRadiusInKm = Double.parseDouble(prop.getProperty("Node"+(i+1)+"RadiusOfDetectionInKm"));
 			}
 			System.out.println(theseNodes[0].NodeUUID);
 			return new ArrayList<>(Arrays.asList(theseNodes));
