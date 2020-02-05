@@ -9,7 +9,7 @@ The NodeData class holds the information about each node and an overview god mod
  */
 public class NodeData
 {
-    /*the order of the items in this class should reflect as much as possible the order in the config.properties file*/
+    /*the order of the items in this class should reflect as much as possible the order in the planproperties file*/
      String NodeUUID;
      /*initially ;used currentLocation and nextLocation, but these were changed at the same time, previousLocation
      allows more information to use for direction of travel

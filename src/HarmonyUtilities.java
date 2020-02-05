@@ -32,9 +32,9 @@ public class HarmonyUtilities
 
 
     public void restartSimulation() throws IOException {
-        //Assuming that the we haven't added/removed any nodes. Update each node to it's starting position from the config.properties
+        //Assuming that the we haven't added/removed any nodes. Update each node to it's starting position from the planproperties
         movementCounter = 0;
-        ArrayList<NodeData> nodesFromConfig = ParseProperties.parseConfig();
+        ArrayList<NodeData> nodesFromConfig = ParseProperties.parsePlan();
         for(NodeData configNode: nodesFromConfig) {
             for(NodeData currentNode: this.nodes) {
                 if(configNode.NodeUUID.equals(currentNode.NodeUUID)) {
