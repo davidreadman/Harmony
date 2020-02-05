@@ -243,6 +243,7 @@ Set up the Gui Listeners
                     simulationOver = true;
                     harmonyUtilities.closeLogFile();
                     enableMovementMenuItem.setSelected(false);
+                    setDurationItem.setEnabled(true);
                 }
             }
             currentDurationItem.setText(generateDurationString());

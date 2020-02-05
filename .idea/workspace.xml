@@ -38,24 +38,12 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\rohit.gopalan\Documents\Harmony\out\artifacts\Harmony_jar" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\dread\Documents\projects\Harmony" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\rohit.gopalan\Documents\Harmony\out\artifacts\Harmony_jar" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="Harmony" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
