@@ -19,7 +19,7 @@ public class ParseProperties
 	 * @throws IOException
 	 */
 	public static ArrayList<NodeData> parsePlan() throws IOException {
-		return parsePlan("planproperties");
+		return parsePlan("plan.properties");
 	}
 
 	/**
@@ -64,7 +64,6 @@ public class ParseProperties
 				theseNodes[i].symbol = prop.getProperty("Node"+(i+1)+"2525B");
 				theseNodes[i].operationalSpeedInKmH =  Double.parseDouble(prop.getProperty("Node"+(i+1)+"OperationalSpeed"));
 				theseNodes[i].maximumSpeedInKmH = Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed"));
-				theseNodes[i].detectionRadiusInKm = Double.parseDouble(prop.getProperty("Node"+(i+1)+"RadiusOfDetectionInKm"));
 			}
 			System.out.println(theseNodes[0].NodeUUID);
 			return new ArrayList<>(Arrays.asList(theseNodes));

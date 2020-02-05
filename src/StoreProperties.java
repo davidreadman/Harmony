@@ -50,9 +50,8 @@ public class StoreProperties
             //    Node1MaxSpeed = 100
                 String line8= "Node"+(i+1)+"MaxSpeed = " + nodeData.get(i).maximumSpeedInKmH+"\n";
             //    Node1RadiusOfDetectionInKm = 20
-                String line9= "Node"+(i+1)+"RadiusOfDetectionInKm = " + nodeData.get(i).detectionRadiusInKm+"\n";
 
-                content = (""+line1+line2+line3+line4+line5+line6+line7+line8+line9+"\n\n\n");
+                content = (""+line1+line2+line3+line4+line5+line6+line7+line8+"\n\n\n");
                 contentInBytes = content.getBytes();
                 outputStream.write(contentInBytes);
 

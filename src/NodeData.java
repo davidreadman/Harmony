@@ -9,7 +9,7 @@ The NodeData class holds the information about each node and an overview god mod
  */
 public class NodeData
 {
-    /*the order of the items in this class should reflect as much as possible the order in the planproperties file*/
+    /*the order of the items in this class should reflect as much as possible the order in the plan.properties file*/
      String NodeUUID;
      /*initially ;used currentLocation and nextLocation, but these were changed at the same time, previousLocation
      allows more information to use for direction of travel
@@ -21,7 +21,6 @@ public class NodeData
      TacticalSymbol symbolIdentifier;
      double operationalSpeedInKmH;
      double maximumSpeedInKmH;
-     double detectionRadiusInKm;
      String closestEnemy = ""; //hostile for a friend node, friend for a hostile node
      //could put in a 'closest road'
      /* the next information is that evaluated by Harmony from the list of nodes and the current node positions */
