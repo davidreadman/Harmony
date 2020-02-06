@@ -64,7 +64,8 @@ public class JFrameGuiActions extends JFrame
             if (evt.getSource() instanceof DDSPositionMessage)
             {
                 DDSPositionMessage pd = (DDSPositionMessage) evt.getSource();
-                System.out.println(String.format("Received event from %s: %s has been changed from %s to %s", pd.getDDSPositionMessage(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue()));
+                if(simulationSettings.debugDataListener)
+                    System.out.println(String.format("Received event from %s: %s has been changed from %s to %s", pd.getDDSPositionMessage(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue()));
                 //on a DDS Message is the *current* best time to make a decision on a new position
                 //a nice quick test could be a new random location based on existing location
                 //curently living in timer, but moveAtAngle to here next after the position message has been altered to include node data
@@ -72,7 +73,7 @@ public class JFrameGuiActions extends JFrame
         };
         dDSPositionMessage.addPropertyChangeListener(pcl);
         /* set up DDS Subscriber/Listeners with bound properties */
-        new HarmonyDataSubscriber(null, dDSPositionMessage);
+        new HarmonyDataSubscriber(null, dDSPositionMessage, simulationSettings.debugDataListener);
 
         /* set up default UI fonts */
         setUIFont(new javax.swing.plaf.FontUIResource("Serif", Font.PLAIN, 40));
@@ -95,7 +96,7 @@ public class JFrameGuiActions extends JFrame
         // Add the World Windows to the card panel.
 
         /*displayWW is set up as a JPanel */
-        this.displayWW = new DisplayWW(nodeData);
+        this.displayWW = new DisplayWW(nodeData, simulationSettings.debugTacticalSymbolGeneration);
         /*add this panel to the cardpanel*/
         cardPanel.add(displayWW, "World Wind");
         /* add the panel to the frame */
@@ -221,7 +222,7 @@ Set up the Gui Listeners
             if(currentStateOfSimulation == -1) {
                 if (enableMovementMenuItem.isSelected())
                 {
-                    harmonyUtilities.triggerMovementForEachNode();
+                    harmonyUtilities.triggerMovementForEachNode(simulationSettings.debugMovementDecision);
                     nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
                 }
                 displayWW.canvas.redraw();
@@ -268,7 +269,7 @@ Set up the Gui Listeners
             //send out data for all nodes
             if (pubMenuItem.isSelected())
             {
-                harmonyUtilities.publishDataForEachNode();
+                harmonyUtilities.publishDataForEachNode(simulationSettings.debugDataListener);
             }
             //////////////////////////////////////////////
         };

@@ -60,10 +60,10 @@ public class HarmonyUtilities
         return String.join("\n", nodesWithTheirCurrentPositions);
     }
 
-    public void publishDataForEachNode() {
+    public void publishDataForEachNode(boolean debugEnabled) {
         for(NodeData currentNode: nodes) {
             pubCounter++;
-            publishData.HarmonyPublish(currentNode);
+            publishData.HarmonyPublish(currentNode, debugEnabled);
         }
         System.out.println("published");
     }
@@ -99,7 +99,7 @@ public class HarmonyUtilities
         }
     }
 
-    public void triggerMovementForEachNode() {
+    public void triggerMovementForEachNode(boolean debugEnabled) {
         movementCounter++;
         for(NodeData currentNode: nodes) {
             String decision = "Move Raspberry Ck";
@@ -131,7 +131,7 @@ public class HarmonyUtilities
                     }
                 }
             }
-            HarmonyMovement.makeDecision(currentNode, decision);
+            HarmonyMovement.makeDecision(currentNode, decision, debugEnabled);
         }
     }
 

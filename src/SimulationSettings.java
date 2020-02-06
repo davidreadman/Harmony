@@ -10,6 +10,9 @@ public class SimulationSettings {
     public boolean publishDDSMessages;
     public boolean sendNodeInformation;
     public boolean sendMetrics;
+    public boolean debugMovementDecision;
+    public boolean debugTacticalSymbolGeneration;
+    public boolean debugDataListener;
 
     public SimulationSettings() {
         startSimulation = true;
@@ -21,6 +24,9 @@ public class SimulationSettings {
         publishDDSMessages = false;
         sendNodeInformation = false;
         sendMetrics = false;
+        debugMovementDecision = false;
+        debugTacticalSymbolGeneration = false;
+        debugDataListener = false;
     }
 
     public void setUpDuration(String durationString) {

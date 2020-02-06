@@ -19,15 +19,16 @@ public class HarmonyDataListener extends DataReaderAdapter<PositionReportMessage
 
 
     boolean closed = false;
+    boolean debugEnabled;
     GuardCondition guardCond = null;
 
     DDSPositionMessage dDSPositionMessage;
 
-
-    public HarmonyDataListener(GuardCondition myGC, DDSPositionMessage dDSPositionMessage)
+    public HarmonyDataListener(GuardCondition myGC, DDSPositionMessage dDSPositionMessage, boolean debugEnabled)
     {
         guardCond = myGC;
         this.dDSPositionMessage = dDSPositionMessage;
+        this.debugEnabled = debugEnabled;
     }
 
     @Override
@@ -46,7 +47,8 @@ public class HarmonyDataListener extends DataReaderAdapter<PositionReportMessage
         boolean hasValidData = false;
         if (samples.size() > 0)
         {
-            System.out.println("=== [ListenerDataListener.on_data_available] - msgList.length : " + samples.size());
+            if(debugEnabled)
+                System.out.println("=== [ListenerDataListener.on_data_available] - msgList.length : " + samples.size());
             String tempMessage ="";
             for (Sample<PositionReportMessage> sample : samples)
             {
@@ -54,10 +56,14 @@ public class HarmonyDataListener extends DataReaderAdapter<PositionReportMessage
                 if (msg != null)
                 {
                     hasValidData = true;
-                    System.out.println("    --- message received ---");
-                    System.out.println("    userID  : " + msg.header.entityName);
-                    System.out.println("    latitude : \"" + msg.latitude + "\"");
-                    System.out.println("    longitude : \"" + msg.longitude + "\"");
+                    if(debugEnabled)
+                    {
+                        System.out.println("    --- message received ---");
+                        System.out.println("    userID  : " + msg.header.entityName);
+                        System.out.println("    latitude : \"" + msg.latitude + "\"");
+                        System.out.println("    longitude : \"" + msg.longitude + "\"");
+
+                    }
                     tempMessage = String.format("%s: (%f,%f)",msg.header.entityName, msg.latitude, msg.longitude);
                     //tempMessage = (msg.header.entityName+msg.latitude + msg.longitude );
                 }
@@ -70,7 +76,7 @@ public class HarmonyDataListener extends DataReaderAdapter<PositionReportMessage
 
                 dDSPositionMessage.setDDSPositionMessage(tempMessage);
 
-            } else
+            } else if(debugEnabled)
             {
                 System.out.println("=== [ListenerDataListener.on_data_available] ===> hasValidData is false!");
             }

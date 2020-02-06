@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Properties;
 
 
@@ -43,10 +42,8 @@ public class ParseProperties
 				throw new FileNotFoundException("property file '" +propFileName + " not found");
 
 			}
-			Date time = new Date (System.currentTimeMillis());
 			//get the number of nodes defined in the properties file
 			int NumberOfNodes = Integer.parseInt(prop.getProperty("Nodes"));
-			System.out.println("number of nodes: " + NumberOfNodes);
 			//create an array to hold these nodes
 			NodeData[] theseNodes = new NodeData[NumberOfNodes];
 			//loop through the number of nodes to fill array
@@ -65,7 +62,6 @@ public class ParseProperties
 				theseNodes[i].operationalSpeedInKmH =  Double.parseDouble(prop.getProperty("Node"+(i+1)+"OperationalSpeed"));
 				theseNodes[i].maximumSpeedInKmH = Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed"));
 			}
-			System.out.println(theseNodes[0].NodeUUID);
 			return new ArrayList<>(Arrays.asList(theseNodes));
 		}
 		catch (Exception e)
@@ -74,7 +70,7 @@ public class ParseProperties
 			//because it has to have a return
 			NodeData[] tempArray = new NodeData[1];
 			
-			return new ArrayList<NodeData>(Arrays.asList(tempArray));
+			return new ArrayList<>(Arrays.asList(tempArray));
 		
 		}
 		finally
@@ -130,6 +126,15 @@ public class ParseProperties
 			}
 			if(prop.containsKey("sendMetrics")) {
 				simulationSettings.sendMetrics = prop.getProperty("sendMetrics").toLowerCase().equals("yes");
+			}
+			if(prop.containsKey("debugMovementDecision")) {
+				simulationSettings.debugMovementDecision = prop.getProperty("debugMovementDecision").toLowerCase().equals("yes");
+			}
+			if(prop.containsKey("debugTacticalSymbolGeneration")) {
+				simulationSettings.debugTacticalSymbolGeneration = prop.getProperty("debugTacticalSymbolGeneration").toLowerCase().equals("yes");
+			}
+			if(prop.containsKey("debugDataListener")) {
+				simulationSettings.debugDataListener = prop.getProperty("debugDataListener").toLowerCase().equals("yes");
 			}
 		}
 		catch(Exception e) {
