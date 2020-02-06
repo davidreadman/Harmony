@@ -60,10 +60,10 @@ public class HarmonyUtilities
         return String.join("\n", nodesWithTheirCurrentPositions);
     }
 
-    public void publishDataForEachNode() {
+    public void publishDataForEachNode(boolean debugEnabled) {
         for(NodeData currentNode: nodes) {
             pubCounter++;
-            publishData.HarmonyPublish(currentNode);
+            publishData.HarmonyPublish(currentNode, debugEnabled);
         }
         System.out.println("published");
     }

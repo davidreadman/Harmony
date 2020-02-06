@@ -30,7 +30,7 @@ public class HarmonyDataPublisher
     {
 
     }
-    void HarmonyPublish(NodeData thisNodeData)
+    void HarmonyPublish(NodeData thisNodeData, boolean debugEnabled)
     {
         try
         {
@@ -68,8 +68,8 @@ public class HarmonyDataPublisher
 
 
 
-
-            System.out.println("publishing node "+thisNodeData.NodeUUID);
+            if(debugEnabled)
+                System.out.println("publishing node "+thisNodeData.NodeUUID);
 
             positionReportMessage.header.entityName = thisNodeData.NodeUUID;
             positionReportMessage.latitude = thisNodeData.currentLocation.asDegreesArray()[0];
@@ -90,7 +90,8 @@ public class HarmonyDataPublisher
             participant.close();
         } catch (Exception e)
         {
-            System.out.println("Error occured: " + e.getMessage());
+            if(debugEnabled)
+                System.out.println("Error occured: " + e.getMessage());
             e.printStackTrace();
         }
     }

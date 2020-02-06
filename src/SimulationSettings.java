@@ -12,6 +12,7 @@ public class SimulationSettings {
     public boolean sendMetrics;
     public boolean debugMovementDecision;
     public boolean debugTacticalSymbolGeneration;
+    public boolean debugDataListener;
 
     public SimulationSettings() {
         startSimulation = true;
@@ -25,6 +26,7 @@ public class SimulationSettings {
         sendMetrics = false;
         debugMovementDecision = false;
         debugTacticalSymbolGeneration = false;
+        debugDataListener = false;
     }
 
     public void setUpDuration(String durationString) {
