@@ -3,8 +3,6 @@ import gov.nasa.worldwind.Configuration;
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
-import gov.nasa.worldwind.event.SelectEvent;
-import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.globes.EarthFlat;
 import gov.nasa.worldwind.layers.Layer;
@@ -14,7 +12,6 @@ import gov.nasa.worldwind.symbology.BasicTacticalSymbolAttributes;
 import gov.nasa.worldwind.symbology.TacticalSymbol;
 import gov.nasa.worldwind.symbology.TacticalSymbolAttributes;
 import gov.nasa.worldwind.symbology.milstd2525.MilStd2525TacticalSymbol;
-import gov.nasa.worldwind.util.BasicDragger;
 import gov.nasa.worldwind.util.WWUtil;
 
 import javax.swing.*;
@@ -27,12 +24,11 @@ The DisplayWW Class is used to control and update the WorldWind Canvas, a
 class DisplayWW extends JPanel
 {
     WorldWindowGLCanvas canvas;
-    Position defaultPosition = Position.fromDegrees(-22.509187, 150.096047, 1);
     Position rCPosition = Position.fromDegrees(-22.71220, 150.40076, 1);
 
 
 
-    public DisplayWW(ArrayList<NodeData> nodeData)
+    public DisplayWW(ArrayList<NodeData> nodeData, boolean debugEnabled)
     {
         //set up default configurations for Shoalwater bay
         configure();
@@ -55,14 +51,17 @@ class DisplayWW extends JPanel
         RenderableLayer symbolLayer = new RenderableLayer();
         symbolLayer.setName("symbolLayer");
         int NumberOfNodes = nodeData.size();
-        System.out.println("number of nodes: " + nodeData.size());
+
+        if(debugEnabled)
+            System.out.println("number of nodes: " + nodeData.size());
+
         for (int i = 0; i < NumberOfNodes; i++)
         {
-            System.out.println("symbol: " + nodeData.get(i).symbol);
-            //pass in the node, have the node updated with the tactical symbol
             symbolLayer = addSymbol(symbolLayer,nodeData.get(i));
-            //check if identifier is updated
-            System.out.println("symbol id: " + nodeData.get(i).symbolIdentifier);
+            if(debugEnabled) {
+                System.out.println("symbol: " + nodeData.get(i).symbol);
+                System.out.println("symbol id: " + nodeData.get(i).symbolIdentifier);
+            }
         }
         //////////////////////////////////////
 
@@ -71,7 +70,9 @@ class DisplayWW extends JPanel
 
         /////////////////////////////////////////////
         //load the symbolLayer into the canvas
-        System.out.println("symbol id: " + symbolLayer);
+        if(debugEnabled)
+            System.out.println("symbol id: " + symbolLayer);
+
         canvas.getModel().getLayers().add(symbolLayer);
 
         RenderableLayer shapesLayer = new RenderableLayer();
@@ -89,7 +90,7 @@ class DisplayWW extends JPanel
         Position pointA = nodeData.get(0).currentLocation;
         Position pointB = nodeData.get(1).currentLocation;
         Path path = new Path(pointA,pointB);
-         linesLayer.addRenderable(path);
+        linesLayer.addRenderable(path);
         canvas.getModel().getLayers().add(linesLayer);
 
 

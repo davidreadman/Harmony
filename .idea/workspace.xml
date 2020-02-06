@@ -46,18 +46,6 @@
       <recent name="C:\Users\rohit.gopalan\Documents\Harmony\out\artifacts\Harmony_jar" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
   <component name="RunManager">
     <configuration name="Harmony" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Harmony" />
@@ -115,22 +103,22 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1500" y="456" key="FileChooserDialogImpl/0.0.3440.1400@0.0.3440.1400" timestamp="1580940734234" />
-    <state width="3419" height="403" key="GridCell.Tab.0.bottom" timestamp="1580946262313">
+    <state width="3419" height="403" key="GridCell.Tab.0.bottom" timestamp="1580951056193">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="3419" height="403" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1580946262313" />
-    <state width="3419" height="403" key="GridCell.Tab.0.center" timestamp="1580946262313">
+    <state width="3419" height="403" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1580951056193" />
+    <state width="3419" height="403" key="GridCell.Tab.0.center" timestamp="1580951056193">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="3419" height="403" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1580946262313" />
-    <state width="3419" height="403" key="GridCell.Tab.0.left" timestamp="1580946262313">
+    <state width="3419" height="403" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1580951056193" />
+    <state width="3419" height="403" key="GridCell.Tab.0.left" timestamp="1580951056193">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="3419" height="403" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1580946262313" />
-    <state width="3419" height="403" key="GridCell.Tab.0.right" timestamp="1580946262313">
+    <state width="3419" height="403" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1580951056193" />
+    <state width="3419" height="403" key="GridCell.Tab.0.right" timestamp="1580951056193">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="3419" height="403" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1580946262313" />
+    <state width="3419" height="403" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1580951056193" />
     <state width="3419" height="492" key="GridCell.Tab.1.bottom" timestamp="1580431560787">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
@@ -161,15 +149,6 @@
     <state x="1383" y="315" width="672" height="678" key="search.everywhere.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1576720549992" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ParseProperties.java</url>
-          <line>31</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="((HashMap)((RenderableLayer)symbolLayer).avList).entrySet().toArray()[1]" custom="gov.nasa.worldwind.layers.RenderableLayer,java.util.HashMap" />

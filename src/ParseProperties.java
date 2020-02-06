@@ -131,6 +131,13 @@ public class ParseProperties
 			if(prop.containsKey("sendMetrics")) {
 				simulationSettings.sendMetrics = prop.getProperty("sendMetrics").toLowerCase().equals("yes");
 			}
+			if(prop.containsKey("debugMovementDecision")) {
+				simulationSettings.debugMovementDecision = prop.getProperty("debugMovementDecision").toLowerCase().equals("yes");
+			}
+			if(prop.containsKey("debugTacticalSymbolGeneration")) {
+				simulationSettings.debugTacticalSymbolGeneration = prop.getProperty("debugTacticalSymbolGeneration").toLowerCase().equals("yes");
+			}
+
 		}
 		catch(Exception e) {
 			System.out.println("Exception: " + e);

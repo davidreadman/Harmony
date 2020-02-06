@@ -30,7 +30,7 @@ public class HarmonyMovement
      * @param decision
      * @return
      */
-    public static Position makeDecision(NodeData currentNode, String decision)
+    public static Position makeDecision(NodeData currentNode, String decision, boolean debugEnabled)
     {
          /*future work: use the current direction of movement as the initialiser for bearing so the default faces same
          direction on break(do nothing)
@@ -98,7 +98,9 @@ public class HarmonyMovement
         else {
             nextPosition = currentNode.currentLocation;
         }
-        System.out.println(String.format("Decision taken by %s: %s", currentNode.NodeUUID, decision));
+        if(debugEnabled)
+            System.out.println(String.format("Decision taken by %s: %s", currentNode.NodeUUID, decision));
+
         currentNode.currentDecision = decision;
         return (nextPosition);
     }

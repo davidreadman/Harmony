@@ -91,7 +91,7 @@ public class JFrameGuiActions extends JFrame
         // Add the World Windows to the card panel.
 
         /*displayWW is set up as a JPanel */
-        this.displayWW = new DisplayWW(nodeData);
+        this.displayWW = new DisplayWW(nodeData, simulationSettings.debugTacticalSymbolGeneration);
         /*add this panel to the cardpanel*/
         cardPanel.add(displayWW, "World Wind");
         /* add the panel to the frame */
@@ -217,7 +217,7 @@ Set up the Gui Listeners
             if(currentStateOfSimulation == -1) {
                 if (enableMovementMenuItem.isSelected())
                 {
-                    harmonyUtilities.triggerMovementForEachNode();
+                    harmonyUtilities.triggerMovementForEachNode(simulationSettings.debugMovementDecision);
                     nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
                 }
                 displayWW.canvas.redraw();
