@@ -71,7 +71,7 @@ public class JFrameGuiActions extends JFrame
         new HarmonyDataSubscriber(null, dDSPositionMessage);
 
         /* set up default UI fonts */
-        setUIFont(new javax.swing.plaf.FontUIResource("Serif", Font.PLAIN, 30));
+        setUIFont(new javax.swing.plaf.FontUIResource("Serif", Font.PLAIN, 40));
         this.setTitle("Harmony");
         setDefaultLookAndFeelDecorated(true);
 
@@ -412,16 +412,30 @@ Set up the Gui Listeners
         JLabel nodeLocationLabel = new JLabel("Node Locations");
         nodeLocationLabel.setHorizontalAlignment(SwingConstants.CENTER);
         nodePositionsTextArea.setLineWrap(true);
-
+        nodePositionsTextArea.setFont(new javax.swing.plaf.FontUIResource("Serif", Font.PLAIN, 25));
         this.nodeLocPanel = new JLayeredPane();
-        nodeLocPanel.setLayout(new GridLayout(2, 1));
-        nodeLocPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        nodeLocPanel.add(nodeLocationLabel);
+        nodeLocPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
+       // nodeLocPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        gbc.gridx = 0;
+        gbc.gridy =0;
+        gbc.gridheight =1;
+       gbc.anchor = GridBagConstraints.PAGE_START;
+        gbc.weighty=1;
+        nodeLocPanel.add(nodeLocationLabel,gbc);
         nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
 
-        nodeLocPanel.add(nodePositionsTextArea);
         nodeLocPanel.setVisible(isVisible);
+        gbc.ipady = 950;
+        gbc.gridx = 0;
+        gbc.gridy =1;
+        gbc.gridheight =40;
+        gbc.weighty=0;
+        //Button button = new Button();
+        //nodeLocPanel.add(button,gbc);
+        nodeLocPanel.add(nodePositionsTextArea,gbc);
     }
 
 
