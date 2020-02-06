@@ -170,7 +170,7 @@ public class HarmonyUtilities
     //placeholder for 'measure of goodness based on the number of nodes within given distance of each other
     public int calculateNumberOfNets(NodeData nodes)
     {
-        
+
         return 0;
     }
 }
