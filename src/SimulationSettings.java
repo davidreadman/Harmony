@@ -16,7 +16,7 @@ public class SimulationSettings {
         durationString = "";
         simulatonDuration = null;
         enableLogging = false;
-        show2525B = false;
+        show2525B = true;
         showNodeLocations = false;
         publishDDSMessages = false;
         sendNodeInformation = false;

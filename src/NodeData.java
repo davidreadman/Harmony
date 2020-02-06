@@ -17,6 +17,9 @@ public class NodeData
      Position currentLocation,previousLocation;
      String nodeType;
      String nodeIFF;
+     String nodeHQ;
+     String nodeLevel;
+     String nodeFunction;
      String symbol;
      TacticalSymbol symbolIdentifier;
      double operationalSpeedInKmH;

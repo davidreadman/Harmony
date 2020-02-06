@@ -39,10 +39,14 @@ public class JFrameGuiActions extends JFrame
     JRadioButtonMenuItem toggle2525B, toggleNodeLocPanel;
     NodeData selectedNode;
     //declared the JPanel components because they are shared between dragger and 2525Bpanel
-    JComboBox<String> iFFList;
+    JComboBox<String> iFFList,hQList,levelList,functionList;
     JComboBox<String> nodeList;
     JLabel SymbolString;
     String[] iFFStrings = {"FRIEND", "HOSTILE", "NEUTRAL"};
+    String[] hQStrings = {"Not","HQ","TFHQ"};
+    String[] levelStrings = {"Null","Team","Squad","Section","Platoon","Company","Battalion","Regiment","Brigade"};
+    String[] functionStrings={"Null","Air Defence","Armor","AntiArmor","Aviation","Infantry","Engineer","Field Artillery",
+            "Recon","Missile","Internal Security Forces"};
     java.util.List<String> iffStringsList = new ArrayList<>(Arrays.asList(iFFStrings));
     JTextArea nodePositionsTextArea;
     String durationStringAsSetByTheUser = "";
@@ -445,6 +449,8 @@ Set up the Gui Listeners
         selectedNode = harmonyUtilities.nodes.get(0);
         /* set up the drop down lists*/
         char[] iFFChars = {'F', 'H', 'N'};
+        //http://www.mapsymbs.com/ms2525c.pdf pg 52
+        char[] hQChars = {'-', 'A', 'B'};
         StringBuilder MilSymString = new StringBuilder(selectedNode.symbolIdentifier.getIdentifier());
 
         JLabel nodeLabel = new JLabel("Node");
@@ -456,6 +462,14 @@ Set up the Gui Listeners
         NodeUUIDText = new JLabel(selectedNode.NodeUUID);
         JLabel affiliationLabel = new JLabel("Affiliation");
         affiliationLabel.setFont(labelFont);
+        //table A-II from Mil-std-2525C Table A-II modifier codes
+        //HQ, Level
+        JLabel typeLabel = new JLabel("Function");
+        typeLabel.setFont(labelFont);
+        JLabel hQLabel = new JLabel("HQ");
+        hQLabel.setFont(labelFont);
+        JLabel levelLabel = new JLabel("Level");
+        levelLabel.setFont(labelFont);
         JLabel stringLabel = new JLabel("String");
         stringLabel.setFont(labelFont);
         JLabel cloneLabel = new JLabel("Clone");
@@ -473,26 +487,41 @@ Set up the Gui Listeners
             nodeNames[i] = harmonyUtilities.nodes.get(i).NodeUUID;
         }
 
-        //Create the combo box, select item at index 4.
-        //Indices start at 0, so 4 specifies the pig.
+
         iFFList = new JComboBox<>(iFFStrings);
+        hQList = new JComboBox<>(hQStrings);
+        levelList = new JComboBox<>(levelStrings);
+        functionList = new JComboBox<>(functionStrings);
+        //set up lists here
+
         nodeList = new JComboBox<>(nodeNames);
+
         JButton cloneButton = new JButton("clone");
+
         iFFList.setSelectedIndex(0);
+        hQList.setSelectedIndex(0);
+        levelList.setSelectedIndex(0);
+        functionList.setSelectedIndex(0);
         nodeList.setSelectedIndex(0);
 
         //buttonA.setBackground(new Color(0,0,0,200));
         //buttonA.setOpaque(true);
-        this.panel2525B = new JLayeredPane();
-        panel2525B.setLayout(new GridLayout(2, 3));
+        panel2525B = new JLayeredPane();
+        panel2525B.setLayout(new GridLayout(3, 3));
         panel2525B.setBorder(new EmptyBorder(10, 10, 10, 10));
         panel2525B.add(nodeLabel);
         panel2525B.add(affiliationLabel);
+        panel2525B.add(hQLabel);
+        panel2525B.add(levelLabel);
+        panel2525B.add(typeLabel);
         panel2525B.add(stringLabel);
         panel2525B.add(cloneLabel);
         //panel2525B.add(nodeList);
         panel2525B.add(NodeUUIDText);
         panel2525B.add(iFFList);
+        panel2525B.add(hQList);
+        panel2525B.add(levelList);
+        panel2525B.add(functionList);
         panel2525B.add(SymbolString);
         panel2525B.add(cloneButton);
 /*using popupmenu listener instead of actionlistener because we modify the ifflist value in the draggable
@@ -557,6 +586,126 @@ used the invisible because the selection of new dropdown is invoked at this poin
 
             }
 
+        });
+        /*Positions 11 and 12, symbol modifier indicator, identify indicators present on the symbol
+such as echelon, feint/dummy, installation, task force, headquarters staff, and equipment mobility.
+Table A-II contains the specific values used in this field.
+*/
+
+        hQList.addPopupMenuListener(new PopupMenuListener()
+        {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
+            {
+            // MilSymString is a string constructed from the currently selected node symbol
+                //the combobox for iFFList has been activated, so first set the char in the stringbuilder
+               MilSymString.setCharAt(10, hQChars[hQList.getSelectedIndex()]);
+                //this sets the stringbuilder output to test functionality
+                SymbolString.setText(MilSymString.toString());
+                //set the node affiliation based on the selected index from the iFFList
+                selectedNode.nodeHQ = hQStrings[hQList.getSelectedIndex()];
+                //need to set the string in the node to the new value
+                selectedNode.symbol = MilSymString.toString();
+                selectedNode.nodeHQ = hQStrings[hQList.getSelectedIndex()];
+                //need to update the tactical symbol to this
+                //selectedNode.symbolIdentifier is the symbol object
+                //selectedNode.currentLocation is the location
+                //remove this symbol from the renderable layer
+                //https://worldwind.arc.nasa.gov/java/latest/javadoc/gov/nasa/worldwind/Model.html getModel
+                //getlayers returns a list of layers in the model
+                Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
+                //create a new symbol for the changed 2525B string
+                TacticalSymbol replacementSymbol = displayWW.setupSymbol(selectedNode.symbol, selectedNode.currentLocation);
+                //and load this into the node as a replacement for the old symbol and symbolidentifier
+                // bad - selectedNode.symbolIdentifier = replacementSymbol;
+                //we have this layer stored as a layer, we can remove this entire layer from the model layers
+                displayWW.canvas.getModel().getLayers().remove(symbolLayer);
+                // need to create a new renderable layer because the symbollayer is converted to a standard layer when added to the model
+                RenderableLayer replaceLayer;
+                replaceLayer = (RenderableLayer) symbolLayer;
+                replaceLayer.setName("symbolLayer");
+                replaceLayer.removeRenderable(selectedNode.symbolIdentifier);
+                selectedNode.symbolIdentifier = replacementSymbol;
+                replaceLayer.addRenderable(replacementSymbol);
+                displayWW.canvas.getModel().getLayers().add(replaceLayer);
+                //so symbollayer can be removed and added
+                // is the symbolLayer the same in both instances? renderable and basic?
+
+                //symbolLayer does not appear to have a change item in symbol
+
+
+                //create a new symbol with the new string
+                //add this new symbol to the renderable layer
+                //replace the symbol in the node with this new symbol
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
+            {
+
+            }
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e)
+            {
+
+            }
+        });
+        levelList.addPopupMenuListener(new PopupMenuListener()
+        {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
+            {
+
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
+            {
+
+            }
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e)
+            {
+
+            }
+        });
+        functionList.addPopupMenuListener(new PopupMenuListener()
+        {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
+            {
+
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
+            {
+
+            }
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e)
+            {
+
+            }
+        });
+        iFFList.addPopupMenuListener(new PopupMenuListener()
+        {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
+            {
+
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
+            {
+
+            }
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e)
+            {
+
+            }
         });
         // panel2525B.setOpaque(true);
         panel2525B.setVisible(isVisible);
