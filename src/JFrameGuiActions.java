@@ -458,6 +458,8 @@ Set up the Gui Listeners
         affiliationLabel.setFont(labelFont);
         JLabel stringLabel = new JLabel("String");
         stringLabel.setFont(labelFont);
+        JLabel cloneLabel = new JLabel("Clone");
+        cloneLabel.setFont(labelFont);
         //load up MilSymString with existingstring (ie nodeData.symbol
         SymbolString = new JLabel(MilSymString.toString());
 
@@ -475,6 +477,7 @@ Set up the Gui Listeners
         //Indices start at 0, so 4 specifies the pig.
         iFFList = new JComboBox<>(iFFStrings);
         nodeList = new JComboBox<>(nodeNames);
+        JButton cloneButton = new JButton("clone");
         iFFList.setSelectedIndex(0);
         nodeList.setSelectedIndex(0);
 
@@ -486,10 +489,12 @@ Set up the Gui Listeners
         panel2525B.add(nodeLabel);
         panel2525B.add(affiliationLabel);
         panel2525B.add(stringLabel);
+        panel2525B.add(cloneLabel);
         //panel2525B.add(nodeList);
         panel2525B.add(NodeUUIDText);
         panel2525B.add(iFFList);
         panel2525B.add(SymbolString);
+        panel2525B.add(cloneButton);
 /*using popupmenu listener instead of actionlistener because we modify the ifflist value in the draggable
 and that invokes the actionlistener, if we do want to invoke the ifflist value as a listener then itemListener can be used
 used the invisible because the selection of new dropdown is invoked at this point
