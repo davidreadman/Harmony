@@ -167,4 +167,10 @@ public class HarmonyUtilities
             return -1;
         }
     }
+    //placeholder for 'measure of goodness based on the number of nodes within given distance of each other
+    public int calculateNumberOfNets(NodeData nodes)
+    {
+        
+        return 0;
+    }
 }
