@@ -23,7 +23,8 @@ public class JFrameGuiActions extends JFrame
     boolean simulationOver = false;
     HarmonyUtilities harmonyUtilities;
     boolean loggingFlag = false;
-    JLayeredPane panel2525B, nodeLocPanel;
+    JPanel nodeLocPanel;
+    JPanel panel2525B;
     JLabel NodeUUIDText;
     DisplayWW displayWW;
     JMenuBar menuBar;
@@ -418,26 +419,29 @@ Set up the Gui Listeners
         nodeLocationLabel.setHorizontalAlignment(SwingConstants.CENTER);
         nodePositionsTextArea.setLineWrap(true);
         nodePositionsTextArea.setFont(new javax.swing.plaf.FontUIResource("Serif", Font.PLAIN, 25));
-        this.nodeLocPanel = new JLayeredPane();
+        nodeLocPanel = new JPanel();
         nodeLocPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
        // nodeLocPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+
         gbc.gridx = 0;
         gbc.gridy =0;
-        gbc.gridheight =1;
+
        gbc.anchor = GridBagConstraints.PAGE_START;
-        gbc.weighty=1;
+
         nodeLocPanel.add(nodeLocationLabel,gbc);
         nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
 
         nodeLocPanel.setVisible(isVisible);
-        gbc.ipady = 950;
+        gbc.weighty = 1;
         gbc.gridx = 0;
         gbc.gridy =1;
-        gbc.gridheight =40;
-        gbc.weighty=0;
+       // gbc.anchor = GridBagConstraints.REMAINDER;
+       // gbc.gridheight =40;
+
         //Button button = new Button();
         //nodeLocPanel.add(button,gbc);
         nodeLocPanel.add(nodePositionsTextArea,gbc);
@@ -475,6 +479,8 @@ Set up the Gui Listeners
         stringLabel.setFont(labelFont);
         JLabel cloneLabel = new JLabel("Clone");
         cloneLabel.setFont(labelFont);
+        JLabel deleteLabel = new JLabel("Delete");
+        deleteLabel.setFont(labelFont);
         //load up MilSymString with existingstring (ie nodeData.symbol
         SymbolString = new JLabel(MilSymString.toString());
 
@@ -498,7 +504,7 @@ Set up the Gui Listeners
         nodeList = new JComboBox<>(nodeNames);
 
         JButton cloneButton = new JButton("clone");
-
+        JButton deleteButton = new JButton("delete");
         iFFList.setSelectedIndex(0);
         hQList.setSelectedIndex(0);
         levelList.setSelectedIndex(0);
@@ -507,24 +513,70 @@ Set up the Gui Listeners
 
         //buttonA.setBackground(new Color(0,0,0,200));
         //buttonA.setOpaque(true);
-        panel2525B = new JLayeredPane();
-        panel2525B.setLayout(new GridLayout(3, 3));
+        panel2525B = new JPanel();
+        panel2525B.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+
+
         panel2525B.setBorder(new EmptyBorder(10, 10, 10, 10));
-        panel2525B.add(nodeLabel);
-        panel2525B.add(affiliationLabel);
-        panel2525B.add(hQLabel);
-        panel2525B.add(levelLabel);
-        panel2525B.add(typeLabel);
-        panel2525B.add(stringLabel);
-        panel2525B.add(cloneLabel);
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 0;
+        panel2525B.add(nodeLabel,c);
+        c.gridx = 1;
+        c.gridy = 0;
+        panel2525B.add(affiliationLabel,c);
+        c.gridx = 2;
+        c.gridy = 0;
+        panel2525B.add(hQLabel,c);
+        c.gridx = 3;
+        c.gridy = 0;
+        panel2525B.add(levelLabel,c);
+        c.gridx = 0;
+        c.gridy = 1;
+        panel2525B.add(NodeUUIDText,c);
+        c.gridx = 1;
+        c.gridy = 1;
+        panel2525B.add(iFFList,c);
+        c.gridx = 2;
+        c.gridy = 1;
+        panel2525B.add(hQList,c);
+        c.gridx = 3;
+        c.gridy = 1;
+        panel2525B.add(levelList,c);
+        c.gridx = 0;
+        c.gridy = 2;
+        panel2525B.add(typeLabel,c);
+        c.gridx = 1;
+        c.gridy = 2;
+        c.gridwidth =3;
+        panel2525B.add(functionList,c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth =1;
+        panel2525B.add(stringLabel,c);
+        c.gridx = 1;
+        c.gridy = 3;
+        panel2525B.add(cloneLabel,c);
+        c.gridx = 2;
+        c.gridy = 3;
+
+        panel2525B.add(deleteLabel,c);
         //panel2525B.add(nodeList);
-        panel2525B.add(NodeUUIDText);
-        panel2525B.add(iFFList);
-        panel2525B.add(hQList);
-        panel2525B.add(levelList);
-        panel2525B.add(functionList);
-        panel2525B.add(SymbolString);
-        panel2525B.add(cloneButton);
+
+
+
+        c.gridx = 0;
+        c.gridy = 4;
+        panel2525B.add(SymbolString,c);
+        c.gridx = 1;
+        c.gridy = 4;
+        panel2525B.add(cloneButton,c);
+        c.gridx =2;
+        c.gridy = 4;
+        panel2525B.add(deleteButton,c);
 /*using popupmenu listener instead of actionlistener because we modify the ifflist value in the draggable
 and that invokes the actionlistener, if we do want to invoke the ifflist value as a listener then itemListener can be used
 used the invisible because the selection of new dropdown is invoked at this point

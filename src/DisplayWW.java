@@ -136,7 +136,7 @@ class DisplayWW extends JPanel
         // G*GPGPUY------- SFAPMFQM------A sfgaucvrm------
         // RenderableLayer symbolLayer = new RenderableLayer();
         TacticalSymbolAttributes attrs = new BasicTacticalSymbolAttributes();
-        attrs.setScale(0.75); // Make the symbol 75% its normal size.
+        attrs.setScale(0.7); // Make the symbol 75% its normal size.
         attrs.setOpacity(0.5); // Make the symbol 50% transparent.
         symname.setModifier("test",1);
         symname.setShowTextModifiers(true);
