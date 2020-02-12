@@ -43,14 +43,20 @@ public class JFrameGuiActions extends JFrame
     JComboBox<String> iFFList,hQList,levelList,functionList;
     JComboBox<String> nodeList;
     JLabel SymbolString;
-    String[] iFFStrings = {"FRIEND", "HOSTILE", "NEUTRAL"};
-    String[] hQStrings = {"Not","HQ","TFHQ"};
-    String[] levelStrings = {"Null","Team","Squad","Section","Platoon","Company","Battalion","Regiment","Brigade"};
-    String[] functionStrings={"Null","Air Defence","Armor","AntiArmor","Aviation","Infantry","Engineer","Field Artillery",
-            "Recon","Missile","Internal Security Forces"};
-    java.util.List<String> iffStringsList = new ArrayList<>(Arrays.asList(iFFStrings));
+    /* set up the combo box sets of strings for the 2525B selection*/
+    //http://www.mapsymbs.com/ms2525c.pdf
+
+   SymbolModifierData symbolModifierData = new SymbolModifierData();
+
+
+    java.util.List<String> levelIDStringsList = new ArrayList<>(Arrays.asList(symbolModifierData.levelIDStrings));
+    java.util.List<String> hQIDStringsList = new ArrayList<>(Arrays.asList(symbolModifierData.hQIDStrings));
+    java.util.List<String> functionIDStringsList = new ArrayList<>(Arrays.asList(symbolModifierData.functionIDStrings));
+    java.util.List<String> iffIDStringsList = new ArrayList<>(Arrays.asList(symbolModifierData.iFFIDStrings));
     JTextArea nodePositionsTextArea;
     String durationStringAsSetByTheUser = "";
+    StringBuilder MilSymString;
+    String substring;
 
     public JFrameGuiActions(HarmonyDataPublisher publishData, ArrayList<NodeData> nodeData, SimulationSettings simulationSettings)
     {
@@ -196,6 +202,7 @@ Set up the Gui Listeners
                             String selectedEvent = event.getEventAction();
                             switch(selectedEvent) {
                                 case SelectEvent.LEFT_CLICK:
+                                    MilSymString = new StringBuilder(selectedNode.symbolIdentifier.getIdentifier());
                                     selectedNode = currentNode;
                                     NodeUUIDText.setText(selectedNode.NodeUUID);
                                     //testing to see how to address the object
@@ -203,7 +210,19 @@ Set up the Gui Listeners
                                     SymbolString.setText(selectedNode.symbol);
 
                                     //identify the iff in the string, adjust the iff in the dropdown iFFList
-                                    iFFList.setSelectedIndex(iffStringsList.indexOf(selectedNode.nodeIFF));
+
+                                    substring = MilSymString.substring(1,2);
+                                    iFFList.setSelectedIndex(iffIDStringsList.indexOf(substring));
+
+                                    substring = MilSymString.substring(10,11);
+                                    hQList.setSelectedIndex(hQIDStringsList.indexOf(substring));
+                                    System.out.println("hQ: " + substring);
+                                    substring = MilSymString.substring(11,12);
+                                    levelList.setSelectedIndex(levelIDStringsList.indexOf(substring));
+                                    System.out.println("level: " + substring);
+                                    substring = MilSymString.substring(4,10);
+                                    functionList.setSelectedIndex(functionIDStringsList.indexOf(substring));
+                                    System.out.println("function: " + substring);
                                     break;
                                 case SelectEvent.DRAG:
                                     currentNode.currentLocation = currentNode.symbolIdentifier.getPosition();
@@ -453,10 +472,8 @@ Set up the Gui Listeners
         //set up a default node
         selectedNode = harmonyUtilities.nodes.get(0);
         /* set up the drop down lists*/
-        char[] iFFChars = {'F', 'H', 'N'};
-        //http://www.mapsymbs.com/ms2525c.pdf pg 52
-        char[] hQChars = {'-', 'A', 'B'};
-        StringBuilder MilSymString = new StringBuilder(selectedNode.symbolIdentifier.getIdentifier());
+
+         MilSymString = new StringBuilder(selectedNode.symbolIdentifier.getIdentifier());
 
         JLabel nodeLabel = new JLabel("Node");
         Font labelFont = nodeLabel.getFont();
@@ -495,20 +512,33 @@ Set up the Gui Listeners
         }
 
 
-        iFFList = new JComboBox<>(iFFStrings);
-        hQList = new JComboBox<>(hQStrings);
-        levelList = new JComboBox<>(levelStrings);
-        functionList = new JComboBox<>(functionStrings);
+        iFFList = new JComboBox<>(symbolModifierData.iFFStrings);
+        hQList = new JComboBox<>(symbolModifierData.hQStrings);
+        levelList = new JComboBox<>(symbolModifierData.levelStrings);
+        functionList = new JComboBox<>(symbolModifierData.functionStrings);
         //set up lists here
 
         nodeList = new JComboBox<>(nodeNames);
 
         JButton cloneButton = new JButton("clone");
         JButton deleteButton = new JButton("delete");
-        iFFList.setSelectedIndex(0);
-        hQList.setSelectedIndex(0);
-        levelList.setSelectedIndex(0);
-        functionList.setSelectedIndex(0);
+        //this part should set up the default index of the default node (node A)
+        //so the MILSymString should equal the selectedNode.symbol as it was constructed earlier.
+        //the setSelectedIndex will match
+        //the IFF is character 2 of the MILSymString
+         substring = MilSymString.substring(1,2);
+        iFFList.setSelectedIndex(iffIDStringsList.indexOf(substring));
+
+
+        substring = MilSymString.substring(10,11);
+        hQList.setSelectedIndex(hQIDStringsList.indexOf(substring));
+        System.out.println("hQ: " + substring);
+        substring = MilSymString.substring(11,12);
+        levelList.setSelectedIndex(levelIDStringsList.indexOf(substring));
+        System.out.println("level: " + substring);
+        substring = MilSymString.substring(4,10);
+        functionList.setSelectedIndex(functionIDStringsList.indexOf(substring));
+        System.out.println("function: " + substring);
         nodeList.setSelectedIndex(0);
 
         //buttonA.setBackground(new Color(0,0,0,200));
@@ -592,15 +622,17 @@ used the invisible because the selection of new dropdown is invoked at this poin
             @Override
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
             {
+
                 //the combobox for iFFList has been activated, so first set the char in the stringbuilder
-                MilSymString.setCharAt(1, iFFChars[iFFList.getSelectedIndex()]);
+
+                MilSymString.setCharAt(1, symbolModifierData.iFFChars[iFFList.getSelectedIndex()]);
                 //this sets the stringbuilder output to test functionality
                 SymbolString.setText(MilSymString.toString());
                 //set the node affiliation based on the selected index from the iFFList
-                selectedNode.nodeIFF = iFFStrings[iFFList.getSelectedIndex()];
+                selectedNode.nodeIFF = symbolModifierData.iFFStrings[iFFList.getSelectedIndex()];
                 //need to set the string in the node to the new value
                 selectedNode.symbol = MilSymString.toString();
-                selectedNode.nodeIFF = iFFStrings[iFFList.getSelectedIndex()];
+                selectedNode.nodeIFF = symbolModifierData.iFFStrings[iFFList.getSelectedIndex()];
                 //need to update the tactical symbol to this
                 //selectedNode.symbolIdentifier is the symbol object
                 //selectedNode.currentLocation is the location
@@ -650,30 +682,23 @@ Table A-II contains the specific values used in this field.
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e)
             {
-            // MilSymString is a string constructed from the currently selected node symbol
-                //the combobox for iFFList has been activated, so first set the char in the stringbuilder
-               MilSymString.setCharAt(10, hQChars[hQList.getSelectedIndex()]);
-                //this sets the stringbuilder output to test functionality
+                /*the layout and reasoning behind this popup is identical to the IIF popup */
+
+               MilSymString.setCharAt(10, symbolModifierData.hQChars[hQList.getSelectedIndex()]);
+
                 SymbolString.setText(MilSymString.toString());
-                //set the node affiliation based on the selected index from the iFFList
-                selectedNode.nodeHQ = hQStrings[hQList.getSelectedIndex()];
-                //need to set the string in the node to the new value
+
+                selectedNode.nodeHQ = symbolModifierData.hQStrings[hQList.getSelectedIndex()];
+
                 selectedNode.symbol = MilSymString.toString();
-                selectedNode.nodeHQ = hQStrings[hQList.getSelectedIndex()];
-                //need to update the tactical symbol to this
-                //selectedNode.symbolIdentifier is the symbol object
-                //selectedNode.currentLocation is the location
-                //remove this symbol from the renderable layer
-                //https://worldwind.arc.nasa.gov/java/latest/javadoc/gov/nasa/worldwind/Model.html getModel
-                //getlayers returns a list of layers in the model
+                selectedNode.nodeHQ = symbolModifierData.hQStrings[hQList.getSelectedIndex()];
+
                 Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
-                //create a new symbol for the changed 2525B string
+
                 TacticalSymbol replacementSymbol = displayWW.setupSymbol(selectedNode.symbol, selectedNode.currentLocation);
-                //and load this into the node as a replacement for the old symbol and symbolidentifier
-                // bad - selectedNode.symbolIdentifier = replacementSymbol;
-                //we have this layer stored as a layer, we can remove this entire layer from the model layers
+
                 displayWW.canvas.getModel().getLayers().remove(symbolLayer);
-                // need to create a new renderable layer because the symbollayer is converted to a standard layer when added to the model
+
                 RenderableLayer replaceLayer;
                 replaceLayer = (RenderableLayer) symbolLayer;
                 replaceLayer.setName("symbolLayer");
@@ -681,15 +706,7 @@ Table A-II contains the specific values used in this field.
                 selectedNode.symbolIdentifier = replacementSymbol;
                 replaceLayer.addRenderable(replacementSymbol);
                 displayWW.canvas.getModel().getLayers().add(replaceLayer);
-                //so symbollayer can be removed and added
-                // is the symbolLayer the same in both instances? renderable and basic?
 
-                //symbolLayer does not appear to have a change item in symbol
-
-
-                //create a new symbol with the new string
-                //add this new symbol to the renderable layer
-                //replace the symbol in the node with this new symbol
             }
 
             @Override
