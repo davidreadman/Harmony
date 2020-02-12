@@ -55,8 +55,9 @@ public class JFrameGuiActions extends JFrame
     java.util.List<String> iffIDStringsList = new ArrayList<>(Arrays.asList(symbolModifierData.iFFIDStrings));
     JTextArea nodePositionsTextArea;
     String durationStringAsSetByTheUser = "";
-    StringBuilder MilSymString;
+    String MilSymString;
     String substring;
+    String constructString;
 
     public JFrameGuiActions(HarmonyDataPublisher publishData, ArrayList<NodeData> nodeData, SimulationSettings simulationSettings)
     {
@@ -202,9 +203,9 @@ Set up the Gui Listeners
                             String selectedEvent = event.getEventAction();
                             switch(selectedEvent) {
                                 case SelectEvent.LEFT_CLICK:
-                                    MilSymString = new StringBuilder(selectedNode.symbolIdentifier.getIdentifier());
+                                    MilSymString = selectedNode.symbolIdentifier.getIdentifier();
                                     selectedNode = currentNode;
-                                    NodeUUIDText.setText(selectedNode.NodeUUID);
+
                                     //testing to see how to address the object
                                     //need to change the selected nodes drop down list at this point else all up to this are changed
                                     SymbolString.setText(selectedNode.symbol);
@@ -216,13 +217,16 @@ Set up the Gui Listeners
 
                                     substring = MilSymString.substring(10,11);
                                     hQList.setSelectedIndex(hQIDStringsList.indexOf(substring));
-                                    System.out.println("hQ: " + substring);
+                                    //System.out.println("hQ: " + substring);
                                     substring = MilSymString.substring(11,12);
                                     levelList.setSelectedIndex(levelIDStringsList.indexOf(substring));
-                                    System.out.println("level: " + substring);
+                                   // System.out.println("level: " + substring);
                                     substring = MilSymString.substring(4,10);
                                     functionList.setSelectedIndex(functionIDStringsList.indexOf(substring));
-                                    System.out.println("function: " + substring);
+                                  //  System.out.println("function: " + substring);
+                                    //still need to tell the symbolstring to update here'
+                                    System.out.println("IFF read: " + selectedNode.NodeUUID);
+
                                     break;
                                 case SelectEvent.DRAG:
                                     currentNode.currentLocation = currentNode.symbolIdentifier.getPosition();
@@ -473,7 +477,7 @@ Set up the Gui Listeners
         selectedNode = harmonyUtilities.nodes.get(0);
         /* set up the drop down lists*/
 
-         MilSymString = new StringBuilder(selectedNode.symbolIdentifier.getIdentifier());
+         MilSymString = selectedNode.symbolIdentifier.getIdentifier();
 
         JLabel nodeLabel = new JLabel("Node");
         Font labelFont = nodeLabel.getFont();
@@ -624,15 +628,34 @@ used the invisible because the selection of new dropdown is invoked at this poin
             {
 
                 //the combobox for iFFList has been activated, so first set the char in the stringbuilder
+             /*   substring = MilSymString.substring(1,2);
+                iFFList.setSelectedIndex(iffIDStringsList.indexOf(substring));
 
-                MilSymString.setCharAt(1, symbolModifierData.iFFChars[iFFList.getSelectedIndex()]);
+                substring = MilSymString.substring(10,11);
+                hQList.setSelectedIndex(hQIDStringsList.indexOf(substring));
+                System.out.println("hQ: " + substring);
+                substring = MilSymString.substring(11,12);
+                levelList.setSelectedIndex(levelIDStringsList.indexOf(substring));
+                System.out.println("level: " + substring);
+                substring = MilSymString.substring(4,10);
+                functionList.setSelectedIndex(functionIDStringsList.indexOf(substring));
+                System.out.println("function: " + substring);*/
+
+                /*construct a new string with the IFF string modified */
+                substring = symbolModifierData.iFFIDStrings[iFFList.getSelectedIndex()];
+                System.out.println("IFF string dropout: " + substring);
+                constructString = MilSymString.substring(0,1)+substring+MilSymString.substring(2,15);
+                MilSymString = constructString;
+                //System.out.println("MilString: " + MilSymString);
+                //System.out.println("Constructed String: " + constructString);
+
                 //this sets the stringbuilder output to test functionality
                 SymbolString.setText(MilSymString.toString());
                 //set the node affiliation based on the selected index from the iFFList
                 selectedNode.nodeIFF = symbolModifierData.iFFStrings[iFFList.getSelectedIndex()];
                 //need to set the string in the node to the new value
-                selectedNode.symbol = MilSymString.toString();
-                selectedNode.nodeIFF = symbolModifierData.iFFStrings[iFFList.getSelectedIndex()];
+                selectedNode.symbol = MilSymString;
+
                 //need to update the tactical symbol to this
                 //selectedNode.symbolIdentifier is the symbol object
                 //selectedNode.currentLocation is the location
@@ -662,7 +685,7 @@ used the invisible because the selection of new dropdown is invoked at this poin
 
                 //create a new symbol with the new string
                 //add this new symbol to the renderable layer
-                //replace the symbol in the node with this new symbol
+                //replace the symbol in the node with this new symbol*/
             }
 
             @Override
@@ -683,15 +706,20 @@ Table A-II contains the specific values used in this field.
             public void popupMenuWillBecomeVisible(PopupMenuEvent e)
             {
                 /*the layout and reasoning behind this popup is identical to the IIF popup */
+                substring = symbolModifierData.hQIDStrings[hQList.getSelectedIndex()];
 
-               MilSymString.setCharAt(10, symbolModifierData.hQChars[hQList.getSelectedIndex()]);
+                //Hq is at position 10,11
+                constructString = MilSymString.substring(0,10)+substring+MilSymString.substring(11,15);
+                MilSymString = constructString;
+                System.out.println("MilString: " + MilSymString+" "+ MilSymString.length());
+                System.out.println("Constructed String: " + constructString+" "+ constructString.length());
 
-                SymbolString.setText(MilSymString.toString());
+                //this sets the stringbuilder output to test functionality
+                SymbolString.setText(MilSymString);
 
-                selectedNode.nodeHQ = symbolModifierData.hQStrings[hQList.getSelectedIndex()];
 
-                selectedNode.symbol = MilSymString.toString();
-                selectedNode.nodeHQ = symbolModifierData.hQStrings[hQList.getSelectedIndex()];
+                //need to set the string in the node to the new value
+                selectedNode.symbol = MilSymString;
 
                 Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
 
