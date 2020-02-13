@@ -205,6 +205,7 @@ Set up the Gui Listeners
                                 case SelectEvent.LEFT_CLICK:
                                     MilSymString = selectedNode.symbolIdentifier.getIdentifier();
                                     selectedNode = currentNode;
+                                    NodeUUIDText.setText(selectedNode.NodeUUID);
 
                                     //testing to see how to address the object
                                     //need to change the selected nodes drop down list at this point else all up to this are changed
