@@ -203,8 +203,9 @@ Set up the Gui Listeners
                             String selectedEvent = event.getEventAction();
                             switch(selectedEvent) {
                                 case SelectEvent.LEFT_CLICK:
-                                    MilSymString = selectedNode.symbolIdentifier.getIdentifier();
                                     selectedNode = currentNode;
+                                    MilSymString = selectedNode.symbolIdentifier.getIdentifier();
+
                                     NodeUUIDText.setText(selectedNode.NodeUUID);
 
                                     //testing to see how to address the object
@@ -214,10 +215,13 @@ Set up the Gui Listeners
                                     //identify the iff in the string, adjust the iff in the dropdown iFFList
 
                                     substring = MilSymString.substring(1,2);
+
+
                                     iFFList.setSelectedIndex(iffIDStringsList.indexOf(substring));
 
                                     substring = MilSymString.substring(10,11);
                                     hQList.setSelectedIndex(hQIDStringsList.indexOf(substring));
+
                                     //System.out.println("hQ: " + substring);
                                     substring = MilSymString.substring(11,12);
                                     levelList.setSelectedIndex(levelIDStringsList.indexOf(substring));
@@ -226,7 +230,7 @@ Set up the Gui Listeners
                                     functionList.setSelectedIndex(functionIDStringsList.indexOf(substring));
                                   //  System.out.println("function: " + substring);
                                     //still need to tell the symbolstring to update here'
-                                    System.out.println("IFF read: " + selectedNode.NodeUUID);
+
 
                                     break;
                                 case SelectEvent.DRAG:
@@ -612,10 +616,12 @@ Set up the Gui Listeners
         c.gridx =2;
         c.gridy = 4;
         panel2525B.add(deleteButton,c);
+
 /*using popupmenu listener instead of actionlistener because we modify the ifflist value in the draggable
 and that invokes the actionlistener, if we do want to invoke the ifflist value as a listener then itemListener can be used
 used the invisible because the selection of new dropdown is invoked at this point
  */
+
         iFFList.addPopupMenuListener(new PopupMenuListener()
         {
             @Override
@@ -706,6 +712,13 @@ Table A-II contains the specific values used in this field.
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e)
             {
+
+
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
+            {
                 /*the layout and reasoning behind this popup is identical to the IIF popup */
                 substring = symbolModifierData.hQIDStrings[hQList.getSelectedIndex()];
 
@@ -735,13 +748,6 @@ Table A-II contains the specific values used in this field.
                 selectedNode.symbolIdentifier = replacementSymbol;
                 replaceLayer.addRenderable(replacementSymbol);
                 displayWW.canvas.getModel().getLayers().add(replaceLayer);
-
-            }
-
-            @Override
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
-            {
-
             }
             @Override
             public void popupMenuCanceled(PopupMenuEvent e)
@@ -760,7 +766,29 @@ Table A-II contains the specific values used in this field.
             @Override
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
             {
+                substring = symbolModifierData.hQIDStrings[hQList.getSelectedIndex()];
 
+                //Hq is at position 10,11
+                constructString = MilSymString.substring(0,10)+substring+MilSymString.substring(11,15);
+                MilSymString = constructString;
+                System.out.println("MilString: " + MilSymString+" "+ MilSymString.length());
+                System.out.println("Constructed String: " + constructString+" "+ constructString.length());
+
+                //this sets the stringbuilder output to test functionality
+                SymbolString.setText(MilSymString);
+
+                //need to set the string in the node to the new value
+                selectedNode.symbol = MilSymString;
+                Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
+                TacticalSymbol replacementSymbol = displayWW.setupSymbol(selectedNode.symbol, selectedNode.currentLocation);
+                displayWW.canvas.getModel().getLayers().remove(symbolLayer);
+                RenderableLayer replaceLayer;
+                replaceLayer = (RenderableLayer) symbolLayer;
+                replaceLayer.setName("symbolLayer");
+                replaceLayer.removeRenderable(selectedNode.symbolIdentifier);
+                selectedNode.symbolIdentifier = replacementSymbol;
+                replaceLayer.addRenderable(replacementSymbol);
+                displayWW.canvas.getModel().getLayers().add(replaceLayer);
             }
             @Override
             public void popupMenuCanceled(PopupMenuEvent e)
@@ -779,7 +807,34 @@ Table A-II contains the specific values used in this field.
             @Override
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
             {
+                substring = symbolModifierData.hQIDStrings[hQList.getSelectedIndex()];
 
+                //Hq is at position 10,11
+                constructString = MilSymString.substring(0,10)+substring+MilSymString.substring(11,15);
+                MilSymString = constructString;
+                System.out.println("MilString: " + MilSymString+" "+ MilSymString.length());
+                System.out.println("Constructed String: " + constructString+" "+ constructString.length());
+
+                //this sets the stringbuilder output to test functionality
+                SymbolString.setText(MilSymString);
+
+
+                //need to set the string in the node to the new value
+                selectedNode.symbol = MilSymString;
+
+                Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
+
+                TacticalSymbol replacementSymbol = displayWW.setupSymbol(selectedNode.symbol, selectedNode.currentLocation);
+
+                displayWW.canvas.getModel().getLayers().remove(symbolLayer);
+
+                RenderableLayer replaceLayer;
+                replaceLayer = (RenderableLayer) symbolLayer;
+                replaceLayer.setName("symbolLayer");
+                replaceLayer.removeRenderable(selectedNode.symbolIdentifier);
+                selectedNode.symbolIdentifier = replacementSymbol;
+                replaceLayer.addRenderable(replacementSymbol);
+                displayWW.canvas.getModel().getLayers().add(replaceLayer);
             }
             @Override
             public void popupMenuCanceled(PopupMenuEvent e)
