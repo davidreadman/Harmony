@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 //note: distanceInRadians = distanceInMeters / globe.getRadius();
 public class HarmonyMovement
 {
-    private static final Position RASPBERRY_CK = Position.fromDegrees(-22.71220, 150.40076, 1);
+    public static final Position RASPBERRY_CK = Position.fromDegrees(-22.71220, 150.40076, 1);
     private static final int NORTH = 0;
     private static final int EAST = 90;
     private static final int SOUTH = 180;
@@ -41,11 +41,11 @@ public class HarmonyMovement
         //find out what direction raspberry ck is in
         switch (decision)
         {
-            case "Move Raspberry Ck":
-                bearingInDegrees = Position.greatCircleAzimuth(currentNode.currentLocation, RASPBERRY_CK).degrees;
-                double currentDistanceFromRaspberryCreek = distanceToTargetInMeters(currentNode.currentLocation, RASPBERRY_CK);
-                if(currentDistanceFromRaspberryCreek < currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR) {
-                    distanceToTravelInMetres = currentDistanceFromRaspberryCreek;
+            case "Move to the next location":
+                bearingInDegrees = Position.greatCircleAzimuth(currentNode.currentLocation, currentNode.nextLocation).degrees;
+                double currentDistanceFromNextLocation = distanceToTargetInMeters(currentNode.currentLocation, currentNode.nextLocation);
+                if(currentDistanceFromNextLocation < currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR) {
+                    distanceToTravelInMetres = currentDistanceFromNextLocation;
                 }
                 else {
                     distanceToTravelInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
@@ -67,18 +67,17 @@ public class HarmonyMovement
                 bearingInDegrees = EAST;
                 distanceToTravelInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
                 break;
-            case "Move Away from Closest Enemy":
-                DetectedNode detectedFriend = currentNode.friendNodesSeen.stream().filter(node -> node.getnodeUUID().equals(currentNode.closestEnemy)).findFirst().orElse(currentNode.friendNodesSeen.get(0));
-                bearingInDegrees = oppositeDirection(detectedFriend.getBearingInDegreesToTarget());
+            case "Move away from Closest Enemy":
+                bearingInDegrees = oppositeDirection(bearingToTargetInDegrees(currentNode.currentLocation, currentNode.closestEnemy.currentLocation));
                 //Attempt to travel at maximum speed to get away from the enemy.
                 distanceToTravelInMetres = currentNode.maximumSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
                 break;
-            case "Move Towards Closest Enemy":
-                DetectedNode detectedHostile = currentNode.hostileNodesSeen.stream().filter(node -> node.getnodeUUID().equals(currentNode.closestEnemy)).findFirst().orElse(currentNode.hostileNodesSeen.get(0));
-                bearingInDegrees = detectedHostile.getBearingInDegreesToTarget();
+            case "Move to the Closest Enemy":
+                bearingInDegrees = bearingToTargetInDegrees(currentNode.currentLocation, currentNode.closestEnemy.currentLocation);
+                double distanceToEnemy = distanceToTargetInMeters(currentNode.currentLocation, currentNode.closestEnemy.currentLocation);
                 //Attempt to travel at maximum speed to get towards the enemy
-                if(detectedHostile.getDistanceToTargetInMeters() < currentNode.maximumSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR) {
-                    distanceToTravelInMetres = detectedHostile.getDistanceToTargetInMeters();
+                if(distanceToEnemy < currentNode.maximumSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR) {
+                    distanceToTravelInMetres =distanceToEnemy;
                 }
                 else {
                     distanceToTravelInMetres = currentNode.maximumSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
@@ -177,12 +176,8 @@ public class HarmonyMovement
 
     }
 
-    public static boolean hasNodeReachedRaspberryCreek(NodeData currentNode) {
-        return hasNodeReachedDestination(currentNode, RASPBERRY_CK);
-    }
-
-    public static boolean hasNodeReachedDestination(NodeData currentNode, Position destination) {
-        return distanceToTargetInMeters(currentNode.currentLocation, destination) == 0;
+    public static boolean hasNodeReachedFinalLocation(NodeData currentNode) {
+        return distanceToTargetInMeters(currentNode.currentLocation, currentNode.finalLocation) == 0;
     }
 
     /* update the locations and direction of travel */

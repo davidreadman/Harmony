@@ -59,11 +59,12 @@ public class JFrameGuiActions extends JFrame
     String substring;
     String constructString;
 
-    public JFrameGuiActions(HarmonyDataPublisher publishData, ArrayList<NodeData> nodeData, SimulationSettings simulationSettings)
+
+    public JFrameGuiActions(HarmonyDataPublisher publishData, DecisionEngine decisionEngine, SimulationSettings simulationSettings)
     {
-        this.harmonyUtilities = new HarmonyUtilities(nodeData, publishData);
+        this.harmonyUtilities = new HarmonyUtilities(publishData, decisionEngine);
         this.nodePositionsTextArea = new JTextArea();
-        this.nodePositionsTextArea.setRows(nodeData.size());
+        this.nodePositionsTextArea.setRows(decisionEngine.nodes.size());
         //this.nodeData = nodeData;
         /* setup the binding of properties to allow for change monitoring across threads */
         DDSPositionMessage dDSPositionMessage = new DDSPositionMessage();
@@ -104,7 +105,7 @@ public class JFrameGuiActions extends JFrame
         // Add the World Windows to the card panel.
 
         /*displayWW is set up as a JPanel */
-        this.displayWW = new DisplayWW(nodeData, simulationSettings.debugTacticalSymbolGeneration);
+        this.displayWW = new DisplayWW(decisionEngine.nodes, simulationSettings.debugTacticalSymbolGeneration);
         /*add this panel to the cardpanel*/
         cardPanel.add(displayWW, "World Wind");
         /* add the panel to the frame */
@@ -198,19 +199,18 @@ Set up the Gui Listeners
                 this.dragger.selected(event);
                 if(event.getObjects() != null && event.getObjects().size() >= 1) {
                     Object object = event.getTopPickedObject().getObject();
-                    for(NodeData currentNode : harmonyUtilities.nodes) {
+                    for(NodeData currentNode : decisionEngine.nodes) {
                         if(object == currentNode.symbolIdentifier) {
                             String selectedEvent = event.getEventAction();
                             switch(selectedEvent) {
                                 case SelectEvent.LEFT_CLICK:
                                     selectedNode = currentNode;
                                     MilSymString = selectedNode.symbolIdentifier.getIdentifier();
-
                                     NodeUUIDText.setText(selectedNode.NodeUUID);
 
                                     //testing to see how to address the object
                                     //need to change the selected nodes drop down list at this point else all up to this are changed
-                                    SymbolString.setText(selectedNode.symbol);
+                                    SymbolString.setText(MilSymString);
 
                                     //identify the iff in the string, adjust the iff in the dropdown iFFList
 
@@ -248,7 +248,7 @@ Set up the Gui Listeners
 
         ActionListener timerListener = actionEvent -> {
             int currentStateOfSimulation = harmonyUtilities.currentStateOfSimulation();
-            if(currentStateOfSimulation == -1) {
+            if(currentStateOfSimulation == 0) {
                 if (enableMovementMenuItem.isSelected())
                 {
                     harmonyUtilities.triggerMovementForEachNode(simulationSettings.debugMovementDecision);
@@ -261,12 +261,9 @@ Set up the Gui Listeners
                     String reasonForEndOfSimulation = "";
                     switch(currentStateOfSimulation) {
                         case 1:
-                            reasonForEndOfSimulation = "Simulation has ended as all nodes have reached Raspberry Creek";
+                            reasonForEndOfSimulation = "Simulation has ended as all nodes have reached their final destinations";
                             break;
                         case 2:
-                            reasonForEndOfSimulation = "Simulation has ended as all Hostile nodes are dead";
-                            break;
-                        case 3:
                             reasonForEndOfSimulation = "Simulation has reached the specified duration of " + durationStringAsSetByTheUser;
                             break;
                         default:
@@ -314,17 +311,17 @@ Set up the Gui Listeners
      * @return
      */
     private String generateDurationString() {
-        if(harmonyUtilities.maxEpochCounter > 0) {
-            long epochRemainingCounter = harmonyUtilities.maxEpochCounter - harmonyUtilities.movementCounter;
+        if(harmonyUtilities.decisionEngine.maxMovementCounter > 0) {
+            long epochRemainingCounter = harmonyUtilities.decisionEngine.maxMovementCounter- harmonyUtilities.decisionEngine.movementCounter;
             long numHoursRemaining = epochRemainingCounter/3600;
             long numMinutesRemaining = (epochRemainingCounter%3600)/60;
             long numSecondsRemaining = epochRemainingCounter % 60;
             return String.format("Time remaining: %02d:%02d:%02d", numHoursRemaining, numMinutesRemaining, numSecondsRemaining);
         }
         else {
-            int numHours = harmonyUtilities.movementCounter /3600;
-            int numMinutes = (harmonyUtilities.movementCounter % 3600) / 60;
-            int numSeconds = harmonyUtilities.movementCounter % 60;
+            long numHours = harmonyUtilities.decisionEngine.movementCounter /3600;
+            long numMinutes = (harmonyUtilities.decisionEngine.movementCounter % 3600) / 60;
+            long numSeconds = harmonyUtilities.decisionEngine.movementCounter% 60;
             return String.format("Time elapsed: %02d:%02d:%02d", numHours, numMinutes, numSeconds);
         }
 
@@ -475,11 +472,40 @@ Set up the Gui Listeners
         nodeLocPanel.add(nodePositionsTextArea,gbc);
     }
 
+    private void updateTacticalSymbol() {
+        //this sets the stringbuilder output to test functionality
+        SymbolString.setText(MilSymString);
+        //need to set the string in the node to the new value
+        selectedNode.symbol = MilSymString;
+        //need to update the tactical symbol to this
+        //selectedNode.symbolIdentifier is the symbol object
+        //selectedNode.currentLocation is the location
+        //remove this symbol from the renderable layer
+        //https://worldwind.arc.nasa.gov/java/latest/javadoc/gov/nasa/worldwind/Model.html getModel
+        //getlayers returns a list of layers in the model
+        Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
+        //create a new symbol for the changed 2525B string
+        TacticalSymbol replacementSymbol = displayWW.setupSymbol(selectedNode.symbol, selectedNode.currentLocation);
+        //and load this into the node as a replacement for the old symbol and symbolidentifier
+        // bad - selectedNode.symbolIdentifier = replacementSymbol;
+        //we have this layer stored as a layer, we can remove this entire layer from the model layers
+        displayWW.canvas.getModel().getLayers().remove(symbolLayer);
+        // need to create a new renderable layer because the symbollayer is converted to a standard layer when added to the model
+        RenderableLayer replaceLayer;
+        replaceLayer = (RenderableLayer) symbolLayer;
+        replaceLayer.setName("symbolLayer");
+        replaceLayer.removeRenderable(selectedNode.symbolIdentifier);
+        selectedNode.symbolIdentifier = replacementSymbol;
+        replaceLayer.addRenderable(replacementSymbol);
+        displayWW.canvas.getModel().getLayers().add(replaceLayer);
+        //so symbollayer can be removed and added
+        // is the symbolLayer the same in both instances? renderable and basic?
+    }
 
     public void setup2525B(boolean isVisible)
     {
         //set up a default node
-        selectedNode = harmonyUtilities.nodes.get(0);
+        selectedNode = harmonyUtilities.decisionEngine.nodes.get(0);
         /* set up the drop down lists*/
 
          MilSymString = selectedNode.symbolIdentifier.getIdentifier();
@@ -512,12 +538,12 @@ Set up the Gui Listeners
 
 
         /*set up the string of node names */
-        int numberOfNodes = harmonyUtilities.nodes.size();
+        int numberOfNodes = harmonyUtilities.decisionEngine.nodes.size();
         String[] nodeNames = new String[numberOfNodes];
 
         for (int i = 0; i < numberOfNodes; i++)
         {
-            nodeNames[i] = harmonyUtilities.nodes.get(i).NodeUUID;
+            nodeNames[i] = harmonyUtilities.decisionEngine.nodes.get(i).NodeUUID;
         }
 
 
@@ -635,64 +661,11 @@ used the invisible because the selection of new dropdown is invoked at this poin
             {
 
                 //the combobox for iFFList has been activated, so first set the char in the stringbuilder
-             /*   substring = MilSymString.substring(1,2);
-                iFFList.setSelectedIndex(iffIDStringsList.indexOf(substring));
-
-                substring = MilSymString.substring(10,11);
-                hQList.setSelectedIndex(hQIDStringsList.indexOf(substring));
-                System.out.println("hQ: " + substring);
-                substring = MilSymString.substring(11,12);
-                levelList.setSelectedIndex(levelIDStringsList.indexOf(substring));
-                System.out.println("level: " + substring);
-                substring = MilSymString.substring(4,10);
-                functionList.setSelectedIndex(functionIDStringsList.indexOf(substring));
-                System.out.println("function: " + substring);*/
-
-                /*construct a new string with the IFF string modified */
+                //IFF is at position 1,2
                 substring = symbolModifierData.iFFIDStrings[iFFList.getSelectedIndex()];
-                System.out.println("IFF string dropout: " + substring);
                 constructString = MilSymString.substring(0,1)+substring+MilSymString.substring(2,15);
                 MilSymString = constructString;
-                //System.out.println("MilString: " + MilSymString);
-                //System.out.println("Constructed String: " + constructString);
-
-                //this sets the stringbuilder output to test functionality
-                SymbolString.setText(MilSymString.toString());
-                //set the node affiliation based on the selected index from the iFFList
-                selectedNode.nodeIFF = symbolModifierData.iFFStrings[iFFList.getSelectedIndex()];
-                //need to set the string in the node to the new value
-                selectedNode.symbol = MilSymString;
-
-                //need to update the tactical symbol to this
-                //selectedNode.symbolIdentifier is the symbol object
-                //selectedNode.currentLocation is the location
-                //remove this symbol from the renderable layer
-                //https://worldwind.arc.nasa.gov/java/latest/javadoc/gov/nasa/worldwind/Model.html getModel
-                //getlayers returns a list of layers in the model
-                Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
-                //create a new symbol for the changed 2525B string
-                TacticalSymbol replacementSymbol = displayWW.setupSymbol(selectedNode.symbol, selectedNode.currentLocation);
-                //and load this into the node as a replacement for the old symbol and symbolidentifier
-                // bad - selectedNode.symbolIdentifier = replacementSymbol;
-                //we have this layer stored as a layer, we can remove this entire layer from the model layers
-                displayWW.canvas.getModel().getLayers().remove(symbolLayer);
-                // need to create a new renderable layer because the symbollayer is converted to a standard layer when added to the model
-                RenderableLayer replaceLayer;
-                replaceLayer = (RenderableLayer) symbolLayer;
-                replaceLayer.setName("symbolLayer");
-                replaceLayer.removeRenderable(selectedNode.symbolIdentifier);
-                selectedNode.symbolIdentifier = replacementSymbol;
-                replaceLayer.addRenderable(replacementSymbol);
-                displayWW.canvas.getModel().getLayers().add(replaceLayer);
-                //so symbollayer can be removed and added
-                // is the symbolLayer the same in both instances? renderable and basic?
-
-                //symbolLayer does not appear to have a change item in symbol
-
-
-                //create a new symbol with the new string
-                //add this new symbol to the renderable layer
-                //replace the symbol in the node with this new symbol*/
+                updateTacticalSymbol();
             }
 
             @Override
@@ -713,41 +686,15 @@ Table A-II contains the specific values used in this field.
             public void popupMenuWillBecomeVisible(PopupMenuEvent e)
             {
 
-
             }
-
             @Override
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
             {
-                /*the layout and reasoning behind this popup is identical to the IIF popup */
                 substring = symbolModifierData.hQIDStrings[hQList.getSelectedIndex()];
-
                 //Hq is at position 10,11
                 constructString = MilSymString.substring(0,10)+substring+MilSymString.substring(11,15);
                 MilSymString = constructString;
-                System.out.println("MilString: " + MilSymString+" "+ MilSymString.length());
-                System.out.println("Constructed String: " + constructString+" "+ constructString.length());
-
-                //this sets the stringbuilder output to test functionality
-                SymbolString.setText(MilSymString);
-
-
-                //need to set the string in the node to the new value
-                selectedNode.symbol = MilSymString;
-
-                Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
-
-                TacticalSymbol replacementSymbol = displayWW.setupSymbol(selectedNode.symbol, selectedNode.currentLocation);
-
-                displayWW.canvas.getModel().getLayers().remove(symbolLayer);
-
-                RenderableLayer replaceLayer;
-                replaceLayer = (RenderableLayer) symbolLayer;
-                replaceLayer.setName("symbolLayer");
-                replaceLayer.removeRenderable(selectedNode.symbolIdentifier);
-                selectedNode.symbolIdentifier = replacementSymbol;
-                replaceLayer.addRenderable(replacementSymbol);
-                displayWW.canvas.getModel().getLayers().add(replaceLayer);
+                updateTacticalSymbol();
             }
             @Override
             public void popupMenuCanceled(PopupMenuEvent e)
@@ -766,29 +713,11 @@ Table A-II contains the specific values used in this field.
             @Override
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
             {
-                substring = symbolModifierData.hQIDStrings[hQList.getSelectedIndex()];
-
-                //Hq is at position 10,11
-                constructString = MilSymString.substring(0,10)+substring+MilSymString.substring(11,15);
+                substring = symbolModifierData.levelIDStrings[levelList.getSelectedIndex()];
+                //Level is at Position 11,12
+                constructString = MilSymString.substring(0,11)+substring+MilSymString.substring(12,15);
                 MilSymString = constructString;
-                System.out.println("MilString: " + MilSymString+" "+ MilSymString.length());
-                System.out.println("Constructed String: " + constructString+" "+ constructString.length());
-
-                //this sets the stringbuilder output to test functionality
-                SymbolString.setText(MilSymString);
-
-                //need to set the string in the node to the new value
-                selectedNode.symbol = MilSymString;
-                Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
-                TacticalSymbol replacementSymbol = displayWW.setupSymbol(selectedNode.symbol, selectedNode.currentLocation);
-                displayWW.canvas.getModel().getLayers().remove(symbolLayer);
-                RenderableLayer replaceLayer;
-                replaceLayer = (RenderableLayer) symbolLayer;
-                replaceLayer.setName("symbolLayer");
-                replaceLayer.removeRenderable(selectedNode.symbolIdentifier);
-                selectedNode.symbolIdentifier = replacementSymbol;
-                replaceLayer.addRenderable(replacementSymbol);
-                displayWW.canvas.getModel().getLayers().add(replaceLayer);
+                updateTacticalSymbol();
             }
             @Override
             public void popupMenuCanceled(PopupMenuEvent e)
@@ -807,53 +736,11 @@ Table A-II contains the specific values used in this field.
             @Override
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
             {
-                substring = symbolModifierData.hQIDStrings[hQList.getSelectedIndex()];
-
-                //Hq is at position 10,11
-                constructString = MilSymString.substring(0,10)+substring+MilSymString.substring(11,15);
+                substring = symbolModifierData.functionIDStrings[functionList.getSelectedIndex()];
+                //Function is at Position 4-10
+                constructString = MilSymString.substring(0,4)+substring+MilSymString.substring(10,15);
                 MilSymString = constructString;
-                System.out.println("MilString: " + MilSymString+" "+ MilSymString.length());
-                System.out.println("Constructed String: " + constructString+" "+ constructString.length());
-
-                //this sets the stringbuilder output to test functionality
-                SymbolString.setText(MilSymString);
-
-
-                //need to set the string in the node to the new value
-                selectedNode.symbol = MilSymString;
-
-                Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
-
-                TacticalSymbol replacementSymbol = displayWW.setupSymbol(selectedNode.symbol, selectedNode.currentLocation);
-
-                displayWW.canvas.getModel().getLayers().remove(symbolLayer);
-
-                RenderableLayer replaceLayer;
-                replaceLayer = (RenderableLayer) symbolLayer;
-                replaceLayer.setName("symbolLayer");
-                replaceLayer.removeRenderable(selectedNode.symbolIdentifier);
-                selectedNode.symbolIdentifier = replacementSymbol;
-                replaceLayer.addRenderable(replacementSymbol);
-                displayWW.canvas.getModel().getLayers().add(replaceLayer);
-            }
-            @Override
-            public void popupMenuCanceled(PopupMenuEvent e)
-            {
-
-            }
-        });
-        iFFList.addPopupMenuListener(new PopupMenuListener()
-        {
-            @Override
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
-            {
-
-            }
-
-            @Override
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
-            {
-
+                updateTacticalSymbol();
             }
             @Override
             public void popupMenuCanceled(PopupMenuEvent e)

@@ -13,40 +13,59 @@ public class NodeData
      String NodeUUID;
      /*initially ;used currentLocation and nextLocation, but these were changed at the same time, previousLocation
      allows more information to use for direction of travel
+     Next location indicates the next known position that the node needs to travel.
       */
-     Position currentLocation,previousLocation;
+     Position currentLocation,previousLocation, nextLocation, finalLocation;
      String nodeType;
-     String nodeIFF;
-     String nodeHQ;
-     String nodeLevel;
-     String nodeFunction;
      String symbol;
      TacticalSymbol symbolIdentifier;
      double operationalSpeedInKmH;
      double maximumSpeedInKmH;
-     String closestEnemy = ""; //hostile for a friend node, friend for a hostile node
-     //could put in a 'closest road'
      /* the next information is that evaluated by Harmony from the list of nodes and the current node positions */
     /*initial implementation, this is not created, can be inferred from currentLocation and nextLocation, may need
     a previousLocation
      */
     double directionOfTravel;
-    List<DetectedNode> friendNodesSeen;
-    List<DetectedNode> hostileNodesSeen;
-    List<DetectedNode> neutralNodesSeen;
 
     /* Used for logging purposes as node is the source of truth */
     /* We want to log the current decision that it made and the corresponding metric */
     String currentMetric = "";
     String currentDecision = "";
 
-     /* the next information is metrics received from the external analysis software (SMARTNet) */
-    
-    NodeData()
-    {
-        friendNodesSeen = new ArrayList<>();
-        hostileNodesSeen = new ArrayList<>();
-        neutralNodesSeen = new ArrayList<>();
+    NodeData closestEnemy;
+
+    /* These list of positions could relate to positions of a tactical graphic or any other places that they need to reach*/
+    /* Once each position in the list has been visited by the node, then we remove it from the list */
+    List<Position> checkpointsRemaining = new ArrayList<Position>();
+
+    //This flag is to indicate whether the node is carrying out a plan sent out by the commander or a higher up.
+    boolean isCarryingOutAPlan = false;
+
+    public void setFinalLocation(Position finalLocation) {
+        this.finalLocation = finalLocation;
+        if(!checkpointsRemaining.contains(finalLocation)) {
+            checkpointsRemaining.add(finalLocation);
+        }
+        this.nextLocation = finalLocation;
     }
 
+    public void updatePlanCheckpoints(List<Position> positions) {
+        checkpointsRemaining.addAll(positions);
+        if(nextLocation != null) {
+            nextLocation = checkpointsRemaining.get(0);
+        }
+        finalLocation = checkpointsRemaining.get(checkpointsRemaining.size()-1);
+    }
+
+    /**
+     * If this position is one of the checkpoints we wanted to tick off, then remove it from the list
+     * as it will indicate that the node arrived at this particular checkpoint for a tactic or a specific place.
+     * @param position
+     */
+    public void tickOffCheckpointIfItExists(Position position) {
+        if(checkpointsRemaining.contains(position)) {
+            checkpointsRemaining.remove(position);
+        }
+        nextLocation = checkpointsRemaining.get(0);
+    }
 }

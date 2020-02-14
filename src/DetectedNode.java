@@ -2,66 +2,18 @@ import gov.nasa.worldwind.geom.Position;
 
 public class DetectedNode
 {
+    NodeData sourceNode;
+    //Node that was detecetd by the source.
+    NodeData focusNode;
 
-    /* what node was detected */
-    private final String nodeUUID;
-    /* current location of that node */
-    private final Position currentLocation;
-    /*direction of node travel*/
-    private double directionOfTravel;
-    /*bearing from the node holding this item to the node in this item */
-    private double bearingInDegreesToTarget;
-    private double distanceToTargetInMeters;
-    /* who reported it (discussion, who reported it first? what about updates? who is tracking? multiple reports? */
-    /*initially considering this *just this report for this arraylist*/
-    private final String detectedByUUID;
-    /* what it is believed to be */
-    private final String nodeType;
-    /* level of confidence in that assessment */
-    /*https://www.dst.defence.gov.au/sites/default/files/publications/documents/DST-Group-TR-3325_0.pdf */
-    private final int levelOfConfidence;
-    /* friend, hostile or neutral (to be expanded later */
-    private final String nodeIFF;
+    double distanceFromSourceToFocusInMeters;
+    double angleFromSourceToFocusInDegrees;
 
-    public DetectedNode(String nodeUUID, Position currentLocation, double directionOfTravel, double distanceToTargetInMeters,
-                        double bearingInDegreesToTarget, String detectedByUUID,
-                        String nodeType, int levelOfConfidence, String nodeIFF)
-    {
-        this.nodeUUID = nodeUUID;
-        this.currentLocation = currentLocation;
-        this.directionOfTravel = directionOfTravel;
-        this.bearingInDegreesToTarget = bearingInDegreesToTarget;
-        this.detectedByUUID = detectedByUUID;
-        this.nodeType = nodeType;
-        this.levelOfConfidence = levelOfConfidence;
-        this.nodeIFF = nodeIFF;
-        this.distanceToTargetInMeters = distanceToTargetInMeters;
-
+    DetectedNode(NodeData source, NodeData focus) {
+        sourceNode = source;
+        focusNode = focus;
+        distanceFromSourceToFocusInMeters = 0;
+        angleFromSourceToFocusInDegrees = 0;
     }
 
-    public String getDetectedByUUID()
-    {
-        return this.detectedByUUID;
-    }
-
-    public String getnodeUUID()
-    {
-        return this.nodeUUID;
-    }
-
-    public double getBearingInDegreesToTarget()
-    {
-        return this.bearingInDegreesToTarget;
-    }
-
-    public double getDistanceToTargetInMeters()
-    {
-        return this.distanceToTargetInMeters;
-    }
-
-    public String getNodeType() { return this.nodeType; }
-
-    public int getLevelOfConfidence() { return this.levelOfConfidence; }
-
-    public String getNodeIFF(){ return this.nodeIFF; }
 }

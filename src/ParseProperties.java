@@ -56,11 +56,20 @@ public class ParseProperties
 				double Lat = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lat"));
 				double Lon = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lon"));
 				theseNodes[i].currentLocation= new Position(LatLon.fromDegrees(Lat,Lon), 0);
-				theseNodes[i].nodeIFF = prop.getProperty("Node"+(i+1)+"IFF");
 				theseNodes[i].nodeType = prop.getProperty("Node"+(i+1)+"Type");
 				theseNodes[i].symbol = prop.getProperty("Node"+(i+1)+"2525B");
 				theseNodes[i].operationalSpeedInKmH =  Double.parseDouble(prop.getProperty("Node"+(i+1)+"OperationalSpeed"));
 				theseNodes[i].maximumSpeedInKmH = Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed"));
+				if(prop.containsKey("Node"+(i+1)+"FinalLocation")) {
+					if(prop.getProperty("Node"+(i+1)+"FinalLocation").trim().equals("Raspberry Ck")) {
+						theseNodes[i].setFinalLocation(HarmonyMovement.RASPBERRY_CK);
+					}
+				}
+				else if(prop.containsKey("Node"+(i+1)+"FinalLat") && prop.containsKey("Node"+(i+1)+"FinalLon")) {
+					double finalLat = Double.parseDouble(prop.getProperty("Node"+(i+1)+"FinalLat"));
+					double finalLon = Double.parseDouble(prop.getProperty("Node"+(i+1)+"FinalLon"));
+					theseNodes[i].setFinalLocation(new Position(LatLon.fromDegrees(finalLat, finalLon), 0));
+				}
 			}
 			return new ArrayList<>(Arrays.asList(theseNodes));
 		}

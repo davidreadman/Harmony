@@ -42,8 +42,6 @@ public class StoreProperties
               //  Node1Type = Armoured Wheeled Vehicle
                 String line4= "Node"+(i+1)+"Type = " + nodeData.get(i).nodeType+"\n";
              //   Node1IFF = B
-                String line5= "Node"+(i+1)+"IFF = " + nodeData.get(i).nodeIFF+"\n";
-             //   Node12525B = SFGPUCRVA-bf---
                 String line6= "Node"+(i+1)+"2525B = " + nodeData.get(i).symbol+"\n";
             //            Node1OperationalSpeed = 40
                 String line7= "Node"+(i+1)+"OperationalSpeed = " + nodeData.get(i).operationalSpeedInKmH+"\n";
@@ -51,7 +49,7 @@ public class StoreProperties
                 String line8= "Node"+(i+1)+"MaxSpeed = " + nodeData.get(i).maximumSpeedInKmH+"\n";
             //    Node1RadiusOfDetectionInKm = 20
 
-                content = (""+line1+line2+line3+line4+line5+line6+line7+line8+"\n\n\n");
+                content = (""+line1+line2+line3+line4+line6+line7+line8+"\n\n\n");
                 contentInBytes = content.getBytes();
                 outputStream.write(contentInBytes);
 
