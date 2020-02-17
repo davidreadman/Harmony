@@ -36,10 +36,5 @@ public class NodeData
 
     NodeData closestEnemy;
 
-    /* These list of positions could relate to positions of a tactical graphic or any other places that they need to reach*/
-    /* Once each position in the list has been visited by the node, then we remove it from the list */
-    List<Position> checkpointsRemaining = new ArrayList<Position>();
-
-    //This flag is to indicate whether the node is carrying out a plan sent out by the commander or a higher up.
-    boolean isCarryingOutAPlan = false;
+    List<String> strategies = new ArrayList<>();
 }

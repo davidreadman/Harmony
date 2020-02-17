@@ -60,6 +60,11 @@ public class ParseProperties
 				theseNodes[i].symbol = prop.getProperty("Node"+(i+1)+"2525B");
 				theseNodes[i].operationalSpeedInKmH =  Double.parseDouble(prop.getProperty("Node"+(i+1)+"OperationalSpeed"));
 				theseNodes[i].maximumSpeedInKmH = Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed"));
+				if(prop.containsKey("Node"+(i+1)+"StrategyCSV")) {
+					theseNodes[i].strategies = Arrays.asList(prop.getProperty("Node"+(i+1)+"StrategyCSV").split(","));
+				}
+				//Remove once strategies are being implemented
+				theseNodes[i].nextLocation = HarmonyMovement.RASPBERRY_CK;
 			}
 			return new ArrayList<>(Arrays.asList(theseNodes));
 		}
