@@ -43,6 +43,7 @@ public class JFrameGuiActions extends JFrame
     JComboBox<String> iFFList,hQList,levelList,functionList;
     JComboBox<String> nodeList;
     JLabel SymbolString;
+    ArrayList<NodeData> nodes;
     /* set up the combo box sets of strings for the 2525B selection*/
     //http://www.mapsymbs.com/ms2525c.pdf
 
@@ -60,11 +61,12 @@ public class JFrameGuiActions extends JFrame
     String constructString;
 
 
-    public JFrameGuiActions(HarmonyDataPublisher publishData, DecisionEngine decisionEngine, SimulationSettings simulationSettings)
+    public JFrameGuiActions(HarmonyDataPublisher publishData, SimulationSettings simulationSettings, ArrayList<NodeData> nodes)
     {
-        this.harmonyUtilities = new HarmonyUtilities(publishData, decisionEngine);
+        this.nodes = nodes;
+        this.harmonyUtilities = new HarmonyUtilities(publishData);
         this.nodePositionsTextArea = new JTextArea();
-        this.nodePositionsTextArea.setRows(decisionEngine.nodes.size());
+        this.nodePositionsTextArea.setRows(nodes.size());
         //this.nodeData = nodeData;
         /* setup the binding of properties to allow for change monitoring across threads */
         DDSPositionMessage dDSPositionMessage = new DDSPositionMessage();
@@ -105,7 +107,7 @@ public class JFrameGuiActions extends JFrame
         // Add the World Windows to the card panel.
 
         /*displayWW is set up as a JPanel */
-        this.displayWW = new DisplayWW(decisionEngine.nodes, simulationSettings.debugTacticalSymbolGeneration);
+        this.displayWW = new DisplayWW(nodes, simulationSettings.debugTacticalSymbolGeneration);
         /*add this panel to the cardpanel*/
         cardPanel.add(displayWW, "World Wind");
         /* add the panel to the frame */
@@ -126,10 +128,10 @@ Set up the Gui Listeners
  */
         restartMenuItem.addActionListener(e -> {
             try {
-                harmonyUtilities.restartSimulation();
+                harmonyUtilities.restartSimulation(nodes);
                 simulationOver = false;
                 //update the positions on view.
-                nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
+                nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString(nodes));
                 currentDurationItem.setText(generateDurationString());
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -139,8 +141,8 @@ Set up the Gui Listeners
             loggingFlag = !loggingFlag;
             harmonyUtilities.createLogFile();
         });
-        buttonMenuItem.addActionListener(e -> harmonyUtilities.createNewConfigPropertiesFile());
-        configCreatorMenuItem.addActionListener(e -> harmonyUtilities.createHoconFile());
+        buttonMenuItem.addActionListener(e -> harmonyUtilities.createNewConfigPropertiesFile(nodes));
+        configCreatorMenuItem.addActionListener(e -> harmonyUtilities.createHoconFile(nodes));
         toggle2525B.addActionListener(e -> {
             /*the toggle button call .isSelected returns false or true, use this to show or hide panel*/
             panel2525B.setVisible(toggle2525B.isSelected());
@@ -199,7 +201,7 @@ Set up the Gui Listeners
                 this.dragger.selected(event);
                 if(event.getObjects() != null && event.getObjects().size() >= 1) {
                     Object object = event.getTopPickedObject().getObject();
-                    for(NodeData currentNode : decisionEngine.nodes) {
+                    for(NodeData currentNode : nodes) {
                         if(object == currentNode.symbolIdentifier) {
                             String selectedEvent = event.getEventAction();
                             switch(selectedEvent) {
@@ -235,7 +237,7 @@ Set up the Gui Listeners
                                     break;
                                 case SelectEvent.DRAG:
                                     currentNode.currentLocation = currentNode.symbolIdentifier.getPosition();
-                                    nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
+                                    nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString(nodes));
                                     break;
                                 default:
                                     break;
@@ -247,12 +249,12 @@ Set up the Gui Listeners
         });
 
         ActionListener timerListener = actionEvent -> {
-            int currentStateOfSimulation = harmonyUtilities.currentStateOfSimulation();
+            int currentStateOfSimulation = harmonyUtilities.currentStateOfSimulation(nodes);
             if(currentStateOfSimulation == 0) {
                 if (enableMovementMenuItem.isSelected())
                 {
-                    harmonyUtilities.triggerMovementForEachNode(simulationSettings.debugMovementDecision);
-                    nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
+                    harmonyUtilities.triggerMovementForEachNode(nodes, simulationSettings.debugMovementDecision);
+                    nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString(nodes));
                 }
                 displayWW.canvas.redraw();
             }
@@ -288,14 +290,14 @@ Set up the Gui Listeners
             //else just log the data
             if (loggingFlag)
             {
-                harmonyUtilities.logToCSV();
+                harmonyUtilities.logToCSV(nodes);
             }
             /////////////////////////////////////////////
             /* publish DDS messages */
             //send out data for all nodes
             if (pubMenuItem.isSelected())
             {
-                harmonyUtilities.publishDataForEachNode(simulationSettings.debugDataListener);
+                harmonyUtilities.publishDataForEachNode(nodes, simulationSettings.debugDataListener);
             }
             //////////////////////////////////////////////
         };
@@ -311,17 +313,17 @@ Set up the Gui Listeners
      * @return
      */
     private String generateDurationString() {
-        if(harmonyUtilities.decisionEngine.maxMovementCounter > 0) {
-            long epochRemainingCounter = harmonyUtilities.decisionEngine.maxMovementCounter- harmonyUtilities.decisionEngine.movementCounter;
+        if(harmonyUtilities.maxMovementCounter > 0) {
+            long epochRemainingCounter = harmonyUtilities.maxMovementCounter- harmonyUtilities.movementCounter;
             long numHoursRemaining = epochRemainingCounter/3600;
             long numMinutesRemaining = (epochRemainingCounter%3600)/60;
             long numSecondsRemaining = epochRemainingCounter % 60;
             return String.format("Time remaining: %02d:%02d:%02d", numHoursRemaining, numMinutesRemaining, numSecondsRemaining);
         }
         else {
-            long numHours = harmonyUtilities.decisionEngine.movementCounter /3600;
-            long numMinutes = (harmonyUtilities.decisionEngine.movementCounter % 3600) / 60;
-            long numSeconds = harmonyUtilities.decisionEngine.movementCounter% 60;
+            long numHours = harmonyUtilities.movementCounter /3600;
+            long numMinutes = (harmonyUtilities.movementCounter % 3600) / 60;
+            long numSeconds = harmonyUtilities.movementCounter% 60;
             return String.format("Time elapsed: %02d:%02d:%02d", numHours, numMinutes, numSeconds);
         }
 
@@ -458,7 +460,7 @@ Set up the Gui Listeners
        gbc.anchor = GridBagConstraints.PAGE_START;
 
         nodeLocPanel.add(nodeLocationLabel,gbc);
-        nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString());
+        nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString(nodes));
 
         nodeLocPanel.setVisible(isVisible);
         gbc.weighty = 1;
@@ -505,7 +507,7 @@ Set up the Gui Listeners
     public void setup2525B(boolean isVisible)
     {
         //set up a default node
-        selectedNode = harmonyUtilities.decisionEngine.nodes.get(0);
+        selectedNode = nodes.get(0);
         /* set up the drop down lists*/
 
          MilSymString = selectedNode.symbolIdentifier.getIdentifier();
@@ -538,12 +540,12 @@ Set up the Gui Listeners
 
 
         /*set up the string of node names */
-        int numberOfNodes = harmonyUtilities.decisionEngine.nodes.size();
+        int numberOfNodes = nodes.size();
         String[] nodeNames = new String[numberOfNodes];
 
         for (int i = 0; i < numberOfNodes; i++)
         {
-            nodeNames[i] = harmonyUtilities.decisionEngine.nodes.get(i).NodeUUID;
+            nodeNames[i] = nodes.get(i).NodeUUID;
         }
 
 

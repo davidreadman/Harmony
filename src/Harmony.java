@@ -51,9 +51,7 @@ public class Harmony
         //Read in initialisation file and load into the NodeData array
         ArrayList<NodeData> allNodes = ParseProperties.parsePlan();
         SimulationSettings simulationSettings = ParseProperties.parseConfig();
-        DecisionEngine decisionEngine = new DecisionEngine();
-        decisionEngine.setUpNodes(allNodes);
-        new JFrameGuiActions( publishdata, decisionEngine, simulationSettings).setVisible(true);
+        new JFrameGuiActions( publishdata, simulationSettings, allNodes).setVisible(true);
 
     }
 

@@ -91,10 +91,11 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1400" y="435" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1580441460168" />
-    <state x="1236" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1580875651022">
-      <screen x="0" y="0" width="3440" height="1400" />
+    <state x="1236" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1581910572689">
+      <screen x="0" y="0" width="3440" height="1359" />
     </state>
     <state x="1236" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1580875651022" />
+    <state x="1236" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581910572689" />
     <state x="1467" y="555" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1580430084968">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
@@ -103,26 +104,26 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1500" y="456" key="FileChooserDialogImpl/0.0.3440.1400@0.0.3440.1400" timestamp="1580940734234" />
-    <state width="3419" height="475" key="GridCell.Tab.0.bottom" timestamp="1581640343757">
+    <state width="3419" height="396" key="GridCell.Tab.0.bottom" timestamp="1581911457143">
       <screen x="0" y="0" width="3440" height="1359" />
     </state>
     <state width="3419" height="403" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1581296459867" />
-    <state width="3419" height="475" key="GridCell.Tab.0.bottom/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581640343757" />
-    <state width="3419" height="475" key="GridCell.Tab.0.center" timestamp="1581640343757">
+    <state width="3419" height="396" key="GridCell.Tab.0.bottom/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581911457143" />
+    <state width="3419" height="396" key="GridCell.Tab.0.center" timestamp="1581911457143">
       <screen x="0" y="0" width="3440" height="1359" />
     </state>
     <state width="3419" height="403" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1581296459866" />
-    <state width="3419" height="475" key="GridCell.Tab.0.center/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581640343757" />
-    <state width="3419" height="475" key="GridCell.Tab.0.left" timestamp="1581640343757">
+    <state width="3419" height="396" key="GridCell.Tab.0.center/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581911457143" />
+    <state width="3419" height="396" key="GridCell.Tab.0.left" timestamp="1581911457142">
       <screen x="0" y="0" width="3440" height="1359" />
     </state>
     <state width="3419" height="403" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1581296459866" />
-    <state width="3419" height="475" key="GridCell.Tab.0.left/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581640343757" />
-    <state width="3419" height="475" key="GridCell.Tab.0.right" timestamp="1581640343757">
+    <state width="3419" height="396" key="GridCell.Tab.0.left/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581911457142" />
+    <state width="3419" height="396" key="GridCell.Tab.0.right" timestamp="1581911457143">
       <screen x="0" y="0" width="3440" height="1359" />
     </state>
     <state width="3419" height="403" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1581296459867" />
-    <state width="3419" height="475" key="GridCell.Tab.0.right/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581640343757" />
+    <state width="3419" height="396" key="GridCell.Tab.0.right/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581911457143" />
     <state width="3419" height="475" key="GridCell.Tab.1.bottom" timestamp="1581640343758">
       <screen x="0" y="0" width="3440" height="1359" />
     </state>
@@ -170,11 +171,11 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/JFrameGuiActions.java</url>
-          <line>692</line>
+          <line>694</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/DecisionEngine.java</url>
+          <url>file://$PROJECT_DIR$/src/HarmonyDecision.java</url>
           <line>103</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
