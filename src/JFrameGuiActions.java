@@ -263,7 +263,7 @@ Set up the Gui Listeners
                     String reasonForEndOfSimulation = "";
                     switch(currentStateOfSimulation) {
                         case 1:
-                            reasonForEndOfSimulation = "Simulation has ended as all nodes have reached their final destinations";
+                            reasonForEndOfSimulation = "Simulation has ended as all nodes have reached raspberry creek";
                             break;
                         case 2:
                             reasonForEndOfSimulation = "Simulation has reached the specified duration of " + durationStringAsSetByTheUser;

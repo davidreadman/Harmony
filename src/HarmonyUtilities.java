@@ -103,13 +103,12 @@ public class HarmonyUtilities
 
     /**
      * Return the current state of the simulation.
-     * Basically if it's running return -1 or return a positive value to indicate the simulation is over
      * @return 0 if it's incomplete,
      *          1 if all nodes have reached raspberry creek,
      *          2 if we ran out of time
      */
     public int currentStateOfSimulation(ArrayList<NodeData> nodes) {
-        if(nodes.stream().allMatch(node -> HarmonyMovement.hasNodeReachedFinalLocation(node) && node.symbol.toUpperCase().charAt(1) == 'F')) {
+        if(nodes.stream().allMatch(node -> HarmonyMovement.hasNodeReachedRaspberryCreek(node))) {
             return 1;
         }
         else if(maxMovementCounter > 0 && movementCounter == maxMovementCounter) {

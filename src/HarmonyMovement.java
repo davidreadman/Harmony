@@ -176,8 +176,8 @@ public class HarmonyMovement
 
     }
 
-    public static boolean hasNodeReachedFinalLocation(NodeData currentNode) {
-        return distanceToTargetInMeters(currentNode.currentLocation, currentNode.finalLocation) == 0;
+    public static boolean hasNodeReachedRaspberryCreek(NodeData currentNode) {
+        return distanceToTargetInMeters(currentNode.currentLocation, RASPBERRY_CK) == 0;
     }
 
     /* update the locations and direction of travel */

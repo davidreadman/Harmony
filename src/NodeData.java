@@ -15,8 +15,10 @@ public class NodeData
      allows more information to use for direction of travel
      Next location indicates the next known position that the node needs to travel.
       */
-     Position currentLocation,previousLocation, nextLocation, finalLocation;
-     String nodeType;
+     Position currentLocation;
+    Position previousLocation;
+    Position nextLocation;
+    String nodeType;
      String symbol;
      TacticalSymbol symbolIdentifier;
      double operationalSpeedInKmH;
@@ -40,32 +42,4 @@ public class NodeData
 
     //This flag is to indicate whether the node is carrying out a plan sent out by the commander or a higher up.
     boolean isCarryingOutAPlan = false;
-
-    public void setFinalLocation(Position finalLocation) {
-        this.finalLocation = finalLocation;
-        if(!checkpointsRemaining.contains(finalLocation)) {
-            checkpointsRemaining.add(finalLocation);
-        }
-        this.nextLocation = finalLocation;
-    }
-
-    public void updatePlanCheckpoints(List<Position> positions) {
-        checkpointsRemaining.addAll(positions);
-        if(nextLocation != null) {
-            nextLocation = checkpointsRemaining.get(0);
-        }
-        finalLocation = checkpointsRemaining.get(checkpointsRemaining.size()-1);
-    }
-
-    /**
-     * If this position is one of the checkpoints we wanted to tick off, then remove it from the list
-     * as it will indicate that the node arrived at this particular checkpoint for a tactic or a specific place.
-     * @param position
-     */
-    public void tickOffCheckpointIfItExists(Position position) {
-        if(checkpointsRemaining.contains(position)) {
-            checkpointsRemaining.remove(position);
-        }
-        nextLocation = checkpointsRemaining.get(0);
-    }
 }
