@@ -3,8 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="36e190ff-6c8f-4732-b55d-ac2461a42e1a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/newconfig.properties" beforeDir="false" afterPath="$PROJECT_DIR$/newconfig.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plan.properties" beforeDir="false" afterPath="$PROJECT_DIR$/plan.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/JFrameGuiActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/JFrameGuiActions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SymbolModifierData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SymbolModifierData.java" afterDir="false" />
     </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,6 +49,18 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\rohit.gopalan\Documents\Harmony\out\artifacts\Harmony_jar" />
     </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager">
     <configuration name="Harmony" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -165,6 +181,7 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
+<<<<<<< Updated upstream
           <url>file://$PROJECT_DIR$/src/ParseProperties.java</url>
           <line>134</line>
           <option name="timeStamp" value="1" />
@@ -176,6 +193,9 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/HarmonyDecision.java</url>
+=======
+          <url>file://$PROJECT_DIR$/src/DecisionEngine.java</url>
+>>>>>>> Stashed changes
           <line>103</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>

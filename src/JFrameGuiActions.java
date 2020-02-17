@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -569,13 +570,13 @@ Set up the Gui Listeners
 
         substring = MilSymString.substring(10,11);
         hQList.setSelectedIndex(hQIDStringsList.indexOf(substring));
-        System.out.println("hQ: " + substring);
+        //System.out.println("hQ: " + substring);
         substring = MilSymString.substring(11,12);
         levelList.setSelectedIndex(levelIDStringsList.indexOf(substring));
-        System.out.println("level: " + substring);
+        //System.out.println("level: " + substring);
         substring = MilSymString.substring(4,10);
         functionList.setSelectedIndex(functionIDStringsList.indexOf(substring));
-        System.out.println("function: " + substring);
+       // System.out.println("function: " + substring);
         nodeList.setSelectedIndex(0);
 
         //buttonA.setBackground(new Color(0,0,0,200));
@@ -649,7 +650,82 @@ Set up the Gui Listeners
 and that invokes the actionlistener, if we do want to invoke the ifflist value as a listener then itemListener can be used
 used the invisible because the selection of new dropdown is invoked at this point
  */
+        cloneButton.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                System.out.println("clone: " + selectedNode.NodeUUID);
+                //get the listarray of nodes
+                System.out.println("there are : " + harmonyUtilities.decisionEngine.nodes.size() + " nodes in the array");
+                //from 1 generate the expected node UUID
+                int nodeIndex = 1;
+                for(NodeData currentNode : harmonyUtilities.decisionEngine.nodes)
+                {
+                    System.out.println(currentNode.NodeUUID +" UUID is present");
+                    if (currentNode.NodeUUID.equals("NodeD"))
+                    {
+                        System.out.println("Node"+nodeIndex+" UUID is present");
+                    }
+                    nodeIndex++;
+                }
+                //go through this list to see if there is a missing node in the sequence eg 1, 2, 3
+                //create a new node to insert into missing item in list or the last item in list
+                //update the symbols in displayww
+            }
+        });
+        deleteButton.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                System.out.println("delete: " + selectedNode.NodeUUID);
+                //get the listarray of nodes
+                System.out.println("there are : " + harmonyUtilities.decisionEngine.nodes.size() + " nodes in the array");
+                //https://www.java67.com/2014/03/2-ways-to-remove-elementsobjects-from-ArrayList-java.html
+                harmonyUtilities.decisionEngine.nodes.remove(selectedNode);
+                //and remove the symbol
+                //get the symbollayer
+                Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
 
+                //we have this layer stored as a layer, we can remove this entire layer from the model layers
+                displayWW.canvas.getModel().getLayers().remove(symbolLayer);
+                // need to create a new renderable layer because the symbollayer is converted to a standard layer when added to the model
+                RenderableLayer replaceLayer;
+                replaceLayer = (RenderableLayer) symbolLayer;
+                replaceLayer.setName("symbolLayer");
+                replaceLayer.removeRenderable(selectedNode.symbolIdentifier);
+
+                displayWW.canvas.getModel().getLayers().add(replaceLayer);
+                System.out.println("there are : " + harmonyUtilities.decisionEngine.nodes.size() + " nodes in the array");
+                //set index to first item in list
+                selectedNode = harmonyUtilities.decisionEngine.nodes.get(0);
+
+                MilSymString = selectedNode.symbolIdentifier.getIdentifier();
+                NodeUUIDText.setText(selectedNode.NodeUUID);
+
+                //testing to see how to address the object
+                //need to change the selected nodes drop down list at this point else all up to this are changed
+                SymbolString.setText(MilSymString);
+
+                //identify the iff in the string, adjust the iff in the dropdown iFFList
+
+                substring = MilSymString.substring(1,2);
+
+
+                iFFList.setSelectedIndex(iffIDStringsList.indexOf(substring));
+
+                substring = MilSymString.substring(10,11);
+                hQList.setSelectedIndex(hQIDStringsList.indexOf(substring));
+
+                //System.out.println("hQ: " + substring);
+                substring = MilSymString.substring(11,12);
+                levelList.setSelectedIndex(levelIDStringsList.indexOf(substring));
+                // System.out.println("level: " + substring);
+                substring = MilSymString.substring(4,10);
+                functionList.setSelectedIndex(functionIDStringsList.indexOf(substring));
+            }
+        });
         iFFList.addPopupMenuListener(new PopupMenuListener()
         {
             @Override
