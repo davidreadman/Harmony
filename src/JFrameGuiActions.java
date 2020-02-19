@@ -657,10 +657,10 @@ used the invisible because the selection of new dropdown is invoked at this poin
             {
                 System.out.println("clone: " + selectedNode.NodeUUID);
                 //get the listarray of nodes
-                System.out.println("there are : " + harmonyUtilities.decisionEngine.nodes.size() + " nodes in the array");
+                System.out.println("there are : " + nodes.size() + " nodes in the array");
                 //from 1 generate the expected node UUID
                 int nodeIndex = 1;
-                for(NodeData currentNode : harmonyUtilities.decisionEngine.nodes)
+                for(NodeData currentNode : nodes)
                 {
                     System.out.println(currentNode.NodeUUID +" UUID is present");
                     if (currentNode.NodeUUID.equals("NodeD"))
@@ -681,9 +681,9 @@ used the invisible because the selection of new dropdown is invoked at this poin
             {
                 System.out.println("delete: " + selectedNode.NodeUUID);
                 //get the listarray of nodes
-                System.out.println("there are : " + harmonyUtilities.decisionEngine.nodes.size() + " nodes in the array");
+                System.out.println("there are : " + nodes.size() + " nodes in the array");
                 //https://www.java67.com/2014/03/2-ways-to-remove-elementsobjects-from-ArrayList-java.html
-                harmonyUtilities.decisionEngine.nodes.remove(selectedNode);
+                nodes.remove(selectedNode);
                 //and remove the symbol
                 //get the symbollayer
                 Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
@@ -697,9 +697,9 @@ used the invisible because the selection of new dropdown is invoked at this poin
                 replaceLayer.removeRenderable(selectedNode.symbolIdentifier);
 
                 displayWW.canvas.getModel().getLayers().add(replaceLayer);
-                System.out.println("there are : " + harmonyUtilities.decisionEngine.nodes.size() + " nodes in the array");
+                System.out.println("there are : " + nodes.size() + " nodes in the array");
                 //set index to first item in list
-                selectedNode = harmonyUtilities.decisionEngine.nodes.get(0);
+                selectedNode = nodes.get(0);
 
                 MilSymString = selectedNode.symbolIdentifier.getIdentifier();
                 NodeUUIDText.setText(selectedNode.NodeUUID);

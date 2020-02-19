@@ -3,12 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="36e190ff-6c8f-4732-b55d-ac2461a42e1a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/newconfig.properties" beforeDir="false" afterPath="$PROJECT_DIR$/newconfig.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plan.properties" beforeDir="false" afterPath="$PROJECT_DIR$/plan.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/JFrameGuiActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/JFrameGuiActions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SymbolModifierData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SymbolModifierData.java" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -49,18 +45,6 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\rohit.gopalan\Documents\Harmony\out\artifacts\Harmony_jar" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager">
     <configuration name="Harmony" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -107,11 +91,10 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1400" y="435" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1580441460168" />
-    <state x="1236" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1581910572689">
-      <screen x="0" y="0" width="3440" height="1359" />
+    <state x="1236" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1580875651022">
+      <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1236" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1580875651022" />
-    <state x="1236" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581910572689" />
     <state x="1467" y="555" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1580430084968">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
@@ -120,26 +103,26 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1500" y="456" key="FileChooserDialogImpl/0.0.3440.1400@0.0.3440.1400" timestamp="1580940734234" />
-    <state width="3419" height="396" key="GridCell.Tab.0.bottom" timestamp="1581911457143">
+    <state width="3419" height="475" key="GridCell.Tab.0.bottom" timestamp="1581640343757">
       <screen x="0" y="0" width="3440" height="1359" />
     </state>
     <state width="3419" height="403" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1581296459867" />
-    <state width="3419" height="396" key="GridCell.Tab.0.bottom/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581911457143" />
-    <state width="3419" height="396" key="GridCell.Tab.0.center" timestamp="1581911457143">
+    <state width="3419" height="475" key="GridCell.Tab.0.bottom/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581640343757" />
+    <state width="3419" height="475" key="GridCell.Tab.0.center" timestamp="1581640343757">
       <screen x="0" y="0" width="3440" height="1359" />
     </state>
     <state width="3419" height="403" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1581296459866" />
-    <state width="3419" height="396" key="GridCell.Tab.0.center/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581911457143" />
-    <state width="3419" height="396" key="GridCell.Tab.0.left" timestamp="1581911457142">
+    <state width="3419" height="475" key="GridCell.Tab.0.center/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581640343757" />
+    <state width="3419" height="475" key="GridCell.Tab.0.left" timestamp="1581640343757">
       <screen x="0" y="0" width="3440" height="1359" />
     </state>
     <state width="3419" height="403" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1581296459866" />
-    <state width="3419" height="396" key="GridCell.Tab.0.left/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581911457142" />
-    <state width="3419" height="396" key="GridCell.Tab.0.right" timestamp="1581911457143">
+    <state width="3419" height="475" key="GridCell.Tab.0.left/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581640343757" />
+    <state width="3419" height="475" key="GridCell.Tab.0.right" timestamp="1581640343757">
       <screen x="0" y="0" width="3440" height="1359" />
     </state>
     <state width="3419" height="403" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1581296459867" />
-    <state width="3419" height="396" key="GridCell.Tab.0.right/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581911457143" />
+    <state width="3419" height="475" key="GridCell.Tab.0.right/3440.0.1280.693/0.0.3440.1359@0.0.3440.1359" timestamp="1581640343757" />
     <state width="3419" height="475" key="GridCell.Tab.1.bottom" timestamp="1581640343758">
       <screen x="0" y="0" width="3440" height="1359" />
     </state>
@@ -181,21 +164,17 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-<<<<<<< Updated upstream
           <url>file://$PROJECT_DIR$/src/ParseProperties.java</url>
           <line>134</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/JFrameGuiActions.java</url>
-          <line>694</line>
+          <line>692</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/HarmonyDecision.java</url>
-=======
           <url>file://$PROJECT_DIR$/src/DecisionEngine.java</url>
->>>>>>> Stashed changes
           <line>103</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>

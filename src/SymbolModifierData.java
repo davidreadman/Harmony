@@ -28,6 +28,7 @@ public class SymbolModifierData
             "Ground Track-Unit-Combat-Engineer",
             "Ground Track-Unit-Combat-Field Artillery",
             "Ground Track-Unit-Combat-Recon",
+
                     "Ground Track-Unit-Combat-Recon-Cavalry-Armored",
             "Ground Track-Unit-Combat-Missile",
             "Ground Track-Unit-Combat-Internal Security Forces"
