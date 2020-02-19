@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
@@ -117,6 +120,38 @@ public class HarmonyUtilities
         else {
             return 0;
         }
+    }
+    public int getArrayOfNames(ArrayList<String> animalNames) throws IOException
+    {
+        String tempString;
+        int counter = 0;
+        FileReader fileReader = new FileReader("Animals.csv") ;
+        BufferedReader br = new BufferedReader(fileReader);
+        while((tempString=br.readLine()) != null)
+        {
+            animalNames.add(tempString);
+            counter++;
+        }
+
+    return counter;
+    }
+    public String grabAName(ArrayList<String> animalNames, ArrayList<NodeData> nodes)
+    {
+        String randString ="";
+        Random generator = new Random();
+            int index =    generator.nextInt(animalNames.size()) ;
+            randString =animalNames.get(index);
+
+        //check for duplication
+        for(NodeData currentNode : nodes)
+        {
+            if (currentNode.NodeUUID == randString)
+            {
+                randString = grabAName(animalNames,nodes);
+            }
+
+        }
+        return randString;
     }
 
     //placeholder for 'measure of goodness based on the number of nodes within given distance of each other

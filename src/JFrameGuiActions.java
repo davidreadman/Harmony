@@ -55,19 +55,21 @@ public class JFrameGuiActions extends JFrame
     java.util.List<String> hQIDStringsList = new ArrayList<>(Arrays.asList(symbolModifierData.hQIDStrings));
     java.util.List<String> functionIDStringsList = new ArrayList<>(Arrays.asList(symbolModifierData.functionIDStrings));
     java.util.List<String> iffIDStringsList = new ArrayList<>(Arrays.asList(symbolModifierData.iFFIDStrings));
+    ArrayList animalList = new ArrayList();
     JTextArea nodePositionsTextArea;
     String durationStringAsSetByTheUser = "";
     String MilSymString;
     String substring;
     String constructString;
+ int numAnimals;
 
-
-    public JFrameGuiActions(HarmonyDataPublisher publishData, SimulationSettings simulationSettings, ArrayList<NodeData> nodes)
+    public JFrameGuiActions(HarmonyDataPublisher publishData, SimulationSettings simulationSettings, ArrayList<NodeData> nodes) throws IOException
     {
         this.nodes = nodes;
         this.harmonyUtilities = new HarmonyUtilities(publishData);
         this.nodePositionsTextArea = new JTextArea();
         this.nodePositionsTextArea.setRows(nodes.size());
+        numAnimals = harmonyUtilities.getArrayOfNames(animalList);
         //this.nodeData = nodeData;
         /* setup the binding of properties to allow for change monitoring across threads */
         DDSPositionMessage dDSPositionMessage = new DDSPositionMessage();
@@ -655,11 +657,12 @@ used the invisible because the selection of new dropdown is invoked at this poin
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                //need to sort out correct node duplication here
                 System.out.println("clone: " + selectedNode.NodeUUID);
                 //get the listarray of nodes
                 System.out.println("there are : " + nodes.size() + " nodes in the array");
                 //from 1 generate the expected node UUID
-                int nodeIndex = 1;
+              /*  int nodeIndex = 1;
                 for(NodeData currentNode : nodes)
                 {
                     System.out.println(currentNode.NodeUUID +" UUID is present");
@@ -668,7 +671,17 @@ used the invisible because the selection of new dropdown is invoked at this poin
                         System.out.println("Node"+nodeIndex+" UUID is present");
                     }
                     nodeIndex++;
-                }
+                }*/
+
+
+              NodeData newNode = selectedNode;
+              nodes.add(newNode);
+
+              newNode.NodeUUID = harmonyUtilities.grabAName(animalList,nodes);
+              // this line to set up the function correctly
+                  MilSymString=newNode.symbol;
+                  updateTacticalSymbol();
+
                 //go through this list to see if there is a missing node in the sequence eg 1, 2, 3
                 //create a new node to insert into missing item in list or the last item in list
                 //update the symbols in displayww
