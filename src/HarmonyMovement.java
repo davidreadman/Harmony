@@ -90,7 +90,7 @@ public class HarmonyMovement
         //Only move if we really need to.
         Position nextPosition;
         if(distanceToTravelInMetres > 0) {
-            nextPosition = moveDirectionDistance(currentNode.currentLocation, bearingInDegrees, distanceToTravelInMetres);
+            nextPosition = moveVDirectionDistance(currentNode.currentLocation, bearingInDegrees,20, distanceToTravelInMetres);
             //and update the node next and current Position with the location of the new position
             updatePosition(nextPosition, currentNode);
         }

@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="36e190ff-6c8f-4732-b55d-ac2461a42e1a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/JFrameGuiActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/JFrameGuiActions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HarmonyMovement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HarmonyMovement.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +45,18 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\rohit.gopalan\Documents\Harmony\out\artifacts\Harmony_jar" />
     </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager">
     <configuration name="Harmony" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -167,11 +179,6 @@
           <url>file://$PROJECT_DIR$/src/ParseProperties.java</url>
           <line>134</line>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/JFrameGuiActions.java</url>
-          <line>692</line>
-          <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DecisionEngine.java</url>
