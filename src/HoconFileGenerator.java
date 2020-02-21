@@ -11,8 +11,8 @@ public class HoconFileGenerator {
     private static String getPositionRecipientsForNode(List<NodeData> nodes, String nodeUUID) {
         List<String> others = new ArrayList<>();
         for(NodeData node: nodes){
-            if(!node.NodeUUID.equals(nodeUUID)) {
-                others.add(node.NodeUUID);
+            if(!node.nodeUUID.equals(nodeUUID)) {
+                others.add(node.nodeUUID);
             }
         }
         return String.join(",", others);
@@ -38,7 +38,7 @@ public class HoconFileGenerator {
         outfile.write("\t\t\t\tinterfaces: {\n");
         for(int i=0;i<nodes.size();i++) {
             NodeData node = nodes.get(i);
-            outfile.write(String.format("\t\t\t\t\t\"%s\" { ipAddress: \"10.0.%d.%d\", macAddress: \"%d%d\"}\n", node.NodeUUID, networkID, i+1, networkID, i+1));
+            outfile.write(String.format("\t\t\t\t\t\"%s\" { ipAddress: \"10.0.%d.%d\", macAddress: \"%d%d\"}\n", node.nodeUUID, networkID, i+1, networkID, i+1));
         }
         outfile.write("\t\t\t\t}\n");
         outfile.write("\t\t\t\trouteSource: { type: static, routes: [] }\n");
@@ -69,22 +69,22 @@ public class HoconFileGenerator {
             }
             for(int i=0; i<nodes.size();i++) {
                 NodeData node = nodes.get(i);
-                nodeUUIDs.add(String.format("\"%s\"", node.NodeUUID));
+                nodeUUIDs.add(String.format("\"%s\"", node.nodeUUID));
                 String positionRecipients = "";
                 switch (node.symbol.charAt(1)) {
                     case 'F':
-                        positionRecipients = getPositionRecipientsForNode(friends, node.NodeUUID);
+                        positionRecipients = getPositionRecipientsForNode(friends, node.nodeUUID);
                         break;
                     case 'H':
-                        positionRecipients = getPositionRecipientsForNode(hostiles, node.NodeUUID);
+                        positionRecipients = getPositionRecipientsForNode(hostiles, node.nodeUUID);
                         break;
                     case 'N':
-                        positionRecipients = getPositionRecipientsForNode(neutrals, node.NodeUUID);
+                        positionRecipients = getPositionRecipientsForNode(neutrals, node.nodeUUID);
                         break;
                     default:
                         break;
                 }
-                entities.add(String.format("\"%s\" {urn: %d, positionRecipients: [%s], symbol: \"%s\"}", node.NodeUUID, i+1, positionRecipients, node.symbol));
+                entities.add(String.format("\"%s\" {urn: %d, positionRecipients: [%s], symbol: \"%s\"}", node.nodeUUID, i+1, positionRecipients, node.symbol));
             }
             LocalDateTime date = LocalDateTime.now();
             //format
@@ -123,7 +123,7 @@ public class HoconFileGenerator {
             outfile.write("\tentityMovement: {\n\t\tsource {\n\t\ttype:waypoints\n\t\tinterval: 10 seconds\n");
             outfile.write("\t\twaypoints {\n");
             for(NodeData node: nodes) {
-                outfile.write(String.format("\t\t\t%s: [{at: 0 minutes, position: { lat: %f, lon: %f}]\n", node.NodeUUID, node.currentLocation.asDegreesArray()[0], node.currentLocation.asDegreesArray()[1]));
+                outfile.write(String.format("\t\t\t%s: [{at: 0 minutes, position: { lat: %f, lon: %f}]\n", node.nodeUUID, node.currentLocation.asDegreesArray()[0], node.currentLocation.asDegreesArray()[1]));
             }
             outfile.write("\t\t}\n"); //complete the waypoints block inside the entityMovement block
             outfile.write("\t}\n"); //complete the entityMovement block

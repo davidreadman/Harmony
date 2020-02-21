@@ -3,7 +3,6 @@ Modified from Opensplice ListenerDataPublisher
  *
  */
 
-import ngems.c2f.*;
 import org.omg.dds.core.Duration;
 import org.omg.dds.core.InstanceHandle;
 import org.omg.dds.core.ServiceEnvironment;
@@ -69,9 +68,9 @@ public class HarmonyDataPublisher
 
 
             if(debugEnabled)
-                System.out.println("publishing node "+thisNodeData.NodeUUID);
+                System.out.println("publishing node "+thisNodeData.nodeUUID);
 
-            positionReportMessage.header.entityName = thisNodeData.NodeUUID;
+            positionReportMessage.header.entityName = thisNodeData.nodeUUID;
             positionReportMessage.latitude = thisNodeData.currentLocation.asDegreesArray()[0];
             positionReportMessage.longitude = thisNodeData.currentLocation.asDegreesArray()[1];
 

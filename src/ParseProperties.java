@@ -5,9 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Properties;
+import java.util.*;
 
 
 public class ParseProperties
@@ -49,24 +47,42 @@ public class ParseProperties
 			//loop through the number of nodes to fill array
 			//assume #nodes > 0
 
+			Map<String, String> nodeToCommander = new HashMap<>();
 			for (int i = 0 ; i<NumberOfNodes ;i++)
 			{
 				theseNodes[i] = new NodeData();
-				theseNodes[i].NodeUUID = prop.getProperty("Node"+(i+1)+"UUID");
+				theseNodes[i].nodeUUID = prop.getProperty("Node"+(i+1)+"UUID");
 				double Lat = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lat"));
 				double Lon = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lon"));
 				theseNodes[i].currentLocation= new Position(LatLon.fromDegrees(Lat,Lon), 0);
 				theseNodes[i].nodeType = prop.getProperty("Node"+(i+1)+"Type");
 				theseNodes[i].symbol = prop.getProperty("Node"+(i+1)+"2525B");
 				theseNodes[i].operationalSpeedInKmH =  Double.parseDouble(prop.getProperty("Node"+(i+1)+"OperationalSpeed"));
-				theseNodes[i].maximumSpeedInKmH = Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed"));
+				theseNodes[i].minOperationalSpeedInKmH = theseNodes[i].operationalSpeedInKmH;
+				theseNodes[i].maxOperationalSpeedInKmH = Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed"));
 				if(prop.containsKey("Node"+(i+1)+"StrategyCSV")) {
 					theseNodes[i].strategies = Arrays.asList(prop.getProperty("Node"+(i+1)+"StrategyCSV").split(","));
 				}
-				//Remove once strategies are being implemented
-				theseNodes[i].nextLocation = HarmonyMovement.RASPBERRY_CK;
+				if(prop.containsKey("Node"+(i+1)+"CommanderUUID")) {
+					nodeToCommander.put(theseNodes[i].nodeUUID, prop.getProperty("Node"+(i+1)+"CommanderUUID"));
+				}
 			}
-			return new ArrayList<>(Arrays.asList(theseNodes));
+			ArrayList<NodeData> allNodes = new ArrayList<>(Arrays.asList(theseNodes));
+			for(NodeData currentNode: allNodes) {
+				if(nodeToCommander.containsKey(currentNode.nodeUUID)){
+					for(NodeData other: allNodes) {
+						if(other.nodeUUID.equals(nodeToCommander.get(currentNode.nodeUUID)))
+						{
+							currentNode.myCommander = other;
+							break;
+						}
+					}
+				}
+				else
+					currentNode.myCommander = null;
+			}
+
+			return allNodes;
 		}
 		catch (Exception e)
 		{
@@ -139,6 +155,9 @@ public class ParseProperties
 			}
 			if(prop.containsKey("debugDataListener")) {
 				simulationSettings.debugDataListener = prop.getProperty("debugDataListener").toLowerCase().equals("yes");
+			}
+			if(prop.containsKey("numOfSimulationsToRun")) {
+				simulationSettings.numOfSimulationsToRun = Integer.parseInt(prop.getProperty("numOfSimulationsToRun"));
 			}
 		}
 		catch(Exception e) {

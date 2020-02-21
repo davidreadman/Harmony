@@ -18,7 +18,7 @@ public class WriteLog
     List<String> linesWritten = new ArrayList<>();
 
     //constructor
-    WriteLog()
+    WriteLog(String directoryName)
     {
         //set up a logging file with a time basis
         //get local time
@@ -31,7 +31,7 @@ public class WriteLog
         filePath = parsedDate.toString().replace("-", "")
                 .replace("T", "").replace(":", "");
         filePath = "log" + filePath +".csv";
-        System.out.println(filePath);
+        filePath = String.format("%s/%s",directoryName, filePath);
         //next line will create writing file
         file = new File(filePath);
 

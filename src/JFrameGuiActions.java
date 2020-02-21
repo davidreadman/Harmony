@@ -23,16 +23,15 @@ public class JFrameGuiActions extends JFrame
 {
     boolean simulationOver = false;
     HarmonyUtilities harmonyUtilities;
-    boolean loggingFlag = false;
     JPanel nodeLocPanel;
     JPanel panel2525B;
-    JLabel NodeUUIDText;
+    JLabel nodeUUIDText;
     DisplayWW displayWW;
     JMenuBar menuBar;
     JMenu menu;
     JMenu aboutMenu;
     JMenu informationMenu;
-    JMenuItem menuItem, enableMovementMenuItem, restartMenuItem, buttonMenuItem, configCreatorMenuItem, setDurationItem, currentDurationItem;
+    JMenuItem menuItem, enableMovementMenuItem, restartMenuItem, buttonMenuItem, configCreatorMenuItem, setDurationItem, currentDurationItem, setNumberOfSimulationsItem;
     JRadioButtonMenuItem rbMenuItem;
     JRadioButtonMenuItem dDSNodeMenuItem;
     JRadioButtonMenuItem pubMenuItem;
@@ -62,6 +61,8 @@ public class JFrameGuiActions extends JFrame
     String substring;
     String constructString;
  int numAnimals;
+    int maxNumOfRuns;
+    int numOfRunsRemaining = 0;
 
     public JFrameGuiActions(HarmonyDataPublisher publishData, SimulationSettings simulationSettings, ArrayList<NodeData> nodes) throws IOException
     {
@@ -94,7 +95,11 @@ public class JFrameGuiActions extends JFrame
         this.setTitle("Harmony");
         setDefaultLookAndFeelDecorated(true);
 
-        this.loggingFlag = simulationSettings.enableLogging;
+        if(simulationSettings.enableLogging)
+            harmonyUtilities.createLogFile(nodes);
+
+        maxNumOfRuns = simulationSettings.numOfSimulationsToRun;
+        numOfRunsRemaining = maxNumOfRuns;
         /*method setupMenuBar*/
         this.setJMenuBar(setupMenuBar(simulationSettings));
 
@@ -131,18 +136,14 @@ Set up the Gui Listeners
  */
         restartMenuItem.addActionListener(e -> {
             try {
-                harmonyUtilities.restartSimulation(nodes);
-                simulationOver = false;
-                //update the positions on view.
-                nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString(nodes));
-                currentDurationItem.setText(generateDurationString());
+                performReset();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         });
         rbMenuItem.addActionListener(e -> {
-            loggingFlag = !loggingFlag;
-            harmonyUtilities.createLogFile();
+            if(rbMenuItem.isSelected())
+                harmonyUtilities.createLogFile(nodes);
         });
         buttonMenuItem.addActionListener(e -> harmonyUtilities.createNewConfigPropertiesFile(nodes));
         configCreatorMenuItem.addActionListener(e -> harmonyUtilities.createHoconFile(nodes));
@@ -191,6 +192,19 @@ Set up the Gui Listeners
             }
         });
 
+        setNumberOfSimulationsItem.addActionListener(e -> {
+            JTextField txtNumSimulationsValue = new JTextField(5);
+            JPanel myPanel = new JPanel();
+            myPanel.add(txtNumSimulationsValue);
+            int result = JOptionPane.showConfirmDialog(null, myPanel, "Specify number of simulations to run",JOptionPane.OK_CANCEL_OPTION);
+            if(result == JOptionPane.OK_OPTION){
+                this.maxNumOfRuns = Integer.parseInt(txtNumSimulationsValue.getText());
+                this.numOfRunsRemaining = this.maxNumOfRuns;
+                restartMenuItem.setEnabled(false);
+                setNumberOfSimulationsItem.setEnabled(false);
+            }
+        });
+
         /*
         dragger is the worldwind gui detector for when an object in the layers is dragged with the mouse
          */
@@ -211,7 +225,7 @@ Set up the Gui Listeners
                                 case SelectEvent.LEFT_CLICK:
                                     selectedNode = currentNode;
                                     MilSymString = selectedNode.symbolIdentifier.getIdentifier();
-                                    NodeUUIDText.setText(selectedNode.NodeUUID);
+                                    nodeUUIDText.setText(selectedNode.nodeUUID);
 
                                     //testing to see how to address the object
                                     //need to change the selected nodes drop down list at this point else all up to this are changed
@@ -266,19 +280,41 @@ Set up the Gui Listeners
                     String reasonForEndOfSimulation = "";
                     switch(currentStateOfSimulation) {
                         case 1:
-                            reasonForEndOfSimulation = "Simulation has ended as all nodes have reached raspberry creek";
+                            reasonForEndOfSimulation = "Simulation has ended as all friendly nodes have reached raspberry creek";
                             break;
                         case 2:
                             reasonForEndOfSimulation = "Simulation has reached the specified duration of " + durationStringAsSetByTheUser;
                             break;
+                        case 3:
+                            reasonForEndOfSimulation = "Simulation has ended as all friendly nodes have died";
+                            break;
+                        case 4:
+                            reasonForEndOfSimulation = "Simulation has ended as all hostile nodes have died";
+                            break;
                         default:
                             break;
                     }
-                    JOptionPane.showMessageDialog(new JFrame("End Of simulation"), String.format("%s.", reasonForEndOfSimulation), "End of simulation", JOptionPane.INFORMATION_MESSAGE);
                     simulationOver = true;
                     harmonyUtilities.closeLogFile();
-                    enableMovementMenuItem.setSelected(false);
-                    setDurationItem.setEnabled(true);
+                    if(maxNumOfRuns == 0) {
+                        JOptionPane.showMessageDialog(new JFrame("End Of simulation"), String.format("%s.", reasonForEndOfSimulation), "End of simulation", JOptionPane.INFORMATION_MESSAGE);
+                        enableMovementMenuItem.setSelected(false);
+                        setDurationItem.setEnabled(true);
+                    }
+                    else
+                    {
+                        numOfRunsRemaining--;
+                        try {
+                            if(numOfRunsRemaining == 0) {
+                                setNumberOfSimulationsItem.setEnabled(true);
+                                JOptionPane.showMessageDialog(new JFrame("End Of simulation"), String.format("Harmony has ended as it finished %d simulations",this.maxNumOfRuns), "Max number of simulations completed", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                            else
+                                performReset();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
                 }
             }
             currentDurationItem.setText(generateDurationString());
@@ -291,7 +327,7 @@ Set up the Gui Listeners
             //if logging is enabled
             //if this is the first time logging, set up csv file and set a flag
             //else just log the data
-            if (loggingFlag)
+            if (rbMenuItem.isSelected())
             {
                 harmonyUtilities.logToCSV(nodes);
             }
@@ -304,9 +340,20 @@ Set up the Gui Listeners
             }
             //////////////////////////////////////////////
         };
-        Timer secondTimer = new Timer(3000, secondTimerListener);
+        Timer secondTimer = new Timer(1000, secondTimerListener);
         secondTimer.start();
 
+
+    }
+
+    private void performReset() throws IOException {
+        harmonyUtilities.restartSimulation(nodes);
+        simulationOver = false;
+        //update the positions on view.
+        nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString(nodes));
+        currentDurationItem.setText(generateDurationString());
+        if(rbMenuItem.isSelected())
+            harmonyUtilities.createLogFile(nodes);
 
     }
 
@@ -409,6 +456,9 @@ Set up the Gui Listeners
         restartMenuItem = new JMenuItem("Restart Simulation");
         menu.add(restartMenuItem);
 
+        setNumberOfSimulationsItem = new JMenuItem("Set number of Simulations");
+        menu.add(setNumberOfSimulationsItem);
+
         /*start and stop logging */
         menu.addSeparator();
 
@@ -435,6 +485,10 @@ Set up the Gui Listeners
             harmonyUtilities.setMaxEpochCounter(simulationSettings.simulatonDuration);
             durationStringAsSetByTheUser = simulationSettings.durationString;
             setDurationItem.setEnabled(false);
+        }
+        if(simulationSettings.numOfSimulationsToRun > 0){
+            restartMenuItem.setEnabled(false);
+            setNumberOfSimulationsItem.setEnabled(false);
         }
 
         currentDurationItem = new JMenuItem(generateDurationString());
@@ -521,7 +575,7 @@ Set up the Gui Listeners
         nodeLabel.setFont(labelFont);
 
         //as null pointers are bad, identify first node as selected
-        NodeUUIDText = new JLabel(selectedNode.NodeUUID);
+        nodeUUIDText = new JLabel(selectedNode.nodeUUID);
         JLabel affiliationLabel = new JLabel("Affiliation");
         affiliationLabel.setFont(labelFont);
         //table A-II from Mil-std-2525C Table A-II modifier codes
@@ -548,7 +602,7 @@ Set up the Gui Listeners
 
         for (int i = 0; i < numberOfNodes; i++)
         {
-            nodeNames[i] = nodes.get(i).NodeUUID;
+            nodeNames[i] = nodes.get(i).nodeUUID;
         }
 
 
@@ -605,7 +659,7 @@ Set up the Gui Listeners
         panel2525B.add(levelLabel,c);
         c.gridx = 0;
         c.gridy = 1;
-        panel2525B.add(NodeUUIDText,c);
+        panel2525B.add(nodeUUIDText,c);
         c.gridx = 1;
         c.gridy = 1;
         panel2525B.add(iFFList,c);
@@ -658,15 +712,15 @@ used the invisible because the selection of new dropdown is invoked at this poin
             public void actionPerformed(ActionEvent e)
             {
                 //need to sort out correct node duplication here
-                System.out.println("clone: " + selectedNode.NodeUUID);
+                System.out.println("clone: " + selectedNode.nodeUUID);
                 //get the listarray of nodes
                 System.out.println("there are : " + nodes.size() + " nodes in the array");
                 //from 1 generate the expected node UUID
               /*  int nodeIndex = 1;
                 for(NodeData currentNode : nodes)
                 {
-                    System.out.println(currentNode.NodeUUID +" UUID is present");
-                    if (currentNode.NodeUUID.equals("NodeD"))
+                    System.out.println(currentNode.nodeUUID +" UUID is present");
+                    if (currentNode.nodeUUID.equals("NodeD"))
                     {
                         System.out.println("Node"+nodeIndex+" UUID is present");
                     }
@@ -677,7 +731,7 @@ used the invisible because the selection of new dropdown is invoked at this poin
               NodeData newNode = selectedNode;
               nodes.add(newNode);
 
-              newNode.NodeUUID = harmonyUtilities.grabAName(animalList,nodes);
+              newNode.nodeUUID = harmonyUtilities.grabAName(animalList,nodes);
               // this line to set up the function correctly
                   MilSymString=newNode.symbol;
                   updateTacticalSymbol();
@@ -692,7 +746,7 @@ used the invisible because the selection of new dropdown is invoked at this poin
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                System.out.println("delete: " + selectedNode.NodeUUID);
+                System.out.println("delete: " + selectedNode.nodeUUID);
                 //get the listarray of nodes
                 System.out.println("there are : " + nodes.size() + " nodes in the array");
                 //https://www.java67.com/2014/03/2-ways-to-remove-elementsobjects-from-ArrayList-java.html
@@ -715,7 +769,7 @@ used the invisible because the selection of new dropdown is invoked at this poin
                 selectedNode = nodes.get(0);
 
                 MilSymString = selectedNode.symbolIdentifier.getIdentifier();
-                NodeUUIDText.setText(selectedNode.NodeUUID);
+                nodeUUIDText.setText(selectedNode.nodeUUID);
 
                 //testing to see how to address the object
                 //need to change the selected nodes drop down list at this point else all up to this are changed

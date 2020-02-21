@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class StoreProperties
@@ -33,7 +32,7 @@ public class StoreProperties
             for (int i = 0; i < nodeData.size(); i++)
             {
 
-                String line1= "Node"+(i+1)+"UUID = " + nodeData.get(i).NodeUUID+"\n";
+                String line1= "Node"+(i+1)+"UUID = " + nodeData.get(i).nodeUUID +"\n";
                 //note: used this to remove degrees symbol present in the angle.degrees number
                 int lengthOfString = nodeData.get(i).currentLocation.getLatitude().toString().length();
                 String line2= "Node"+(i+1)+"Lat = " + nodeData.get(i).currentLocation.getLatitude().toString().substring(0,lengthOfString-1)+"\n";
@@ -46,7 +45,7 @@ public class StoreProperties
             //            Node1OperationalSpeed = 40
                 String line7= "Node"+(i+1)+"OperationalSpeed = " + nodeData.get(i).operationalSpeedInKmH+"\n";
             //    Node1MaxSpeed = 100
-                String line8= "Node"+(i+1)+"MaxSpeed = " + nodeData.get(i).maximumSpeedInKmH+"\n";
+                String line8= "Node"+(i+1)+"MaxSpeed = " + nodeData.get(i).maxOperationalSpeedInKmH +"\n";
             //    Node1RadiusOfDetectionInKm = 20
 
                 content = (""+line1+line2+line3+line4+line6+line7+line8+"\n\n\n");

@@ -13,6 +13,7 @@ public class SimulationSettings {
     public boolean debugMovementDecision;
     public boolean debugTacticalSymbolGeneration;
     public boolean debugDataListener;
+    public int numOfSimulationsToRun;
 
     public SimulationSettings() {
         startSimulation = true;
@@ -27,6 +28,7 @@ public class SimulationSettings {
         debugMovementDecision = false;
         debugTacticalSymbolGeneration = false;
         debugDataListener = false;
+        numOfSimulationsToRun = 0;
     }
 
     public void setUpDuration(String durationString) {
