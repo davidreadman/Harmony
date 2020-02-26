@@ -10,7 +10,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -21,7 +20,7 @@ import java.util.Enumeration;
 
 public class JFrameGuiActions extends JFrame
 {
-    boolean simulationOver = false;
+    boolean showPopupForEndOfSimulation = false;
     HarmonyUtilities harmonyUtilities;
     JPanel nodeLocPanel;
     JPanel panel2525B;
@@ -60,14 +59,14 @@ public class JFrameGuiActions extends JFrame
     String MilSymString;
     String substring;
     String constructString;
- int numAnimals;
+    int numAnimals;
     int maxNumOfRuns;
     int numOfRunsRemaining = 0;
 
     public JFrameGuiActions(HarmonyDataPublisher publishData, SimulationSettings simulationSettings, ArrayList<NodeData> nodes) throws IOException
     {
         this.nodes = nodes;
-        this.harmonyUtilities = new HarmonyUtilities(publishData);
+        this.harmonyUtilities = new HarmonyUtilities(publishData, nodes);
         this.nodePositionsTextArea = new JTextArea();
         this.nodePositionsTextArea.setRows(nodes.size());
         numAnimals = harmonyUtilities.getArrayOfNames(animalList);
@@ -266,35 +265,28 @@ Set up the Gui Listeners
         });
 
         ActionListener timerListener = actionEvent -> {
-            int currentStateOfSimulation = harmonyUtilities.currentStateOfSimulation(nodes);
-            if(currentStateOfSimulation == 0) {
-                if (enableMovementMenuItem.isSelected())
-                {
-                    harmonyUtilities.triggerMovementForEachNode(nodes, simulationSettings.debugMovementDecision);
-                    nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString(nodes));
-                }
-                displayWW.canvas.redraw();
-            }
-            else {
-                if(!simulationOver) {
+            if(harmonyUtilities.hasSimulationEnded()) {
+                if(!showPopupForEndOfSimulation) {
                     String reasonForEndOfSimulation = "";
-                    switch(currentStateOfSimulation) {
-                        case 1:
-                            reasonForEndOfSimulation = "Simulation has ended as all friendly nodes have reached raspberry creek";
-                            break;
-                        case 2:
-                            reasonForEndOfSimulation = "Simulation has reached the specified duration of " + durationStringAsSetByTheUser;
-                            break;
-                        case 3:
-                            reasonForEndOfSimulation = "Simulation has ended as all friendly nodes have died";
-                            break;
-                        case 4:
-                            reasonForEndOfSimulation = "Simulation has ended as all hostile nodes have died";
-                            break;
-                        default:
-                            break;
+                    if(harmonyUtilities.currentSimulationState == HarmonyUtilities.ACTIVE_FRIENDLIES_REACHED_RASPBERRY_CREEK){
+                        reasonForEndOfSimulation = "Simulation has ended as all active friendly nodes have reached raspberry creek";
                     }
-                    simulationOver = true;
+                    else if(harmonyUtilities.currentSimulationState == HarmonyUtilities.SIMULATION_RAN_OUT_OF_TIME) {
+                        reasonForEndOfSimulation = "Simulation has reached the specified duration of " + durationStringAsSetByTheUser;
+                    }
+                    else if(harmonyUtilities.currentSimulationState == HarmonyUtilities.ALL_FRIENDLIES_ARE_DEAD) {
+                        reasonForEndOfSimulation = "Simulation has ended as all friendly nodes have died";
+                    }
+                    else if(harmonyUtilities.currentSimulationState == HarmonyUtilities.ALL_HOSTILES_ARE_DEAD) {
+                        reasonForEndOfSimulation = "Simulation has ended as all hostile nodes have died";
+                    }
+                    else if(harmonyUtilities.currentSimulationState== HarmonyUtilities.ACTIVE_HOSTILES_REACHED_RASPBERRY_CREEK) {
+                        reasonForEndOfSimulation = "Simulation has ended as all active hostiles nodes have reached raspberry creek";
+                    }
+                    else if(harmonyUtilities.currentSimulationState == HarmonyUtilities.NO_ACTIVE_NODES_REMAINING) {
+                        reasonForEndOfSimulation = "Simulation has ended because no active nodes remain";
+                    }
+                    showPopupForEndOfSimulation = true;
                     harmonyUtilities.closeLogFile();
                     if(maxNumOfRuns == 0) {
                         JOptionPane.showMessageDialog(new JFrame("End Of simulation"), String.format("%s.", reasonForEndOfSimulation), "End of simulation", JOptionPane.INFORMATION_MESSAGE);
@@ -316,6 +308,14 @@ Set up the Gui Listeners
                         }
                     }
                 }
+            }
+            else {
+                if (enableMovementMenuItem.isSelected())
+                {
+                    harmonyUtilities.triggerMovementForEachNode(nodes, simulationSettings.debugMovementDecision);
+                    nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString(nodes));
+                }
+                displayWW.canvas.redraw();
             }
             currentDurationItem.setText(generateDurationString());
         };
@@ -348,7 +348,7 @@ Set up the Gui Listeners
 
     private void performReset() throws IOException {
         harmonyUtilities.restartSimulation(nodes);
-        simulationOver = false;
+        showPopupForEndOfSimulation = false;
         //update the positions on view.
         nodePositionsTextArea.setText(harmonyUtilities.getAllCurrentNodePositionsAsAString(nodes));
         currentDurationItem.setText(generateDurationString());
@@ -706,92 +706,82 @@ Set up the Gui Listeners
 and that invokes the actionlistener, if we do want to invoke the ifflist value as a listener then itemListener can be used
 used the invisible because the selection of new dropdown is invoked at this point
  */
-        cloneButton.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
+        cloneButton.addActionListener(e -> {
+            //need to sort out correct node duplication here
+            System.out.println("clone: " + selectedNode.nodeUUID);
+            //get the listarray of nodes
+            System.out.println("there are : " + nodes.size() + " nodes in the array");
+            //from 1 generate the expected node UUID
+          /*  int nodeIndex = 1;
+            for(NodeData currentNode : nodes)
             {
-                //need to sort out correct node duplication here
-                System.out.println("clone: " + selectedNode.nodeUUID);
-                //get the listarray of nodes
-                System.out.println("there are : " + nodes.size() + " nodes in the array");
-                //from 1 generate the expected node UUID
-              /*  int nodeIndex = 1;
-                for(NodeData currentNode : nodes)
+                System.out.println(currentNode.nodeUUID +" UUID is present");
+                if (currentNode.nodeUUID.equals("NodeD"))
                 {
-                    System.out.println(currentNode.nodeUUID +" UUID is present");
-                    if (currentNode.nodeUUID.equals("NodeD"))
-                    {
-                        System.out.println("Node"+nodeIndex+" UUID is present");
-                    }
-                    nodeIndex++;
-                }*/
+                    System.out.println("Node"+nodeIndex+" UUID is present");
+                }
+                nodeIndex++;
+            }*/
 
 
-              NodeData newNode = selectedNode;
-              nodes.add(newNode);
+          NodeData newNode = selectedNode;
+          nodes.add(newNode);
 
-              newNode.nodeUUID = harmonyUtilities.grabAName(animalList,nodes);
-              // this line to set up the function correctly
-                  MilSymString=newNode.symbol;
-                  updateTacticalSymbol();
+          newNode.nodeUUID = harmonyUtilities.grabAName(animalList,nodes);
+          // this line to set up the function correctly
+              MilSymString=newNode.symbol;
+              updateTacticalSymbol();
 
-                //go through this list to see if there is a missing node in the sequence eg 1, 2, 3
-                //create a new node to insert into missing item in list or the last item in list
-                //update the symbols in displayww
-            }
+            //go through this list to see if there is a missing node in the sequence eg 1, 2, 3
+            //create a new node to insert into missing item in list or the last item in list
+            //update the symbols in displayww
         });
-        deleteButton.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                System.out.println("delete: " + selectedNode.nodeUUID);
-                //get the listarray of nodes
-                System.out.println("there are : " + nodes.size() + " nodes in the array");
-                //https://www.java67.com/2014/03/2-ways-to-remove-elementsobjects-from-ArrayList-java.html
-                nodes.remove(selectedNode);
-                //and remove the symbol
-                //get the symbollayer
-                Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
+        deleteButton.addActionListener(e -> {
+            System.out.println("delete: " + selectedNode.nodeUUID);
+            //get the listarray of nodes
+            System.out.println("there are : " + nodes.size() + " nodes in the array");
+            //https://www.java67.com/2014/03/2-ways-to-remove-elementsobjects-from-ArrayList-java.html
+            nodes.remove(selectedNode);
+            //and remove the symbol
+            //get the symbollayer
+            Layer symbolLayer = displayWW.canvas.getModel().getLayers().getLayerByName("symbolLayer");
 
-                //we have this layer stored as a layer, we can remove this entire layer from the model layers
-                displayWW.canvas.getModel().getLayers().remove(symbolLayer);
-                // need to create a new renderable layer because the symbollayer is converted to a standard layer when added to the model
-                RenderableLayer replaceLayer;
-                replaceLayer = (RenderableLayer) symbolLayer;
-                replaceLayer.setName("symbolLayer");
-                replaceLayer.removeRenderable(selectedNode.symbolIdentifier);
+            //we have this layer stored as a layer, we can remove this entire layer from the model layers
+            displayWW.canvas.getModel().getLayers().remove(symbolLayer);
+            // need to create a new renderable layer because the symbollayer is converted to a standard layer when added to the model
+            RenderableLayer replaceLayer;
+            replaceLayer = (RenderableLayer) symbolLayer;
+            replaceLayer.setName("symbolLayer");
+            replaceLayer.removeRenderable(selectedNode.symbolIdentifier);
 
-                displayWW.canvas.getModel().getLayers().add(replaceLayer);
-                System.out.println("there are : " + nodes.size() + " nodes in the array");
-                //set index to first item in list
-                selectedNode = nodes.get(0);
+            displayWW.canvas.getModel().getLayers().add(replaceLayer);
+            System.out.println("there are : " + nodes.size() + " nodes in the array");
+            //set index to first item in list
+            selectedNode = nodes.get(0);
 
-                MilSymString = selectedNode.symbolIdentifier.getIdentifier();
-                nodeUUIDText.setText(selectedNode.nodeUUID);
+            MilSymString = selectedNode.symbolIdentifier.getIdentifier();
+            nodeUUIDText.setText(selectedNode.nodeUUID);
 
-                //testing to see how to address the object
-                //need to change the selected nodes drop down list at this point else all up to this are changed
-                SymbolString.setText(MilSymString);
+            //testing to see how to address the object
+            //need to change the selected nodes drop down list at this point else all up to this are changed
+            SymbolString.setText(MilSymString);
 
-                //identify the iff in the string, adjust the iff in the dropdown iFFList
+            //identify the iff in the string, adjust the iff in the dropdown iFFList
 
-                substring = MilSymString.substring(1,2);
+            substring = MilSymString.substring(1,2);
 
 
-                iFFList.setSelectedIndex(iffIDStringsList.indexOf(substring));
+            iFFList.setSelectedIndex(iffIDStringsList.indexOf(substring));
 
-                substring = MilSymString.substring(10,11);
-                hQList.setSelectedIndex(hQIDStringsList.indexOf(substring));
+            substring = MilSymString.substring(10,11);
+            hQList.setSelectedIndex(hQIDStringsList.indexOf(substring));
 
-                //System.out.println("hQ: " + substring);
-                substring = MilSymString.substring(11,12);
-                levelList.setSelectedIndex(levelIDStringsList.indexOf(substring));
-                // System.out.println("level: " + substring);
-                substring = MilSymString.substring(4,10);
-                functionList.setSelectedIndex(functionIDStringsList.indexOf(substring));
-            }
+            //System.out.println("hQ: " + substring);
+            substring = MilSymString.substring(11,12);
+            levelList.setSelectedIndex(levelIDStringsList.indexOf(substring));
+            // System.out.println("level: " + substring);
+            substring = MilSymString.substring(4,10);
+            functionList.setSelectedIndex(functionIDStringsList.indexOf(substring));
         });
         iFFList.addPopupMenuListener(new PopupMenuListener()
         {

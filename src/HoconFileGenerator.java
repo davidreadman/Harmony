@@ -1,3 +1,5 @@
+import gov.nasa.worldwind.geom.Position;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -5,6 +7,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class HoconFileGenerator {
 
@@ -45,7 +49,7 @@ public class HoconFileGenerator {
         outfile.write("\t\t\t}\n");
     }
 
-    public static void writeToHocon(ArrayList<NodeData> nodes) {
+    public static void writeToHocon(ArrayList<NodeData> nodes, Map<Integer, Map<String, Position>> waypoints, int currentMovementCounter, long maxMovementCounter) {
         try {
             List<String> nodeUUIDs = new ArrayList<>();
             List<String> entities = new ArrayList<>();
@@ -101,7 +105,7 @@ public class HoconFileGenerator {
             outfile.write("simulation: {\n\trandomSeed: 1234\n");
             outfile.write(String.format("\thosts {\n\t\tlocalhost {\n\t\t\tentities: [%s]\n\t\t}\n\t}\n", String.join(",", nodeUUIDs)));
             outfile.write("\ttransform.type = Simple\n\tdissemination {\n\t\ttype: Static\n\t\tmessageStore { expiryIntervalSeconds: 60 }\n\t\trules { Generic { priority: 10, expiryTime: 1 } }\n\t}\n");
-            outfile.write("\tscenario {\n\t\tid: harmony\n\t\tname: harmony\n\t\tstartTime:\"NOW\"\n\t\tduration:\"10 minutes\"\n\t\tareaOfInterest {}\n\t\tmulticasts {}\n\t\tentities {\n");
+            outfile.write(String.format("\tscenario {\n\t\tid: harmony\n\t\tname: harmony\n\t\tstartTime:\"NOW\"\n\t\tduration:\"%d seconds\"\n\t\tareaOfInterest {}\n\t\tmulticasts {}\n\t\tentities {\n", maxMovementCounter > 0 ? maxMovementCounter : currentMovementCounter));
             for(String entity: entities) {
                 outfile.write(String.format("\t\t\t%s\n", entity));
             }
@@ -120,10 +124,17 @@ public class HoconFileGenerator {
             outfile.write("\t\t}\n"); //complete the networks block inside the scenario block
             outfile.write("\t}\n"); //complete the scenario block
             outfile.write("\tmasterEventList: {type: inline, events: []}\n");
-            outfile.write("\tentityMovement: {\n\t\tsource {\n\t\ttype:waypoints\n\t\tinterval: 10 seconds\n");
+            outfile.write("\tentityMovement: {\n\t\tsource {\n\t\ttype:waypoints\n\t\tinterval: 1 seconds\n");
             outfile.write("\t\twaypoints {\n");
+
             for(NodeData node: nodes) {
-                outfile.write(String.format("\t\t\t%s: [{at: 0 minutes, position: { lat: %f, lon: %f}]\n", node.nodeUUID, node.currentLocation.asDegreesArray()[0], node.currentLocation.asDegreesArray()[1]));
+                Map<Integer, Map<String, Position>> filtered = waypoints.entrySet().stream().filter(a -> a.getValue().containsKey(node.nodeUUID)).collect(Collectors.toMap(e->e.getKey(), e->e.getValue()));
+                List<String> waypointStrings = new ArrayList<>();
+                for(Map.Entry<Integer,Map<String,Position>> entry : filtered.entrySet()){
+                    double[] degreesArray = entry.getValue().get(node.nodeUUID).asDegreesArray();
+                    waypointStrings.add(String.format("{at: %d seconds, position: {lat: %f, lon:%f}", entry.getKey(),degreesArray[0],degreesArray[1]));
+                }
+                outfile.write(String.format("\t\t\t%s: [%s]\n", node.nodeUUID, String.join(",",waypointStrings)));
             }
             outfile.write("\t\t}\n"); //complete the waypoints block inside the entityMovement block
             outfile.write("\t}\n"); //complete the entityMovement block
@@ -133,10 +144,5 @@ public class HoconFileGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) throws IOException {
-        ArrayList<NodeData> nodes = ParseProperties.parsePlan();
-        writeToHocon(nodes);
     }
 }

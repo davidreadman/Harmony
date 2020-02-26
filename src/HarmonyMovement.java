@@ -34,74 +34,45 @@ public class HarmonyMovement
          direction on break(do nothing)
           */
         double bearingInDegrees = 0;
-        double distanceToTravelInMetres = 0;
+        double distanceToTargetInMetres = 0;
         switch (decision)
         {
             case "Move to the next location":
                 bearingInDegrees = bearingToTargetInDegrees(currentNode.currentLocation, currentNode.nextLocation);
-                double currentDistanceFromNextLocation = distanceToTargetInMeters(currentNode.currentLocation, currentNode.nextLocation);
-                if(currentDistanceFromNextLocation < currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR) {
-                    distanceToTravelInMetres = currentDistanceFromNextLocation;
-                }
-                else {
-                    distanceToTravelInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
-                }
+                distanceToTargetInMetres = distanceToTargetInMeters(currentNode.currentLocation, currentNode.nextLocation);
                 break;
             case "Move North":
                 bearingInDegrees = NORTH;
-                distanceToTravelInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
+                distanceToTargetInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
                 break;
             case "Move South":
                 bearingInDegrees = SOUTH;
-                distanceToTravelInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
+                distanceToTargetInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
                 break;
             case "Move West":
                 bearingInDegrees = WEST;
-                distanceToTravelInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
+                distanceToTargetInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
                 break;
             case "Move East":
                 bearingInDegrees = EAST;
-                distanceToTravelInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
+                distanceToTargetInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
                 break;
             case "Move away from Closest Enemy":
                 bearingInDegrees = oppositeDirection(bearingToTargetInDegrees(currentNode.currentLocation, currentNode.closestEnemy.currentLocation));
                 //Attempt to travel at maximum speed to get away from the enemy.
-                distanceToTravelInMetres = currentNode.maxOperationalSpeedInKmH /METRES_PER_SECOND_TO_KM_PER_HOUR;
+                distanceToTargetInMetres = currentNode.maxOperationalSpeedInKmH /METRES_PER_SECOND_TO_KM_PER_HOUR;
                 break;
             case "Move to the Closest Enemy":
                 bearingInDegrees = bearingToTargetInDegrees(currentNode.currentLocation, currentNode.closestEnemy.currentLocation);
-                double distanceToEnemy = distanceToTargetInMeters(currentNode.currentLocation, currentNode.closestEnemy.currentLocation);
-                //Attempt to travel at maximum speed to get towards the enemy
-                if(distanceToEnemy < currentNode.maxOperationalSpeedInKmH /METRES_PER_SECOND_TO_KM_PER_HOUR) {
-                    distanceToTravelInMetres =distanceToEnemy;
-                }
-                else {
-                    distanceToTravelInMetres = currentNode.maxOperationalSpeedInKmH /METRES_PER_SECOND_TO_KM_PER_HOUR;
-                }
+                distanceToTargetInMetres = distanceToTargetInMeters(currentNode.currentLocation, currentNode.closestEnemy.currentLocation);
                 break;
             case "Follow Commander":
-                if(currentNode.myCommander != null) {
-                    bearingInDegrees = bearingToTargetInDegrees(currentNode.currentLocation, currentNode.myCommander.currentLocation);
-                    double distanceToCommander = distanceToTargetInMeters(currentNode.currentLocation, currentNode.myCommander.currentLocation);
-                    if(distanceToCommander < currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR){
-                        distanceToTravelInMetres = distanceToCommander;
-                    }
-                    else {
-                        distanceToTravelInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
-                    }
-                }
+                bearingInDegrees = bearingToTargetInDegrees(currentNode.currentLocation, currentNode.myCommander.currentLocation);
+                distanceToTargetInMetres = distanceToTargetInMeters(currentNode.currentLocation, currentNode.myCommander.currentLocation);
                 break;
             case "Follow Node":
-                if(currentNode.nodeToFollow != null) {
-                    bearingInDegrees = bearingToTargetInDegrees(currentNode.currentLocation, currentNode.nodeToFollow.currentLocation);
-                    double distanceToNode = distanceToTargetInMeters(currentNode.currentLocation, currentNode.nodeToFollow.currentLocation);
-                    if(distanceToNode < currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR) {
-                        distanceToTravelInMetres = distanceToNode;
-                    }
-                    else {
-                        distanceToTravelInMetres = currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR;
-                    }
-                }
+                bearingInDegrees = bearingToTargetInDegrees(currentNode.currentLocation, currentNode.nodeToFollow.currentLocation);
+                distanceToTargetInMetres = distanceToTargetInMeters(currentNode.currentLocation, currentNode.nodeToFollow.currentLocation);
                 break;
             default:
                 break;
@@ -109,15 +80,14 @@ public class HarmonyMovement
 
         //Only move if we really need to.
         Position nextPosition;
-        if(distanceToTravelInMetres > 0) {
-            nextPosition = moveVDirectionDistance(currentNode.currentLocation, bearingInDegrees,20, distanceToTravelInMetres);
-            nextPosition = moveVDirectionDistance(currentNode.currentLocation, bearingInDegrees, VARIATION_AS_DEGREES,distanceToTravelInMetres);
-            //and update the node next and current Position with the location of the new position
-            updatePosition(nextPosition, currentNode);
+        if(distanceToTargetInMetres > 0) {
+            nextPosition = moveVDirectionSpeed(currentNode, bearingInDegrees, VARIATION_AS_DEGREES,distanceToTargetInMetres);
         }
         else {
             nextPosition = currentNode.currentLocation;
         }
+        //and update the node next and current Position with the location of the new position
+        updatePosition(nextPosition, currentNode);
         if(debugEnabled)
             System.out.println(String.format("Decision taken by %s: %s", currentNode.nodeUUID, decision));
 
@@ -125,46 +95,37 @@ public class HarmonyMovement
         return (nextPosition);
     }
 
-    private static Position moveDirectionDistance(Position currentLocation, double bearingAsDegrees, double distanceInMeters)
+    private static Position moveDirectionSpeed(NodeData currentNode, double bearingAsDegrees, double distanceToTargetInMeters)
     {
+        //Set the travelling distance of node to the minimum value between distance to target location and the node's metres per second rate.
+        double distanceToTravel = Math.min(distanceToTargetInMeters, currentNode.operationalSpeedInKmH/METRES_PER_SECOND_TO_KM_PER_HOUR);
+
         //Convert a distance values in miles to radians
-        double distanceRadians = distanceInMeters / tempGlobe.getRadius();
+        double distanceRadians = distanceToTravel / tempGlobe.getRadius();
         //Generate Angle object with a value in degrees before calling the moveDirection()
         Angle bearing = Angle.fromDegrees(bearingAsDegrees);
         //Use great circle end position to get the next position from the current location.
-        return new Position(LatLon.greatCircleEndPosition(currentLocation, bearing.radians, distanceRadians), 0);
+        return new Position(LatLon.greatCircleEndPosition(currentNode.currentLocation, bearing.radians, distanceRadians), 0);
     }
 
-    private static Position moveVDirectionDistance(Position currentLocation, double bearingAsDegrees, double variationAsDegrees, double distanceInMeters)
+    private static Position moveVDirectionSpeed(NodeData currentNode, double bearingAsDegrees, double variationAsDegrees, double distanceInMeters)
     {
         //Get a value of the bearing +/- variation
         //https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadLocalRandom.html
         double randomizedBearing = ThreadLocalRandom.current().nextDouble(bearingAsDegrees - variationAsDegrees, bearingAsDegrees + variationAsDegrees + 0.01);
-        return moveDirectionDistance(currentLocation, randomizedBearing, distanceInMeters);
-    }
-
-    private static Position moveDirectionVDistance(Position currentLocation, double bearingAsDegrees, double minimumDistanceInMeters, double maximumDistanceInMeters)
-    {
-        //Get a distance value between the minimum and maximum distance
-        double randomisedDistanceInMeters = ThreadLocalRandom.current().nextDouble(minimumDistanceInMeters, maximumDistanceInMeters);
-        return moveDirectionDistance(currentLocation, bearingAsDegrees, randomisedDistanceInMeters);
-    }
-
-    private static Position moveVDirectionVDistance(Position currentLocation, double bearingAsDegrees, double variationAsDegrees, double minDistanceInMeters, double maxDistanceInMeters)
-    {
-        //Get a value of the bearing +/- variation
-        double randomizedBearing = ThreadLocalRandom.current().nextDouble(bearingAsDegrees - variationAsDegrees, bearingAsDegrees + variationAsDegrees + 0.01);
-        //Get a distance value between the minimum and maximum distance
-        double randomisedDistanceInMeters = ThreadLocalRandom.current().nextDouble(minDistanceInMeters, maxDistanceInMeters + 0.01);
-
-        return moveDirectionDistance(currentLocation, randomizedBearing, randomisedDistanceInMeters);
+        return moveDirectionSpeed(currentNode, randomizedBearing, distanceInMeters);
     }
 
     //identify the bearing to the target in degrees
     public static double bearingToTargetInDegrees(Position currentLocation, Position targetLocation)
     {
         double bearingInDegrees = Position.greatCircleAzimuth(currentLocation, targetLocation).degrees;
-        return (bearingInDegrees);
+        //For the consistent direction of travel to be positive, we need to add 360 if the bearing is negative.
+        //This consistency is required for ML.
+        if(bearingInDegrees < 0)
+            bearingInDegrees += 360.0;
+
+        return bearingInDegrees;
     }
 
     //identify the distance to the target in meters
@@ -197,13 +158,16 @@ public class HarmonyMovement
 
     }
 
-    public static boolean isNodeWithinSightOfLocation(NodeData currentNode, Position otherLocation, double detectionRadius) {
-        double distanceToOtherLocation = distanceToTargetInMeters(currentNode.currentLocation, otherLocation);
-        return distanceToOtherLocation > detectionRadius-0.01 && distanceToOtherLocation < detectionRadius+0.01;
+    public static boolean isNodeWithinSightOfLocation(NodeData currentNode, Position otherLocation, double detectionRadiusInMetres) {
+        return distanceToTargetInMeters(currentNode.currentLocation, otherLocation) < detectionRadiusInMetres+0.01;
+    }
+
+    public static boolean hasNodeReachedLocation(NodeData currentNode, Position targetLocation) {
+        return isNodeWithinSightOfLocation(currentNode, targetLocation, 0.0);
     }
 
     public static boolean hasNodeReachedRaspberryCreek(NodeData currentNode) {
-        return isNodeWithinSightOfLocation(currentNode, RASPBERRY_CK,0.0);
+        return hasNodeReachedLocation(currentNode, RASPBERRY_CK);
     }
 
     /* update the locations and direction of travel */
@@ -211,7 +175,6 @@ public class HarmonyMovement
     {
         nodeData.previousLocation = nodeData.currentLocation;
         nodeData.currentLocation = newPosition;
-        nodeData.directionOfTravel = bearingToTargetInDegrees(nodeData.previousLocation, nodeData.currentLocation);
         //and set the symbol object for the displayed symbol
         nodeData.symbolIdentifier.setPosition(newPosition);
     }

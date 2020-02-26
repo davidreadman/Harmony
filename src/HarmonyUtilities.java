@@ -1,6 +1,7 @@
+import gov.nasa.worldwind.geom.Position;
+
 import java.io.File;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.Duration;
@@ -15,24 +16,47 @@ import java.util.*;
 public class HarmonyUtilities
 {
     int logCounter =0, pubCounter = 0, movementCounter = 0;
+    int cumulativeNumNets = 0, cumulativeNumCollisions = 0, cumulativeNumHostilesDetected = 0;
     long maxMovementCounter = 0;
     WriteLog logger;
     HarmonyDataPublisher publishData;
     StoreProperties storeProperties = new StoreProperties();
+    public static int SIMULATION_STILL_RUNNING = 0;
+    public static int ACTIVE_FRIENDLIES_REACHED_RASPBERRY_CREEK = 1;
+    public static int SIMULATION_RAN_OUT_OF_TIME = 2;
+    public static int ALL_FRIENDLIES_ARE_DEAD = 3;
+    public static int ALL_HOSTILES_ARE_DEAD = 4;
+    public static int ACTIVE_HOSTILES_REACHED_RASPBERRY_CREEK = 5;
+    public static int NO_ACTIVE_NODES_REMAINING = 6;
+    int currentSimulationState = SIMULATION_STILL_RUNNING;
 
-    public HarmonyUtilities(HarmonyDataPublisher publishData)
+    Map<Integer, Map<String, Position>> waypoints = new HashMap<>();
+
+    public HarmonyUtilities(HarmonyDataPublisher publishData, ArrayList<NodeData> nodes)
     {
         this.publishData = publishData;
+        addInitialWaypoints(nodes);
     }
 
 
+    private void addInitialWaypoints(ArrayList<NodeData> nodes) {
+        waypoints.putIfAbsent(0, new HashMap<>());
+        for(NodeData node: nodes){
+            waypoints.get(0).put(node.nodeUUID,node.currentLocation);
+        }
+    }
+
     public void restartSimulation(ArrayList<NodeData> nodes) throws IOException {
         movementCounter = 0;
+        currentSimulationState = SIMULATION_STILL_RUNNING;
+        waypoints.clear();
+        addInitialWaypoints(nodes);
         ArrayList<NodeData> nodesFromConfig = ParseProperties.parsePlan();
         for(NodeData configNode: nodesFromConfig) {
             for(NodeData currentNode: nodes) {
                 if(configNode.nodeUUID.equals(currentNode.nodeUUID)) {
                     HarmonyMovement.updatePosition(configNode.currentLocation, currentNode);
+                    currentNode.currentState = HarmonyAwareness.NODE_IS_STILL_ACTIVE;
                     break;
                 }
             }
@@ -67,9 +91,9 @@ public class HarmonyUtilities
         }
         List<String> nodeHeadersAsCSVFormat = new ArrayList<>();
         for(int i=0;i<nodes.size();i++) {
-            nodeHeadersAsCSVFormat.add(String.format("NODE%dUUID,NODE%dIFF,NODE%dISCOMMANDER,NODE%dSTATUS,NODE%dSTATE,NODE%dLAT,NODE%dLON,NODE%dMETRIC,NODE%dDECISION,NODE%dCOMMANDER,NODE%dISFOLLOWING,NODE%dCLOSESTENEMY",i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1));
+            nodeHeadersAsCSVFormat.add(String.format("NODE%dUUID,NODE%dIFF,NODE%dISCOMMANDER,NODE%dSTATE,NODE%dLAT,NODE%dLON,NODE%dDISTANCE_TRAVELLED,NODE%dDIRECTION_OF_TRAVEL,NODE%dMETRIC_TYPE,NODE%dMETRIC_VALUE,NODE%dDECISION,NODE%dCOMMANDER,NODE%dISFOLLOWING,NODE%dCLOSESTENEMY",i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1));
         }
-        String writableString = String.format("TIME,%s,STATE\n", String.join(",", nodeHeadersAsCSVFormat));
+        String writableString = String.format("TIME,%s,CUM_NUM_NETS,CUM_NUM_COLLISIONS,CUM_NUM_HOSTILES_DETECTED,STATE\n", String.join(",", nodeHeadersAsCSVFormat));
         logger.writeStringToFile(writableString);
         logger.Flush();
     }
@@ -80,15 +104,19 @@ public class HarmonyUtilities
             List<String> nodesAsCSVFormat = new ArrayList<>();
             for(NodeData currentNode: nodes) {
                 //Develop csv for each node
-                nodesAsCSVFormat.add(String.format("%s,%c,%d,%c,%d,%f,%f,%s,%s,%s,%s,%s", currentNode.nodeUUID, currentNode.symbol.charAt(1), isNodeTheCommander(currentNode,nodes) ? 1:0,currentNode.symbol.charAt(3),currentStateOfNode(currentNode),currentNode.currentLocation.asDegreesArray()[0], currentNode.currentLocation.asDegreesArray()[1],currentNode.currentMetric,currentNode.currentDecision,
+                nodesAsCSVFormat.add(String.format("%s,%c,%d,%d,%.4f,%.4f,%.2f,%.2f,%s,%.2f,%s,%s,%s,%s", currentNode.nodeUUID, currentNode.symbol.charAt(1), isNodeTheCommander(currentNode,nodes) ? 1:0,HarmonyAwareness.currentStateOfNode(currentNode),currentNode.currentLocation.asDegreesArray()[0], currentNode.currentLocation.asDegreesArray()[1],
+                        HarmonyMovement.distanceToTargetInMeters(currentNode.previousLocation, currentNode.currentLocation),
+                        HarmonyMovement.bearingToTargetInDegrees(currentNode.previousLocation, currentNode.currentLocation),
+                        currentNode.currentMetric.getKey(),
+                        currentNode.currentMetric.getValue(),
+                        currentNode.currentDecision,
                         currentNode.myCommander == null ? "None": currentNode.myCommander.nodeUUID,
                         currentNode.nodeToFollow == null ? "None": currentNode.nodeToFollow.nodeUUID,
                         currentNode.closestEnemy == null ? "None": currentNode.closestEnemy.nodeUUID));
             }
 /*            String timestamp = logger.getTimeStamp();*/
-            String writableString = String.format("%d,%s,%d\n", movementCounter, String.join(",", nodesAsCSVFormat), currentStateOfSimulation(nodes));
+            String writableString = String.format("%d,%s,%d,%d,%d,%d\n", movementCounter, String.join(",", nodesAsCSVFormat),cumulativeNumNets,cumulativeNumCollisions,cumulativeNumHostilesDetected,currentSimulationState);
             //Only write line to file starting with timestamp if we haven't done so already.
-            //if(logger.linesWritten.stream().noneMatch(line -> line.startsWith(timestamp))) {
             if(logger.linesWritten.stream().noneMatch(line -> line.startsWith(String.format("%d", movementCounter)))){
                 logger.writeStringToFile(writableString);
             }
@@ -101,17 +129,6 @@ public class HarmonyUtilities
         return nodes.stream().anyMatch(node -> node.myCommander != null && node.myCommander.nodeUUID.equals(currentNode.nodeUUID));
     }
 
-    private int currentStateOfNode(NodeData currentNode) {
-        if(currentNode.symbol.charAt(3) == 'X')
-            return 2;
-        else {
-            if(HarmonyMovement.hasNodeReachedRaspberryCreek(currentNode))
-                return 1;
-            else
-                return 0;
-        }
-    }
-
     public void closeLogFile() {
         if(logger != null) {
             logger.closeAndFlush();
@@ -120,12 +137,17 @@ public class HarmonyUtilities
     }
 
     public void triggerMovementForEachNode(ArrayList<NodeData> nodes, boolean debugEnabled) {
-        movementCounter++;
-        HarmonyDecision.makeDecisionForEachNode(nodes, debugEnabled);
+        if(currentSimulationState == SIMULATION_STILL_RUNNING) {
+            movementCounter++;
+            waypoints.put(movementCounter,HarmonyDecision.makeDecisionForEachNode(nodes, debugEnabled));
+            updateCurrentSimulationState(nodes);
+            updateMetrics(nodes);
+        }
+
     }
 
     public void createHoconFile(ArrayList<NodeData> nodes) {
-        HoconFileGenerator.writeToHocon(nodes);
+        HoconFileGenerator.writeToHocon(nodes,waypoints,movementCounter, maxMovementCounter);
         System.out.println("Created new HOCON file for SMARTNet");
     }
 
@@ -153,28 +175,33 @@ public class HarmonyUtilities
      *          2 if we ran out of time
      *          3 if all friendlies have been killed
      *          4 if all hostiles have been killed
-     *          5 if at least one active hostile has reached raspberry creek
+     *          5 if all remaining active hostile nodes has reached raspberry creek
      */
-    public int currentStateOfSimulation(ArrayList<NodeData> nodes) {
-        if(HarmonyAwareness.hasAllRemainingActiveFriendliesReachedRaspberryCreek(nodes)) {
-            return 1;
+    public void updateCurrentSimulationState(ArrayList<NodeData> nodes) {
+        if(HarmonyAwareness.checkIfSpecificNodesHasSpecificStatus(nodes, 'F', HarmonyAwareness.REACHED_RASPBERRY_CREEK)) {
+            currentSimulationState = ACTIVE_FRIENDLIES_REACHED_RASPBERRY_CREEK;
         }
         else if(maxMovementCounter > 0 && movementCounter == maxMovementCounter) {
-            return 2;
+            currentSimulationState = SIMULATION_RAN_OUT_OF_TIME;
         }
-        else if(HarmonyAwareness.hasAllFriendliesBeenDestroyed(nodes)) {
-            return 3;
+        else if(HarmonyAwareness.checkIfSpecificNodesHasSpecificStatus(nodes, 'F', HarmonyAwareness.NODE_IS_DESTROYED)) {
+            currentSimulationState = ALL_FRIENDLIES_ARE_DEAD;
         }
-        else if(HarmonyAwareness.hasAllHostilesBeenDestroyed(nodes)) {
-            return 4;
+        else if(HarmonyAwareness.checkIfSpecificNodesHasSpecificStatus(nodes, 'H', HarmonyAwareness.NODE_IS_DESTROYED)) {
+            currentSimulationState = ALL_HOSTILES_ARE_DEAD;
         }
-        else if(HarmonyAwareness.hasOneActiveHostileReachedRaspberryCreek(nodes)) {
-            return 5;
+        else if(HarmonyAwareness.checkIfSpecificNodesHasSpecificStatus(nodes, 'H', HarmonyAwareness.REACHED_RASPBERRY_CREEK)) {
+            currentSimulationState = ACTIVE_HOSTILES_REACHED_RASPBERRY_CREEK;
         }
-        else {
-            return 0;
+        else if(HarmonyAwareness.noActiveNodesRemaining(nodes)){
+            currentSimulationState = NO_ACTIVE_NODES_REMAINING;
         }
     }
+
+    public boolean hasSimulationEnded() {
+        return currentSimulationState > SIMULATION_STILL_RUNNING;
+    }
+
     public int getArrayOfNames(ArrayList<String> animalNames) throws IOException
     {
         String tempString;
@@ -209,9 +236,9 @@ public class HarmonyUtilities
         return randString;
     }
 
-    //placeholder for 'measure of goodness based on the number of nodes within given distance of each other
-    public int calculateNumberOfNets()
-    {
-        return 0;
+    private void updateMetrics(ArrayList<NodeData> nodes) {
+        cumulativeNumNets += HarmonyAwareness.calculateNumberOfNets(nodes);
+        cumulativeNumCollisions += HarmonyAwareness.calculateNumberOfNodeCollisions(nodes);
+        cumulativeNumHostilesDetected += HarmonyAwareness.calculateNumberOfHostilesDetected(nodes);
     }
 }

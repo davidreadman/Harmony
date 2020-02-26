@@ -1,8 +1,10 @@
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.symbology.TacticalSymbol;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /*
 The NodeData class holds the information about each node and an overview god mode shared by all NodeData types
@@ -21,19 +23,15 @@ public class NodeData
     String nodeType;
      String symbol;
      TacticalSymbol symbolIdentifier;
-     double minOperationalSpeedInKmH;
      double operationalSpeedInKmH;
      double maxOperationalSpeedInKmH;
-     /* the next information is that evaluated by Harmony from the list of nodes and the current node positions */
-    /*initial implementation, this is not created, can be inferred from currentLocation and nextLocation, may need
-    a previousLocation
-     */
-    double directionOfTravel;
+     double detectionRadiusInMetres = 0;
 
     /* Used for logging purposes as node is the source of truth */
     /* We want to log the current decision that it made and the corresponding metric */
-    String currentMetric = "None";
-    String currentDecision = "";
+    Map.Entry<String, Double> currentMetric = new AbstractMap.SimpleEntry<>("None", 0.0);
+    String currentDecision = "None";
+    int currentState = HarmonyAwareness.NODE_IS_STILL_ACTIVE;
 
     NodeData closestEnemy;
 

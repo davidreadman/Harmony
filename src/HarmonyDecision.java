@@ -1,18 +1,21 @@
+import gov.nasa.worldwind.geom.Position;
+
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class HarmonyDecision {
 
-    private static double DEFAULT_DETECTION_RADIUS_IN_METRES = 500.0;
-
-    public static void makeDecisionForEachNode(ArrayList<NodeData> nodes, boolean debugEnabled) {
-        for(NodeData currentNode: nodes) {
-            //If node is destroyed, it can't move so no decision is to be made
-            if(currentNode.symbol.charAt(3) == 'X')
+    public static Map<String, Position> makeDecisionForEachNode(ArrayList<NodeData> nodes, boolean debugEnabled) {
+        Map<String, Position> waypoints = new HashMap<>();
+        for(NodeData node: nodes) {
+            if(node.currentState != HarmonyAwareness.NODE_IS_STILL_ACTIVE) {
+                if(debugEnabled)
+                    System.out.println(String.format("Current state of %s: %d", node.nodeUUID, node.currentState));
                 continue;
-
+            }
             String decision = "";
-            for (int i = currentNode.strategies.size() - 1; i >= 0; i--) {
-                String strategy = currentNode.strategies.get(i);
+            for (int i = node.strategies.size() - 1; i >= 0; i--) {
+                String strategy = node.strategies.get(i);
                 String[] wordsInStrategy = strategy.split(" ");
                 if (strategy.startsWith("Detect")) {
                     double detectionRadius = 0.0;
@@ -24,14 +27,15 @@ public class HarmonyDecision {
                        }
                     }
                     else {
-                        detectionRadius = DEFAULT_DETECTION_RADIUS_IN_METRES;
+                        detectionRadius = HarmonyAwareness.DEFAULT_DETECTION_RADIUS_IN_METRES;
                     }
-                    HarmonyAwareness.assignClosestEnemy(currentNode, nodes, detectionRadius);
-                    if(currentNode.closestEnemy != null) {
+                    node.detectionRadiusInMetres = detectionRadius;
+                    HarmonyAwareness.assignClosestEnemy(node, nodes);
+                    if(node.closestEnemy != null) {
                         if (strategy.toLowerCase().contains("and attack")) {
-                            if(HarmonyAwareness.isNodeVeryCloseToTheEnemy(currentNode)) {
+                            if(HarmonyAwareness.isNodeVeryCloseToTheEnemy(node)) {
                                 decision = "Attack closest enemy";
-                                currentNode.closestEnemy.symbol.replace(currentNode.closestEnemy.symbol.charAt(3), 'X');
+                                node.closestEnemy.symbol.replace(node.closestEnemy.symbol.charAt(3), 'X');
                             }
                             else {
                                 decision = "Move to the Closest enemy";
@@ -39,9 +43,9 @@ public class HarmonyDecision {
                             break;
                         }
                         else if(strategy.toLowerCase().contains("and avoid")) {
-                            if(HarmonyAwareness.isNodeVeryCloseToTheEnemy(currentNode)) {
+                            if(HarmonyAwareness.isNodeVeryCloseToTheEnemy(node)) {
                                 //Node gets killed
-                                currentNode.symbol.replace(currentNode.symbol.charAt(3), 'X');
+                                node.symbol.replace(node.symbol.charAt(3), 'X');
                             }
                             else {
                                 decision = "Move away from Closest enemy";
@@ -51,10 +55,15 @@ public class HarmonyDecision {
                     }
 
                 } else if (strategy.startsWith("Move towards Raspberry Creek") || strategy.startsWith("Move towards Raspberry Ck")) {
-                    currentNode.nextLocation = HarmonyMovement.RASPBERRY_CK;
+                    node.nextLocation = HarmonyMovement.RASPBERRY_CK;
                     if(strategy.endsWith("ASAP")) {
-                        currentNode.operationalSpeedInKmH = currentNode.maxOperationalSpeedInKmH;
+                        node.operationalSpeedInKmH = node.maxOperationalSpeedInKmH;
                     }
+                    else {
+                        node.operationalSpeedInKmH = ThreadLocalRandom.current().nextDouble(1, node.maxOperationalSpeedInKmH+0.01);
+                    }
+                    if(debugEnabled)
+                        System.out.println(String.format("Travelling speed of %s: %.2f", node.nodeUUID, node.operationalSpeedInKmH));
                     decision = "Move to the next location";
                     break;
                 } else if (strategy.startsWith("Move")) {
@@ -63,21 +72,34 @@ public class HarmonyDecision {
                 } else if (strategy.startsWith("Follow")) {
                     if(wordsInStrategy.length == 2) {
                         if(wordsInStrategy[1].toLowerCase().equals("commander")) {
+                            if(node.myCommander == null || node.myCommander.currentState == HarmonyAwareness.NODE_IS_DESTROYED)
+                                continue;
+
                             decision = strategy;
-                            currentNode.operationalSpeedInKmH = currentNode.myCommander.operationalSpeedInKmH;
+                            node.operationalSpeedInKmH = node.myCommander.operationalSpeedInKmH;
+                            if(debugEnabled)
+                                System.out.println(String.format("Travelling speed of %s: %.2f", node.nodeUUID, node.operationalSpeedInKmH));
                         }
                         else {
-                            HarmonyAwareness.setNodeToFollow(currentNode, wordsInStrategy[1], nodes);
+                            HarmonyAwareness.setNodeToFollow(node, wordsInStrategy[1], nodes);
+                            if(node.nodeToFollow == null || node.nodeToFollow.currentState == HarmonyAwareness.NODE_IS_DESTROYED)
+                                continue;
+
                             decision = "Follow Node";
-                            currentNode.operationalSpeedInKmH = currentNode.nodeToFollow.operationalSpeedInKmH;
+                            node.operationalSpeedInKmH = node.nodeToFollow.operationalSpeedInKmH;
+                            if(debugEnabled)
+                                System.out.println(String.format("Travelling speed of %s: %.2f", node.nodeUUID, node.operationalSpeedInKmH));
                         }
                         break;
                     }
                 }
             }
             if(!decision.isEmpty())
-                HarmonyMovement.carryOutDecision(currentNode, decision, debugEnabled);
+                waypoints.put(node.nodeUUID, HarmonyMovement.carryOutDecision(node, decision, debugEnabled));
+
+            node.currentState = HarmonyAwareness.currentStateOfNode(node);
         }
+        return waypoints;
     }
 
     //Uncomment and move code once tactical graphics are implemented into code
