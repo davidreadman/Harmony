@@ -131,12 +131,17 @@ public class HarmonyMovement
     //identify the distance to the target in meters
     public static double distanceToTargetInMeters(Position currentLocation, Position targetLocation)
     {
-        double distanceInRadians = Position.greatCircleDistance(currentLocation, targetLocation).radians;
-        //to get a distance in meters, multiply the distance in radians by the radius of the globe
-        //https://nasaworldwind.github.io/WorldWindJava/gov/nasa/worldwind/geom/LatLon.html
-        //see notes on greatCircleDistance
-        double distanceInMeters = distanceInRadians * tempGlobe.getRadius();
-        return Math.abs(distanceInMeters);
+        Angle angularDistance = Position.greatCircleDistance(currentLocation, targetLocation);
+        if(angularDistance == Angle.ZERO) {
+            return 0.0;
+        }
+        else {
+            //to get a distance in meters, multiply the distance in radians by the radius of the globe
+            //https://nasaworldwind.github.io/WorldWindJava/gov/nasa/worldwind/geom/LatLon.html
+            //see notes on greatCircleDistance
+            double distanceInMeters = angularDistance.radians * tempGlobe.getRadius();
+            return Math.abs(distanceInMeters);
+        }
     }
 
     /* for any 0 to 360 degrees angle, the opposite angle is 180 plus that angle mod 360 */

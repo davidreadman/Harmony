@@ -28,7 +28,7 @@ class DisplayWW extends JPanel
 
 
 
-    public DisplayWW(ArrayList<NodeData> nodeData, boolean debugEnabled)
+    public DisplayWW(ArrayList<NodeData> nodes, boolean debugEnabled)
     {
         //set up default configurations for Shoalwater bay
         configure();
@@ -50,17 +50,17 @@ class DisplayWW extends JPanel
         //set up a symbolLayer containing all the symbols
         RenderableLayer symbolLayer = new RenderableLayer();
         symbolLayer.setName("symbolLayer");
-        int NumberOfNodes = nodeData.size();
+        int numberOfNodes = nodes.size();
 
         if(debugEnabled)
-            System.out.println("number of nodes: " + nodeData.size());
+            System.out.println("number of nodes: " + nodes.size());
 
-        for (int i = 0; i < NumberOfNodes; i++)
+        for (int i = 0; i < numberOfNodes; i++)
         {
-            symbolLayer = addSymbol(symbolLayer,nodeData.get(i));
+            symbolLayer = addSymbol(symbolLayer,nodes.get(i));
             if(debugEnabled) {
-                System.out.println("symbol: " + nodeData.get(i).symbol);
-                System.out.println("symbol id: " + nodeData.get(i).symbolIdentifier);
+                System.out.println("symbol: " + nodes.get(i).symbol);
+                System.out.println("symbol id: " + nodes.get(i).symbolIdentifier);
             }
         }
         //////////////////////////////////////
@@ -87,8 +87,8 @@ class DisplayWW extends JPanel
 
 
         RenderableLayer linesLayer = new RenderableLayer();
-        Position pointA = nodeData.get(0).currentLocation;
-        Position pointB = nodeData.get(1).currentLocation;
+        Position pointA = nodes.get(0).currentLocation;
+        Position pointB = nodes.get(1).currentLocation;
         Path path = new Path(pointA,pointB);
         linesLayer.addRenderable(path);
         canvas.getModel().getLayers().add(linesLayer);
