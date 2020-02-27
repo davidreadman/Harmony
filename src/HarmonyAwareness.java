@@ -36,7 +36,7 @@ public class HarmonyAwareness {
         currentNode.nodeToFollow = nodes.stream().filter(node -> node.nodeUUID.equals(nodeToFollowUUID)).findFirst().orElse(null);
     }
 
-    private static List<NodeData> getNodesOfSpecificIFF(ArrayList<NodeData> nodes, char iffChar){
+    public static List<NodeData> getNodesOfSpecificIFF(ArrayList<NodeData> nodes, char iffChar){
         return nodes.stream().filter(node -> node.symbol.charAt(1) == iffChar).collect(Collectors.toList());
     }
 

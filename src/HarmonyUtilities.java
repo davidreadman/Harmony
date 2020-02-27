@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * This class is responsible for working behind the scenes while the GUI is operating
@@ -16,7 +18,6 @@ import java.util.*;
 public class HarmonyUtilities
 {
     int logCounter =0, pubCounter = 0, movementCounter = 0;
-    int cumulativeNumNets = 0, cumulativeNumCollisions = 0, cumulativeNumHostilesDetected = 0;
     long maxMovementCounter = 0;
     WriteLog logger;
     HarmonyDataPublisher publishData;
@@ -31,13 +32,27 @@ public class HarmonyUtilities
     int currentSimulationState = SIMULATION_STILL_RUNNING;
 
     Map<Integer, Map<String, Position>> waypoints = new HashMap<>();
+    Map<String, Integer> metrics = new HashMap<>();
 
     public HarmonyUtilities(HarmonyDataPublisher publishData, ArrayList<NodeData> nodes)
     {
         this.publishData = publishData;
         addInitialWaypoints(nodes);
+        initialiseMetrics(nodes);
     }
 
+    /**
+     * We want to set up revelant metrics based on the strategies to be employed by the blue friendly nodes
+     * @param nodes
+     */
+    private void initialiseMetrics(ArrayList<NodeData> nodes){
+        metrics.put("Number of Nets", 0);
+        metrics.put("Number of Vehicle Collisions",0);
+
+        Predicate<NodeData> anyFriendlyPlanningToDetectEnemies = node -> node.strategies.stream().anyMatch(strategy -> strategy.startsWith("Detect"));
+        if(HarmonyAwareness.getNodesOfSpecificIFF(nodes,'F').stream().anyMatch(anyFriendlyPlanningToDetectEnemies))
+            metrics.put("Number of Hostiles Detected",0);
+    }
 
     private void addInitialWaypoints(ArrayList<NodeData> nodes) {
         waypoints.putIfAbsent(0, new HashMap<>());
@@ -51,6 +66,7 @@ public class HarmonyUtilities
         currentSimulationState = SIMULATION_STILL_RUNNING;
         waypoints.clear();
         addInitialWaypoints(nodes);
+        initialiseMetrics(nodes);
         ArrayList<NodeData> nodesFromConfig = ParseProperties.parsePlan();
         for(NodeData configNode: nodesFromConfig) {
             for(NodeData currentNode: nodes) {
@@ -90,10 +106,15 @@ public class HarmonyUtilities
             logger = new WriteLog(createNewDirectory());
         }
         List<String> nodeHeadersAsCSVFormat = new ArrayList<>();
+        List<String> metricHeaders = new ArrayList<>();
+        for(int i=1;i<=metrics.size();i++) {
+            metricHeaders.add(String.format("METRIC%d_UNIT",i));
+            metricHeaders.add(String.format("METRIC%d_VALUE",i));
+        }
         for(int i=0;i<nodes.size();i++) {
             nodeHeadersAsCSVFormat.add(String.format("NODE%dUUID,NODE%dIFF,NODE%dISCOMMANDER,NODE%dSTATE,NODE%dLAT,NODE%dLON,NODE%dDISTANCE_TRAVELLED,NODE%dDIRECTION_OF_TRAVEL,NODE%dMETRIC_TYPE,NODE%dMETRIC_VALUE,NODE%dDECISION,NODE%dCOMMANDER,NODE%dISFOLLOWING,NODE%dCLOSESTENEMY",i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1,i+1));
         }
-        String writableString = String.format("TIME,%s,CUM_NUM_NETS,CUM_NUM_COLLISIONS,CUM_NUM_HOSTILES_DETECTED,STATE\n", String.join(",", nodeHeadersAsCSVFormat));
+        String writableString = String.format("TIME,%s,%s,STATE\n", String.join(",", nodeHeadersAsCSVFormat), String.join(",",metricHeaders));
         logger.writeStringToFile(writableString);
         logger.Flush();
     }
@@ -114,8 +135,12 @@ public class HarmonyUtilities
                         currentNode.nodeToFollow == null ? "None": currentNode.nodeToFollow.nodeUUID,
                         currentNode.closestEnemy == null ? "None": currentNode.closestEnemy.nodeUUID));
             }
+            List<String> metricValues = new ArrayList<>();
+            for(Map.Entry<String,Integer> entry : metrics.entrySet()) {
+                metricValues.add(String.format("%s,%d",entry.getKey(),entry.getValue()));
+            }
 /*            String timestamp = logger.getTimeStamp();*/
-            String writableString = String.format("%d,%s,%d,%d,%d,%d\n", movementCounter, String.join(",", nodesAsCSVFormat),cumulativeNumNets,cumulativeNumCollisions,cumulativeNumHostilesDetected,currentSimulationState);
+            String writableString = String.format("%d,%s,%s,%d\n", movementCounter, String.join(",", nodesAsCSVFormat),String.join(",",metricValues),currentSimulationState);
             //Only write line to file starting with timestamp if we haven't done so already.
             if(logger.linesWritten.stream().noneMatch(line -> line.startsWith(String.format("%d", movementCounter)))){
                 logger.writeStringToFile(writableString);
@@ -237,8 +262,14 @@ public class HarmonyUtilities
     }
 
     private void updateMetrics(ArrayList<NodeData> nodes) {
-        cumulativeNumNets += HarmonyAwareness.calculateNumberOfNets(nodes);
-        cumulativeNumCollisions += HarmonyAwareness.calculateNumberOfNodeCollisions(nodes);
-        cumulativeNumHostilesDetected += HarmonyAwareness.calculateNumberOfHostilesDetected(nodes);
+        int numNets = metrics.get("Number of Nets");
+        int numCollisions = metrics.get("Number of Vehicle Collisions");
+        metrics.replace("Number of Nets",numNets,numNets+HarmonyAwareness.calculateNumberOfNets(nodes));
+        metrics.replace("Number of Vehicle Collisions",numCollisions,numCollisions+HarmonyAwareness.calculateNumberOfNodeCollisions(nodes));
+
+        if(metrics.containsKey("Number of Hostiles Detected")) {
+            int numHostiles = metrics.get("Number of Hostiles Detected");
+            metrics.replace("Number of Hostiles Detected",numHostiles,numHostiles+HarmonyAwareness.calculateNumberOfHostilesDetected(nodes));
+        }
     }
 }
