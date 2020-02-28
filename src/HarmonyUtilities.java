@@ -21,7 +21,6 @@ public class HarmonyUtilities
     long maxMovementCounter = 0;
     WriteLog logger;
     HarmonyDataPublisher publishData;
-    StoreProperties storeProperties = new StoreProperties();
     public static int SIMULATION_STILL_RUNNING = 0;
     public static int ACTIVE_FRIENDLIES_REACHED_RASPBERRY_CREEK = 1;
     public static int SIMULATION_RAN_OUT_OF_TIME = 2;
@@ -125,7 +124,7 @@ public class HarmonyUtilities
             List<String> nodesAsCSVFormat = new ArrayList<>();
             for(NodeData currentNode: nodes) {
                 //Develop csv for each node
-                nodesAsCSVFormat.add(String.format("%s,%c,%d,%d,%.4f,%.4f,%.2f,%.2f,%s,%.2f,%s,%s,%s,%s", currentNode.nodeUUID, currentNode.symbol.charAt(1), isNodeTheCommander(currentNode,nodes) ? 1:0,HarmonyAwareness.currentStateOfNode(currentNode),currentNode.currentLocation.asDegreesArray()[0], currentNode.currentLocation.asDegreesArray()[1],
+                nodesAsCSVFormat.add(String.format("%s,%c,%d,%d,%.4f,%.4f,%.2f,%.2f,%s,%.2f,%s,%s,%s,%s", currentNode.nodeUUID, currentNode.symbol.charAt(1), isNodeTheCommander(currentNode,nodes) ? 1:0,currentNode.currentState,currentNode.currentLocation.asDegreesArray()[0], currentNode.currentLocation.asDegreesArray()[1],
                         HarmonyMovement.distanceToTargetInMeters(currentNode.previousLocation, currentNode.currentLocation),
                         HarmonyMovement.bearingToTargetInDegrees(currentNode.previousLocation, currentNode.currentLocation),
                         currentNode.currentMetric.getKey(),
@@ -177,7 +176,7 @@ public class HarmonyUtilities
     }
 
     public void createNewConfigPropertiesFile(ArrayList<NodeData> nodes) {
-        storeProperties.writeConfig(nodes);
+        StoreProperties.writeConfig(nodes);
         System.out.println("Created new Config properties file");
     }
 

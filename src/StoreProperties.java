@@ -2,20 +2,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class StoreProperties
 {
-    public StoreProperties()
-    {
-        // TODO Auto-generated constructor stub
-    }
-    public void writeConfig(ArrayList<NodeData> nodeData)
+    public static void writeConfig(ArrayList<NodeData> nodes)
     {
         //create a file
         String propFileName = "newconfig.properties";
         FileOutputStream outputStream;
         File file;
-        String content = "Nodes = "+nodeData.size()+"\n\n";
         try
         {
             byte[] contentInBytes;
@@ -25,30 +21,26 @@ public class StoreProperties
             if (!file.exists()) {
                 file.createNewFile();
             }
+            String content = "Nodes = "+nodes.size()+"\n\n";
             contentInBytes = content.getBytes();
             outputStream.write(contentInBytes);
 
             //pass through the nodes and create the properties
-            for (int i = 0; i < nodeData.size(); i++)
+            for (int i = 0; i < nodes.size(); i++)
             {
+                List<String> nodeDetails = new ArrayList<>();
+                double[] currentLocationDegreesArray = nodes.get(i).currentLocation.asDegreesArray();
+                nodeDetails.add(String.format("Node%dUUID = %s\n",i+1,nodes.get(i).nodeUUID));
+                nodeDetails.add(String.format("Node%dLat = %f\n",i+1,currentLocationDegreesArray[0]));
+                nodeDetails.add(String.format("Node%dLon = %f\n",i+1,currentLocationDegreesArray[1]));
+                nodeDetails.add(String.format("Node%d2525B = %s\n",i+1,nodes.get(i).symbol));
+                nodeDetails.add(String.format("Node%dMaxSpeed = %f\n",i+1,nodes.get(i).maxOperationalSpeedInKmH));
+                nodeDetails.add(String.format("Node%dStrategyCSV = %s\n",i+1,String.join(",",nodes.get(i).strategies)));
+                if(nodes.get(i).myCommander != null) {
+                    nodeDetails.add(String.format("Node%dCommanderUUID = %s\n",i+1,nodes.get(i).myCommander.nodeUUID));
+                }
 
-                String line1= "Node"+(i+1)+"UUID = " + nodeData.get(i).nodeUUID +"\n";
-                //note: used this to remove degrees symbol present in the angle.degrees number
-                int lengthOfString = nodeData.get(i).currentLocation.getLatitude().toString().length();
-                String line2= "Node"+(i+1)+"Lat = " + nodeData.get(i).currentLocation.getLatitude().toString().substring(0,lengthOfString-1)+"\n";
-                lengthOfString = nodeData.get(i).currentLocation.getLongitude().toString().length();
-                String line3= "Node"+(i+1)+"Lon = " + nodeData.get(i).currentLocation.getLongitude().toString().substring(0,lengthOfString-1)+"\n";
-              //  Node1Type = Armoured Wheeled Vehicle
-                String line4= "Node"+(i+1)+"Type = " + nodeData.get(i).nodeType+"\n";
-             //   Node1IFF = B
-                String line6= "Node"+(i+1)+"2525B = " + nodeData.get(i).symbol+"\n";
-            //            Node1OperationalSpeed = 40
-                String line7= "Node"+(i+1)+"OperationalSpeed = " + nodeData.get(i).operationalSpeedInKmH+"\n";
-            //    Node1MaxSpeed = 100
-                String line8= "Node"+(i+1)+"MaxSpeed = " + nodeData.get(i).maxOperationalSpeedInKmH +"\n";
-            //    Node1RadiusOfDetectionInKm = 20
-
-                content = (""+line1+line2+line3+line4+line6+line7+line8+"\n\n\n");
+                content = String.format("%s\n\n\n",String.join("", nodeDetails));
                 contentInBytes = content.getBytes();
                 outputStream.write(contentInBytes);
 

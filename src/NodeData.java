@@ -18,9 +18,8 @@ public class NodeData
      Next location indicates the next known position that the node needs to travel.
       */
      Position currentLocation;
-    Position previousLocation;
-    Position nextLocation;
-    String nodeType;
+     Position previousLocation;
+     Position nextLocation;
      String symbol;
      TacticalSymbol symbolIdentifier;
      double operationalSpeedInKmH;

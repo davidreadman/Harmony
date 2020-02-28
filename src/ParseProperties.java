@@ -56,7 +56,6 @@ public class ParseProperties
 				double Lon = Double.parseDouble(prop.getProperty("Node"+(i+1)+"Lon"));
 				theseNodes[i].currentLocation= new Position(LatLon.fromDegrees(Lat,Lon), 0);
 				theseNodes[i].previousLocation = theseNodes[i].currentLocation;
-				theseNodes[i].nodeType = prop.getProperty("Node"+(i+1)+"Type");
 				theseNodes[i].symbol = prop.getProperty("Node"+(i+1)+"2525B");
 				theseNodes[i].maxOperationalSpeedInKmH = Double.parseDouble(prop.getProperty("Node"+(i+1)+"MaxSpeed"));
 				if(prop.containsKey("Node"+(i+1)+"StrategyCSV")) {
