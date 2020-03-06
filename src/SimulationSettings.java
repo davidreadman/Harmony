@@ -1,6 +1,7 @@
 import java.time.Duration;
 
-public class SimulationSettings {
+public class SimulationSettings
+{
     public boolean startSimulation;
     public String durationString;
     public Duration simulatonDuration;
@@ -15,7 +16,8 @@ public class SimulationSettings {
     public boolean debugDataListener;
     public int numOfSimulationsToRun;
 
-    public SimulationSettings() {
+    public SimulationSettings()
+    {
         startSimulation = true;
         durationString = "";
         simulatonDuration = null;
@@ -31,24 +33,27 @@ public class SimulationSettings {
         numOfSimulationsToRun = 0;
     }
 
-    public void setUpDuration(String durationString) {
+    public void setUpDuration(String durationString)
+    {
         String[] arr = durationString.split(" ");
-        if(arr.length == 2) {
+        if (arr.length == 2)
+        {
             Integer value = Integer.parseInt(arr[0]);
             String unit = arr[1].toLowerCase();
-            if(unit.startsWith("d") || unit.startsWith("day")){
+            if (unit.startsWith("d") || unit.startsWith("day"))
+            {
                 simulatonDuration = Duration.ofDays(value);
                 unit = "day(s)";
-            }
-            else if(unit.startsWith("h") || unit.startsWith("hour") || unit.startsWith("hr")) {
+            } else if (unit.startsWith("h") || unit.startsWith("hour") || unit.startsWith("hr"))
+            {
                 simulatonDuration = Duration.ofHours(value);
                 unit = "hour(s)";
-            }
-            else if(unit.startsWith("m") || unit.startsWith("min")) {
+            } else if (unit.startsWith("m") || unit.startsWith("min"))
+            {
                 simulatonDuration = Duration.ofMinutes(value);
                 unit = "minute(s)";
-            }
-            else if(unit.startsWith("s") || unit.startsWith("sec")) {
+            } else if (unit.startsWith("s") || unit.startsWith("sec"))
+            {
                 simulatonDuration = Duration.ofSeconds(value);
                 unit = "second(s)";
             }

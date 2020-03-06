@@ -52,7 +52,7 @@ public class JFrameGuiActions extends JFrame
     java.util.List<String> levelIDStringsList = new ArrayList<>(Arrays.asList(symbolModifierData.levelIDStrings));
     java.util.List<String> hQIDStringsList = new ArrayList<>(Arrays.asList(symbolModifierData.hQIDStrings));
     java.util.List<String> functionIDStringsList = new ArrayList<>(Arrays.asList(symbolModifierData.functionIDStrings));
-    java.util.List<String> iffIDStringsList = new ArrayList<>(Arrays.asList(symbolModifierData.iFFIDStrings));
+    java.util.List<String> iffIDStringsList = new ArrayList<>(Arrays.asList(SymbolModifierData.iFFIDStrings));
     ArrayList animalList = new ArrayList();
     JTextArea nodePositionsTextArea;
     String durationStringAsSetByTheUser = "";
@@ -593,7 +593,7 @@ Set up the Gui Listeners
         JLabel deleteLabel = new JLabel("Delete");
         deleteLabel.setFont(labelFont);
         //load up MilSymString with existingstring (ie nodeData.symbol
-        SymbolString = new JLabel(MilSymString.toString());
+        SymbolString = new JLabel(MilSymString);
 
 
         /*set up the string of node names */
@@ -606,7 +606,7 @@ Set up the Gui Listeners
         }
 
 
-        iFFList = new JComboBox<>(symbolModifierData.iFFStrings);
+        iFFList = new JComboBox<>(SymbolModifierData.iFFStrings);
         hQList = new JComboBox<>(symbolModifierData.hQStrings);
         levelList = new JComboBox<>(symbolModifierData.levelStrings);
         functionList = new JComboBox<>(symbolModifierData.functionStrings);
@@ -616,6 +616,7 @@ Set up the Gui Listeners
 
         JButton cloneButton = new JButton("clone");
         JButton deleteButton = new JButton("delete");
+        JButton testButton = new JButton("test");
         //this part should set up the default index of the default node (node A)
         //so the MILSymString should equal the selectedNode.symbol as it was constructed earlier.
         //the setSelectedIndex will match
@@ -701,6 +702,9 @@ Set up the Gui Listeners
         c.gridx =2;
         c.gridy = 4;
         panel2525B.add(deleteButton,c);
+        c.gridx =3;
+        c.gridy = 4;
+        panel2525B.add(testButton,c);
 
 /*using popupmenu listener instead of actionlistener because we modify the ifflist value in the draggable
 and that invokes the actionlistener, if we do want to invoke the ifflist value as a listener then itemListener can be used
@@ -782,7 +786,14 @@ used the invisible because the selection of new dropdown is invoked at this poin
             // System.out.println("level: " + substring);
             substring = MilSymString.substring(4,10);
             functionList.setSelectedIndex(functionIDStringsList.indexOf(substring));
+
+
         });
+        testButton.addActionListener(e ->
+        {
+            HarmonyAwareness.calculateNumberOfNets(nodes);
+        });
+
         iFFList.addPopupMenuListener(new PopupMenuListener()
         {
             @Override
@@ -797,7 +808,7 @@ used the invisible because the selection of new dropdown is invoked at this poin
 
                 //the combobox for iFFList has been activated, so first set the char in the stringbuilder
                 //IFF is at position 1,2
-                substring = symbolModifierData.iFFIDStrings[iFFList.getSelectedIndex()];
+                substring = SymbolModifierData.iFFIDStrings[iFFList.getSelectedIndex()];
                 constructString = MilSymString.substring(0,1)+substring+MilSymString.substring(2,15);
                 MilSymString = constructString;
                 updateTacticalSymbol();

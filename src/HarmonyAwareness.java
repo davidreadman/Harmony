@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,7 +24,7 @@ public class HarmonyAwareness {
                 return NODE_IS_STILL_ACTIVE;
         }
     }
-
+    public static ArrayList<Integer>adjacentVertices[];
     private static ArrayList<PlaceOfInterest> generatePlacesOfInterest() {
         return new ArrayList<>();
     }
@@ -48,10 +49,84 @@ public class HarmonyAwareness {
         return nodes.stream().noneMatch(node -> node.currentState == NODE_IS_STILL_ACTIVE);
     }
 
-    public static int calculateNumberOfNets(ArrayList<NodeData> nodes) {
-        return 0;
-    }
+    public static int calculateNumberOfNets(ArrayList<NodeData> nodes)
+    {
+        int distance = 2000;
+        int index =0;
+        List<NodeData> friendlyNodes = getNodesOfSpecificIFF(nodes, 'F');
+        List<NodeData> scanningToArray ;
+        ArrayList<ArrayList<String>> elementsInNet= new ArrayList<ArrayList<String>>();
+        Boolean thisNetExists;
+        ArrayList<String>baseArray = new ArrayList<String>();
+        ArrayList<ArrayList<String>> dendrogram= new ArrayList<ArrayList<String>>();
+        //create a list for each friendly node, this will contain the adjacent nodes
 
+        adjacentVertices=new ArrayList[friendlyNodes.size()];
+
+        for (int i=0; i<friendlyNodes.size()-1;i++)
+        {
+            baseArray.add(friendlyNodes.get(i).nodeUUID);
+            adjacentVertices[i] = new ArrayList();
+                    thisNetExists = false;
+                    scanningToArray = friendlyNodes.subList(index,friendlyNodes.size());
+                    for (int j = index; j< friendlyNodes.size(); j++)
+                    {
+                    ArrayList<String> nets = new ArrayList<String>();
+                        if (friendlyNodes.get(j) != friendlyNodes.get(i))
+                        {
+                            double nodeDistance = HarmonyMovement.distanceToTargetInMeters(friendlyNodes.get(i).currentLocation, friendlyNodes.get(j).currentLocation);
+                            //System.out.println("node checking from " + friendlyNodes.get(i).nodeUUID + " nets");
+                          //  System.out.println("checking node " + scanningTo.nodeUUID + " " + nodeDistance + " meters");
+                            if (nodeDistance<= distance)
+                            {
+                                adjacentVertices[i].add(j);
+                                nets.add(friendlyNodes.get(i).nodeUUID);
+                                nets.add(friendlyNodes.get(j).nodeUUID);
+                                dendrogram.add(nets);
+                            }
+                        }
+                }
+            index++;
+        }
+        //and then create the last vertice adjacency so it isn't null
+        adjacentVertices[friendlyNodes.size()-1] = new ArrayList();
+        baseArray.add(friendlyNodes.get(friendlyNodes.size()-1).nodeUUID);
+        System.out.println("base array: " + baseArray);
+        System.out.println("dendrogram: " + dendrogram);
+        System.out.println("adjacency: " + adjacentVertices);
+        boolean visited[] = new boolean[friendlyNodes.size()];
+        int count = 0;
+        for (int z =0; z<friendlyNodes.size();z++)
+        {
+            if (!visited[z])
+        {
+            System.out.println("new net : " + z);
+            DFSearch(z, visited);
+            count++;
+        }
+       }
+        System.out.println("number of nets : " + count);
+        //there cannot be any more nets than the number of pairs < distance plus singletons
+
+     //   System.out.println("distilled dendrogram: " + distillDendrogram);
+
+
+
+        // System.out.println("There are "+numberOfNets+" nets");
+        return elementsInNet.size();
+}
+public static void DFSearch(int v, boolean visited[])
+{
+    visited[v] = true;
+    System.out.println("v: " + v+ " "+adjacentVertices[v]);
+    Iterator<Integer> i = adjacentVertices[v].listIterator();
+    while (i.hasNext())
+    {
+        int n = i.next();
+        if (!visited[n])
+            DFSearch(n, visited);
+    }
+}
     public static int calculateNumberOfNodeCollisions(ArrayList<NodeData> nodes) {
         int numCollisions = 0;
         for(int i=0;i<nodes.size();i++) {
